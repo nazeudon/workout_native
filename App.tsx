@@ -2,12 +2,12 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
-import { Event } from "./src/component/Event";
+import { EventsList } from "./src/component/EventsList";
 
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Event />
+      <EventsList />
     </SafeAreaView>
   );
 };

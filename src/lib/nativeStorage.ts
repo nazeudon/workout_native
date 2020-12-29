@@ -22,15 +22,9 @@ export const initSaveToStorage = async () => {
   await initData.event.forEach((evt) => {
     storage.save({
       key: evt.key,
+      name: evt.name,
       data: evt.data,
     });
-  });
-};
-
-export const saveToStorage = async ({ props }) => {
-  await storage.save({
-    key: props.key,
-    data: props.data,
   });
 };
 
@@ -45,6 +39,28 @@ export const loadFromStorage = async () => {
   };
   const datas = await getDatas();
   return datas;
+};
+
+export const saveToStorage = async () => {
+  await storage.save({
+    key: "ベンチプレス2",
+    data: {
+      id_1: {
+        items: {
+          item_1: {
+            weight: 1000,
+          },
+        },
+      },
+    },
+  });
+};
+
+export const loadData = async (key: string) => {
+  const res = await storage.load({
+    key: key,
+  });
+  console.log(res);
 };
 
 export const deleteFromStorage = async ({ props }) => {

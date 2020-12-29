@@ -1,27 +1,32 @@
-import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-
-const imagePath = require("../statics/img/maccho.png");
+import React, { useEffect, useState } from "react";
+import { Text, SafeAreaView, StyleSheet, FlatList } from "react-native";
+import { Event } from "./Event";
+/* lib */
+import { loadFromStorage } from "../lib/nativeStorage";
+/* types */
+import { EventData, EventKey } from "../types/event";
 
 export const EventsList: React.FC = () => {
+  const [datas, setDatas] = useState<EventData[]>([]);
+  // const KEYS = ["ベンチプレス", "デッドリフト", "スクワット"];
+
+  useEffect(() => {
+    loadDatas();
+  }, []);
+
+  const loadDatas = async () => {
+    const reses = await loadFromStorage();
+    setDatas(reses);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.event}>
-        <Image style={styles.image} source={imagePath} />
-        <Text style={styles.text}>ベンチプレス</Text>
-      </View>
-      <View style={styles.event}>
-        <Image style={styles.image} source={imagePath} />
-        <Text style={styles.text}>ベンチプレス</Text>
-      </View>
-      <View style={styles.event}>
-        <Image style={styles.image} source={imagePath} />
-        <Text style={styles.text}>ベンチプレス</Text>
-      </View>
-      <View style={styles.event}>
-        <Image style={styles.image} source={imagePath} />
-        <Text style={styles.text}>ベンチプレス</Text>
-      </View>
+      <FlatList
+        data={datas}
+        renderItem={({ item }: { item: EventData }) => <Event data={item} />}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+      />
     </SafeAreaView>
   );
 };
@@ -30,28 +35,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    flexWrap: "wrap",
-    // alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
-  event: {
-    display: "flex",
-    width: "45%",
-    padding: "2.5%",
-    margin: "2.5%",
-    borderWidth: 1,
-    borderColor: "#ACACBA",
-    borderRadius: 10,
+    // flexWrap: "wrap",
+    // flexDirection: "row",
+    // justifyContent: "flex-start",
     alignItems: "center",
-  },
-  image: {
-    marginTop: -20,
-    width: 150,
-    height: 150,
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
+    justifyContent: "center",
   },
 });

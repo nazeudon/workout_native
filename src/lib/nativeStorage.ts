@@ -2,7 +2,7 @@ import Storage from "react-native-storage";
 import AsyncStorage from "@react-native-community/async-storage";
 import initData from "./initSampleData.json";
 /* types */
-import { EventKey, EventData } from "../types/event";
+import { EventData } from "../types/event";
 
 const KEYS = ["ベンチプレス", "デッドリフト", "スクワット"];
 

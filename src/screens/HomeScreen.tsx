@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Text, SafeAreaView, StyleSheet, FlatList } from "react-native";
-import { Event } from "./Event";
+import { SafeAreaView, StyleSheet, FlatList } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+/* component */
+import { Event } from "../component/Event";
 /* lib */
 import { loadFromStorage } from "../lib/nativeStorage";
 /* types */
-import { EventData, EventKey } from "../types/event";
+import { EventData } from "../types/event";
+import { RootStackParamList } from "../types/navigation";
 
-export const EventsList: React.FC = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+};
+
+export const HomeScreen = ({ navigation }: Props) => {
   const [datas, setDatas] = useState<EventData[]>([]);
-  // const KEYS = ["ベンチプレス", "デッドリフト", "スクワット"];
 
   useEffect(() => {
     loadDatas();

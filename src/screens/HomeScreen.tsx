@@ -10,7 +10,13 @@ import {
   loadData,
   saveToStorage,
 } from "../lib/nativeStorage";
-import { initDB, insertToDB, getFromDB } from "../lib/sqlite";
+import {
+  initDB,
+  insertToDB,
+  getFromDB,
+  changeDB,
+  deleteDB,
+} from "../lib/sqlite";
 /* types */
 import { EventData } from "../types/event";
 import { RootStackParamList } from "../types/navigation";
@@ -45,6 +51,8 @@ export const HomeScreen = ({ navigation }: Props) => {
       <Button title="initDB" onPress={initDB} />
       <Button title="insertToDB" onPress={insertToDB} />
       <Button title="getFromDB" onPress={getFromDB} />
+      {/* <Button title="changeDB" onPress={changeDB} /> */}
+      <Button title="deleteDB" onPress={deleteDB} />
     </SafeAreaView>
   );
 };

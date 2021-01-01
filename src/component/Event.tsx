@@ -1,19 +1,19 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 /* types */
-import { EventData } from "../types/event";
+import { EventType } from "../types/event";
 
 const imagePath = require("../statics/img/maccho.png");
 
 type Props = {
-  data: EventData;
+  data: EventType;
 };
 
 export const Event: React.FC<Props> = ({ data }: Props) => {
   return (
     <View style={styles.event}>
       <Image style={styles.image} source={imagePath} />
-      <Text style={styles.text}>{data.name}</Text>
+      <Text style={styles.text}>{data.event}</Text>
     </View>
   );
 };

@@ -5,20 +5,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Event } from "../component/Event";
 /* lib */
 import {
-  loadFromStorage,
   initSaveToStorage,
   loadData,
   saveToStorage,
 } from "../lib/nativeStorage";
-import {
-  initDB,
-  insertToDB,
-  getFromDB,
-  changeDB,
-  deleteDB,
-} from "../lib/sqlite";
+import { initDB, insertToDB, getEvents, deleteDB } from "../lib/sqlite";
 /* types */
-import { EventData } from "../types/event";
+import { EventType } from "../types/event";
 import { RootStackParamList } from "../types/navigation";
 
 type Props = {
@@ -26,22 +19,22 @@ type Props = {
 };
 
 export const HomeScreen = ({ navigation }: Props) => {
-  const [datas, setDatas] = useState<EventData[]>([]);
+  const [events, setEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
-    loadDatas();
+    fetchEvents();
   }, []);
 
-  const loadDatas = async () => {
-    const reses = await loadFromStorage();
-    setDatas(reses);
+  const fetchEvents = async () => {
+    const res = await getEvents();
+    setEvents(res);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={datas}
-        renderItem={({ item }: { item: EventData }) => <Event data={item} />}
+        data={events}
+        renderItem={({ item }: { item: EventType }) => <Event data={item} />}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
       />
@@ -50,7 +43,8 @@ export const HomeScreen = ({ navigation }: Props) => {
       <Button title="editData" onPress={saveToStorage} />
       <Button title="initDB" onPress={initDB} />
       <Button title="insertToDB" onPress={insertToDB} />
-      <Button title="getFromDB" onPress={getFromDB} />
+      {/* <Button title="getFromDB" onPress={getEvents} /> */}
+      <Button title="getFromDB" onPress={fetchEvents} />
       {/* <Button title="changeDB" onPress={changeDB} /> */}
       <Button title="deleteDB" onPress={deleteDB} />
     </SafeAreaView>

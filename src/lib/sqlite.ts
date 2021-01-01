@@ -42,29 +42,29 @@ export const insertToDB = () => {
   });
 };
 
-export const getFromDB = () => {
-  db.transaction(
-    (tx) => {
-      tx.executeSql(
-        "select * from events where id = ?;",
-        [2],
-        (_, resultSet) => {
-          // SUCCESS
-          console.log(resultSet);
-        },
-        () => {
-          console.log("fail");
-          return false; // 何もしない
-        } // 失敗時のコールバック関数
-      );
-    },
-    () => {
-      console.log("fail all");
-    }, // 失敗時のコールバック関数
-    () => {
-      console.log("success");
-    } // 成功時のコールバック関数
-  );
+export const getEvents = () => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "select * from events;",
+          [],
+          (_, resultSet) => {
+            // 成功時の処理
+            // console.log(resultSet);
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
 };
 
 export const deleteDB = () => {
@@ -82,3 +82,31 @@ export const deleteDB = () => {
     );
   });
 };
+// export const getEvents = () => {
+//   db.transaction(
+//     (tx) => {
+//       tx.executeSql(
+//         //"select * from events where id = ?;",
+//         "select * from events;",
+//         [],
+//         (_, resultSet) => {
+//           // SUCCESS
+//           console.log("1");
+//           console.log(resultSet);
+//           return resultSet;
+//         },
+//         () => {
+//           // FAIL
+//           console.log("fail");
+//           return false; // nothing to do.
+//         }
+//       );
+//     },
+//     () => {
+//       console.log("fail all");
+//     }, // 失敗時のコールバック関数
+//     () => {
+//       console.log("success");
+//     } // 成功時のコールバック関数
+//   );
+// };

@@ -1,19 +1,32 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 /* type */
 import { ItemType } from "../types/item";
 
 type Props = {
   data: ItemType;
-  //   onPress: () => void;
+  onPress: () => void;
 };
 
-export const Item: React.FC<Props> = ({ data }: Props) => {
+export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
   return (
-    <View>
-      <Text>{data.createdAt}</Text>
-    </View>
+    <TouchableOpacity style={styles.item} onPress={onPress}>
+      <Text style={styles.text}>{data.createdAt}</Text>
+    </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 18,
+    textAlign: "center",
+  },
+  item: {
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderWidth: 0.5,
+    borderColor: "#d6d7da",
+    padding: 10,
+  },
+});

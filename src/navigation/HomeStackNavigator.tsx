@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 /* screens */
 import { HomeScreen } from "../screens/HomeScreen";
 import { EventScreen } from "../screens/EventScreen";
+import { ItemScreen } from "../screens/ItemScreen";
 /* types */
 import { RootStackParamList } from "../types/navigation";
 /* context */
@@ -28,6 +29,11 @@ export const MainStack = () => {
         name="Event"
         component={EventScreen}
         options={{ title: event }}
+      />
+      <Stack.Screen
+        name="Item"
+        component={ItemScreen}
+        // options={{ title: item }}
       />
     </Stack.Navigator>
   );

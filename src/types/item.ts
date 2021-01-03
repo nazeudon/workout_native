@@ -3,3 +3,11 @@ export type ItemType = {
   eventId: number;
   createdAt: string;
 };
+
+export type ItemDetailType = {
+  id: number;
+  itemsId: number;
+  setNum: number;
+  weights: number;
+  times: number;
+};

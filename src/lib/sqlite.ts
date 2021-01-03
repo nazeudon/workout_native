@@ -17,7 +17,7 @@ export const getEvents = () => {
             results = resultSet;
           },
           () => {
-            // エラー時はロールバックする
+            // エラー時はロールバックする！！
             return true;
           }
         );
@@ -53,6 +53,31 @@ export const getItems = (eventId: number) => {
   });
 };
 
+export const getItemDetails = (itemsId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          // "select * from items (eventId) value ?;",
+          "select * from item where itemsId = ?;",
+          [itemsId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get itemsDetails] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
 export const initDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
@@ -74,11 +99,12 @@ export const initDB = () => {
 export const insertToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      //"insert into items (id, eventId) values (?, ?),(?, ?);",
+      "insert into items (eventId) values (?);",
+      [1],
       //"insert into events (id, event) values (?, ?),(?, ?), (?, ?);",
       //[1, "ベンチプレス ", 2, "デッドリフト", 3, "スクワット"],
-      "insert into item (itemsId, setNum, weights, times) values (?,?,?,?),(?,?,?,?),(?,?,?,?);",
-      [1, 1, 100.0, 10, 1, 2, 100.0, 9, 1, 3, 100.0, 8],
+      // "insert into item (itemsId, setNum, weights, times) values (?,?,?,?),(?,?,?,?),(?,?,?,?);",
+      // [1, 1, 100.0, 10, 1, 2, 100.0, 9, 1, 3, 100.0, 8],
       () => {
         console.log("success");
       }, // 成功時のコールバック関数

@@ -4,6 +4,55 @@ import * as FileSystem from "expo-file-system";
 console.log(FileSystem.documentDirectory + "SQLite/");
 const db = SQLite.openDatabase("DB.db");
 
+export const getEvents = () => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "select * from events;",
+          [],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get events] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
+export const getItems = (eventId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          // "select * from items (eventId) value ?;",
+          "select * from items where eventId = ?;",
+          [eventId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get items] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
 export const initDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
@@ -38,31 +87,6 @@ export const insertToDB = () => {
 
         return true; // ロールバックする場合はtrueを返す
       } // 失敗時のコールバック関数
-    );
-  });
-};
-
-export const getEvents = () => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "select * from events;",
-          [],
-          (_, resultSet) => {
-            // 成功時の処理
-            // console.log(resultSet);
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[get] transaction failed")),
-      () => resolve(results.rows._array)
     );
   });
 };

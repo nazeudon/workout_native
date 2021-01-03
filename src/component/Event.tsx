@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 /* types */
 import { EventType } from "../types/event";
 
@@ -7,14 +7,15 @@ const imagePath = require("../statics/img/maccho.png");
 
 type Props = {
   data: EventType;
+  onPress: () => void;
 };
 
-export const Event: React.FC<Props> = ({ data }: Props) => {
+export const Event: React.FC<Props> = ({ data, onPress }: Props) => {
   return (
-    <View style={styles.event}>
+    <TouchableOpacity style={styles.event} onPress={onPress}>
       <Image style={styles.image} source={imagePath} />
       <Text style={styles.text}>{data.event}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

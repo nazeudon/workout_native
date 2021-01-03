@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 /* screens */
 import { HomeScreen } from "../screens/HomeScreen";
+import { EventScreen } from "../screens/EventScreen";
 /* types */
 import { RootStackParamList } from "../types/navigation";
+/* context */
+import { EventContext } from "../context/eventContext";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export const MainStack = () => {
+  const { event } = useContext(EventContext);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,6 +23,11 @@ export const MainStack = () => {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Event"
+        component={EventScreen}
+        options={{ title: event }}
       />
     </Stack.Navigator>
   );

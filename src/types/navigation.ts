@@ -5,5 +5,6 @@ export type RootStackParamList = {
   Home: undefined;
   Event: { event: EventType };
   Item: { item: ItemType };
+  ItemDetail: { itemDetail: ItemDetailType };
   Main: undefined;
 };

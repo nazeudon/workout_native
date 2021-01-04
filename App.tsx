@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { EventContext } from "./src/context/eventContext";
+import { ItemContext } from "./src/context/itemContext";
 /* navigation */
 import AppNavigator from "./src/navigation/AppNavigator";
-// import { EventsList } from "./src/component/EventsList";
 
 const App = () => {
   const [event, setEvent] = useState<string | undefined>("");
+  const [item, setItem] = useState<string | undefined>("");
   return (
-    <EventContext.Provider value={{ event, setEvent }}>
-      <AppNavigator />
-    </EventContext.Provider>
+    <ItemContext.Provider value={{ item, setItem }}>
+      <EventContext.Provider value={{ event, setEvent }}>
+        <AppNavigator />
+      </EventContext.Provider>
+    </ItemContext.Provider>
   );
 };
 

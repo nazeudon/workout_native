@@ -1,6 +1,4 @@
 import { createContext } from "react";
-/* types */
-import { EventType } from "../types/event";
 
 type EventContextValue = {
   event: string | undefined;

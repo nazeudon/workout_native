@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, SafeAreaView, FlatList, Text } from "react-native";
+import { StyleSheet, SafeAreaView, Text } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -29,18 +29,20 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     setItemDetails(res);
   };
 
-  const onPressItemDetail = (itemDeteil: ItemDetailType) => {};
+  const onPressItemDetail = (itemDetail: ItemDetailType) => {
+    navigation.navigate("ItemDetail", { itemDetail });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
+      <SwipeListView
         data={itemDetails}
         renderItem={({ item }: { item: ItemDetailType }) => (
           <ItemDetail data={item} onPress={() => onPressItemDetail(item)} />
         )}
         keyExtractor={(item, index) => index.toString()}
+        renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
       />
-      {/* <Text>AA</Text> */}
     </SafeAreaView>
   );
 };

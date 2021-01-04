@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, SafeAreaView, Text } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -10,6 +10,8 @@ import { RootStackParamList } from "../types/navigation";
 import { ItemType, ItemDetailType } from "../types/item";
 /* component */
 import { Item } from "../component/Item";
+/* context */
+import { ItemContext } from "../context/itemContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Event">;
@@ -19,6 +21,7 @@ type Props = {
 export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
+  const { setItem } = useContext(ItemContext);
 
   useEffect(() => {
     fetchItems();
@@ -30,7 +33,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const onPressItem = (item: ItemType) => {
-    // setEvent(event.event);
+    setItem(item.createdAt);
     navigation.navigate("Item", { item });
   };
 

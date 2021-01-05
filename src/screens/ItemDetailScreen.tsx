@@ -4,6 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* type */
 import { RootStackParamList } from "../types/navigation";
+import { ItemDetailType } from "../types/item";
 /* component */
 import { EditItem } from "../component/EditItem";
 
@@ -29,7 +30,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
   //   setItemDetails(res);
   // };
 
-  // const onPressItemDetail = (itemDeteil: ItemDetailType) => {};
+  //   const onPressItemDetail = (itemDeteil: ItemDetailType) => {};
 
   return (
     <SafeAreaView style={styles.container}>

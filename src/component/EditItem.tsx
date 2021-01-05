@@ -8,8 +8,18 @@ import {
   SceneRendererProps,
   NavigationState,
 } from "react-native-tab-view";
+/* screen */
+import { WeightsEditScreen } from "../screens/WeightsEditScreen";
+import { TimesEditScreen } from "../screens/TimesEditScreen";
+/* type */
+import { ItemDetailType } from "../types/item";
 
-export const EditItem = () => {
+type Props = {
+  data: ItemDetailType;
+  // onPress: () => void;
+};
+
+export const EditItem: React.FC<Props> = ({ data }: Props) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Weights" },
@@ -19,8 +29,8 @@ export const EditItem = () => {
   const initialLayout = { width: Dimensions.get("window").width };
 
   const renderScene = SceneMap({
-    first: NotificationScreen,
-    second: InformationScreen,
+    first: WeightsEditScreen,
+    second: TimesEditScreen,
   });
 
   const renderTabBar = (
@@ -51,22 +61,6 @@ export const EditItem = () => {
       //   renderPager={(props) => <ScrollPager {...props} />}
       renderTabBar={renderTabBar}
     />
-  );
-};
-
-const NotificationScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Weights</Text>
-    </View>
-  );
-};
-
-const InformationScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Times</Text>
-    </View>
   );
 };
 

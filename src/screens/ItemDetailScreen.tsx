@@ -34,7 +34,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <EditItem />
+      <EditItem data={itemDetail} />
     </SafeAreaView>
   );
 };

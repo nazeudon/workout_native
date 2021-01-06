@@ -8,6 +8,7 @@ import {
   SceneRendererProps,
   NavigationState,
 } from "react-native-tab-view";
+
 /* screen */
 import { WeightsEditScreen } from "../screens/WeightsEditScreen";
 import { TimesEditScreen } from "../screens/TimesEditScreen";
@@ -53,6 +54,7 @@ export const EditItem: React.FC<Props> = ({ data }: Props) => {
 
   return (
     <TabView
+      // swipeEnabled={false}
       style={styles.container}
       navigationState={{ index, routes }}
       renderScene={renderScene}

@@ -7,6 +7,7 @@ import { RootStackParamList } from "../types/navigation";
 import { ItemDetailType } from "../types/item";
 /* component */
 import { EditItem } from "../component/EditItem";
+import { DisplayItemDetail } from "../component/DisplayItemDetail";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;
@@ -34,6 +35,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
 
   return (
     <SafeAreaView style={styles.container}>
+      <DisplayItemDetail data={itemDetail} />
       <EditItem data={itemDetail} />
     </SafeAreaView>
   );

@@ -21,15 +21,20 @@ export const DisplayItemDetail: React.FC<Props> = ({ data }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eee",
+    alignSelf: "center",
+    backgroundColor: "#0076FF",
     maxHeight: "10%",
+    minWidth: "95%",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    // margin: 10,
-    // paddingLeft: 10,
+    borderRadius: 5,
+    marginVertical: 15,
   },
   text: {
     fontSize: 24,
+    color: "#eee",
+    fontWeight: "bold",
+    // fontFamily: "",
   },
 });

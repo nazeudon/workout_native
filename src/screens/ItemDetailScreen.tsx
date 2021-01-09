@@ -8,6 +8,7 @@ import { ItemDetailType } from "../types/item";
 /* component */
 import { EditItem } from "../component/EditItem";
 import { DisplayItemDetail } from "../component/DisplayItemDetail";
+import { SegmentedControl } from "../component/SegmentedControl";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;
@@ -36,7 +37,8 @@ export const ItemDetailScreen: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <DisplayItemDetail data={itemDetail} />
-      <EditItem data={itemDetail} />
+      {/* <EditItem data={itemDetail} /> */}
+      <SegmentedControl />
     </SafeAreaView>
   );
 };
@@ -45,5 +47,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#eee",
+    // flexDirection: "column",
+    // justifyContent: "center",
   },
 });

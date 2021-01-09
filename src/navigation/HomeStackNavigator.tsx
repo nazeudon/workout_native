@@ -22,7 +22,7 @@ export const MainStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: "#000",
+        headerTintColor: "#333",
       }}
     >
       <Stack.Screen

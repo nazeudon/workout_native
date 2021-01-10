@@ -6,9 +6,11 @@ import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
 import { ItemDetailType } from "../types/item";
 /* component */
-import { EditItem } from "../component/EditItem";
 import { DisplayItemDetail } from "../component/DisplayItemDetail";
 import { SegmentedControl } from "../component/SegmentedControl";
+import { Decision } from "../component/Decision";
+/* screen */
+import { NumberInputScreen } from "../screens/NumberInputScreen";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;
@@ -32,13 +34,15 @@ export const ItemDetailScreen: React.FC<Props> = ({
   //   setItemDetails(res);
   // };
 
-  //   const onPressItemDetail = (itemDeteil: ItemDetailType) => {};
+  const onPressDecision = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
       <DisplayItemDetail data={itemDetail} />
       {/* <EditItem data={itemDetail} /> */}
       <SegmentedControl />
+      <NumberInputScreen />
+      <Decision onPress={onPressDecision} />
     </SafeAreaView>
   );
 };
@@ -47,7 +51,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#eee",
-    // flexDirection: "column",
-    // justifyContent: "center",
   },
 });

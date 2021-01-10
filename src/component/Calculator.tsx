@@ -9,20 +9,24 @@ type Props = {
 export const Calculator: React.FC<Props> = ({ data }: Props) => {
   return (
     <TouchableOpacity style={styles.button}>
-      <Text>{data}</Text>
+      <Text style={styles.text}>{data}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    display: "flex",
-    width: "31%",
-    paddingVertical: "5%",
-    margin: "1.17%",
+    flex: 1,
+    paddingVertical: "7%",
+    marginBottom: "3%",
+    margin: "1%",
     borderWidth: 1,
-    borderColor: "#ACACBA",
+    borderColor: "#0076FF",
+    backgroundColor: "#fff",
     borderRadius: 5,
     alignItems: "center",
+  },
+  text: {
+    fontSize: 16,
   },
 });

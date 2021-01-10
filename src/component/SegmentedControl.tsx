@@ -18,6 +18,7 @@ export const SegmentedControl = () => {
       borderRadius={5}
       tabsContainerStyle={styles.tabsContainerStyle}
       tabStyle={styles.tabStyle}
+      tabTextStyle={styles.tabTextStyle}
     />
   );
 };
@@ -29,5 +30,9 @@ const styles = StyleSheet.create({
   },
   tabStyle: {
     backgroundColor: "#fff",
+    marginBottom: "5%",
+  },
+  tabTextStyle: {
+    fontSize: 20,
   },
 });

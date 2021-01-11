@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, SafeAreaView, Text } from "react-native";
+import { StyleSheet, SafeAreaView, Text, View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -34,21 +34,61 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <SwipeListView
-        data={itemDetails}
-        renderItem={({ item }: { item: ItemDetailType }) => (
-          <ItemDetail data={item} onPress={() => onPressItemDetail(item)} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
-      />
-    </SafeAreaView>
+    <>
+      <View style={styles.descs}>
+        <View style={styles.desc}>
+          <Text style={styles.textDec}>セット</Text>
+          <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>挙上重量(kg)</Text>
+          <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>回数</Text>
+        </View>
+        <View style={styles.date}>
+          <Text style={styles.textDate}>総挙上重量(kg)</Text>
+        </View>
+      </View>
+      <SafeAreaView style={styles.list}>
+        <SwipeListView
+          data={itemDetails}
+          renderItem={({ item }: { item: ItemDetailType }) => (
+            <ItemDetail data={item} onPress={() => onPressItemDetail(item)} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
+        />
+      </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  descs: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  desc: {
+    marginTop: "3%",
+    marginLeft: "3%",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  date: {
+    marginTop: "3%",
+    marginRight: "3%",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textDec: {
+    color: "#555",
+  },
+  separate: {
+    color: "#555",
+    marginHorizontal: "1%",
+  },
+  textDate: {
+    color: "#555",
+  },
+  list: {
     flex: 1,
     backgroundColor: "#eee",
   },

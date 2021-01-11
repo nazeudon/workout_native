@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 /* type */
 import { ItemType } from "../types/item";
 
@@ -9,24 +9,40 @@ type Props = {
 };
 
 export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
+  const date = data.createdAt.split(" ")[0];
   return (
-    <TouchableOpacity style={styles.item} onPress={onPress}>
-      <Text style={styles.text}>{data.createdAt}</Text>
-    </TouchableOpacity>
+    <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
+      <View style={styles.items}>
+        <View style={styles.desc}>
+          <Text style={styles.text}>{date}</Text>
+        </View>
+        <View style={styles.date}>
+          <Text style={styles.text}>{date}</Text>
+        </View>
+      </View>
+    </TouchableHighlight>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 18,
-    textAlign: "center",
-  },
-  item: {
+  items: {
     height: 50,
     backgroundColor: "#fff",
-    borderRadius: 5,
-    borderWidth: 0.5,
-    borderColor: "#d6d7da",
-    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "#eee",
+    // borderColor: "#0076FF",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  desc: {
+    marginLeft: "3%",
+  },
+  date: {
+    marginRight: "3%",
+  },
+  text: {
+    fontSize: 16,
+    color: "#333",
   },
 });

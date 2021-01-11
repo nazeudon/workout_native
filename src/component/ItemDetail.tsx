@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableHighlight,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
 
@@ -17,7 +11,7 @@ type Props = {
 export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
-      <View style={styles.container}>
+      <View style={styles.item}>
         <View style={styles.sets}>
           <Text style={styles.text}>{data.setNum}セット</Text>
         </View>
@@ -39,20 +33,19 @@ export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  item: {
     height: 50,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderColor: "#eee",
     // borderColor: "#0076FF",
-    padding: 10,
     margin: 0.5,
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   sets: {
-    width: "20%",
+    marginLeft: "3%",
   },
   weights: {
     width: "14%",

@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableHighlight,
+  View,
+} from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
 
@@ -10,23 +16,56 @@ type Props = {
 
 export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
   return (
-    <TouchableOpacity style={styles.item} onPress={onPress}>
-      <Text>{data.setNum}セット目</Text>
-      <Text>{data.weights}kg</Text>
-      <Text>{data.times}回</Text>
-    </TouchableOpacity>
+    <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
+      <View style={styles.container}>
+        <View style={styles.sets}>
+          <Text style={styles.text}>{data.setNum}セット</Text>
+        </View>
+        <View style={styles.separate}>
+          <Text style={styles.text}>/</Text>
+        </View>
+        <View style={styles.weights}>
+          <Text style={styles.text}>{data.weights}kg</Text>
+        </View>
+        <View style={styles.separate}>
+          <Text style={styles.text}>/</Text>
+        </View>
+        <View style={styles.times}>
+          <Text style={styles.text}>{data.times}回</Text>
+        </View>
+      </View>
+    </TouchableHighlight>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
+  container: {
     height: 50,
     backgroundColor: "#fff",
-    borderRadius: 5,
-    borderWidth: 0.5,
-    borderColor: "#d6d7da",
+    borderBottomWidth: 1,
+    borderColor: "#eee",
+    // borderColor: "#0076FF",
     padding: 10,
+    margin: 0.5,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  sets: {
+    width: "20%",
+  },
+  weights: {
+    width: "14%",
+  },
+  times: {
+    width: "10%",
+  },
+  text: {
+    alignSelf: "flex-end",
+    fontSize: 16,
+    color: "#333",
+  },
+  separate: {
+    width: "3%",
   },
 });

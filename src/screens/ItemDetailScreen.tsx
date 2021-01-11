@@ -39,7 +39,6 @@ export const ItemDetailScreen: React.FC<Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <DisplayItemDetail data={itemDetail} />
-      {/* <EditItem data={itemDetail} /> */}
       <SegmentedControl />
       <NumberInputScreen />
       <Decision onPress={onPressDecision} />

@@ -39,12 +39,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         <View style={styles.desc}>
           <Text style={styles.textDec}>セット</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>挙上重量(kg)</Text>
+          <Text style={styles.textDec}>挙上重量</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.textDec}>回数</Text>
         </View>
         <View style={styles.date}>
-          <Text style={styles.textDate}>総挙上重量(kg)</Text>
+          <Text style={styles.textDate}>総挙上重量</Text>
         </View>
       </View>
       <SafeAreaView style={styles.list}>

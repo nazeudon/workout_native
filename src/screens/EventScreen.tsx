@@ -41,9 +41,11 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     <>
       <View style={styles.descs}>
         <View style={styles.desc}>
-          <Text style={styles.textDec}>Volume(総挙上重量)(kg)</Text>
+          <Text style={styles.textDec}>総セット数</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>推定Max重量(kg)</Text>
+          <Text style={styles.textDec}>総挙上重量</Text>
+          <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>推定Max重量</Text>
         </View>
         <View style={styles.date}>
           <Text style={styles.textDate}>年-月-日</Text>

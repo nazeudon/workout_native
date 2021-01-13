@@ -78,7 +78,7 @@ export const getItemDetails = (itemsId: number) => {
   });
 };
 
-export const initDB = () => {
+export const _initDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
       // 実行したいSQL文
@@ -96,7 +96,7 @@ export const initDB = () => {
   });
 };
 
-export const insertToDB = () => {
+export const _insertToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
       "insert into items (eventId) values (?);",
@@ -117,7 +117,7 @@ export const insertToDB = () => {
   });
 };
 
-export const deleteDB = () => {
+export const _deleteDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
       // 実行したいSQL文

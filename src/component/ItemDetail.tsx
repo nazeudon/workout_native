@@ -9,6 +9,8 @@ type Props = {
 };
 
 export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
+  const volume: number = data.weights * data.times;
+
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.item}>
@@ -27,6 +29,11 @@ export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
         <View style={styles.times}>
           <Text style={styles.text}>{data.times}回</Text>
         </View>
+        <View style={styles.volume}>
+          <View>
+            <Text style={styles.text}>{volume}kg</Text>
+          </View>
+        </View>
       </View>
     </TouchableHighlight>
   );
@@ -39,26 +46,28 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#eee",
     // borderColor: "#0076FF",
-    margin: 0.5,
     flexDirection: "row",
-    justifyContent: "flex-start",
     alignItems: "center",
   },
   sets: {
     marginLeft: "3%",
   },
   weights: {
-    width: "14%",
+    // width: "14%",
   },
   times: {
-    width: "10%",
+    // width: "10%",
   },
   text: {
     alignSelf: "flex-end",
     fontSize: 16,
     color: "#333",
   },
+  volume: {
+    marginLeft: "auto",
+    marginRight: "3%",
+  },
   separate: {
-    width: "3%",
+    marginHorizontal: "1%",
   },
 });

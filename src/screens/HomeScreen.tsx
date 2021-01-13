@@ -4,7 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
 import { Event } from "../component/Event";
 /* lib */
-import { initDB, insertToDB, getEvents, deleteDB } from "../lib/sqlite";
+import { getEvents, _initDB, _insertToDB, _deleteDB } from "../lib/sqlite";
 /* types */
 import { EventType } from "../types/event";
 import { RootStackParamList } from "../types/navigation";
@@ -43,12 +43,12 @@ export const HomeScreen = ({ navigation }: Props) => {
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
       />
-      <Button title="initDB" onPress={initDB} />
-      <Button title="insertToDB" onPress={insertToDB} />
-      {/* <Button title="getFromDB" onPress={getEvents} /> */}
+      <Button title="initDB" onPress={_initDB} />
+      <Button title="insertToDB" onPress={_insertToDB} />
+      <Button title="deleteDB" onPress={_deleteDB} />
       <Button title="getFromDB" onPress={fetchEvents} />
+      {/* <Button title="getFromDB" onPress={getEvents} /> */}
       {/* <Button title="changeDB" onPress={changeDB} /> */}
-      <Button title="deleteDB" onPress={deleteDB} />
     </SafeAreaView>
   );
 };

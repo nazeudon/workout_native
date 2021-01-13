@@ -8,16 +8,11 @@ type Props = {
 
 export const Decision: React.FC<Props> = ({ onPress }: Props) => {
   return (
-    <>
-      {/* <View style={styles.container}>
-        <Button onPress={onPress} title="OK" color="#fff" />
-      </View> */}
-      <TouchableOpacity>
-        <View style={styles.container}>
-          <Text style={styles.text}>OK</Text>
-        </View>
-      </TouchableOpacity>
-    </>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.container}>
+        <Text style={styles.text}>OK</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 

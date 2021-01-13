@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
+/* context */
+import { WeightsContext } from "../context/weightsContext";
+import { TimesContext } from "../context/timesContext";
 
 type Props = {
   data: ItemDetailType;
@@ -9,6 +12,9 @@ type Props = {
 };
 
 export const DisplayItemDetail: React.FC<Props> = ({ data }: Props) => {
+  const { weights, setWeights } = useContext(WeightsContext);
+  const { times, setTimes } = useContext(TimesContext);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{data.weights} Kg</Text>

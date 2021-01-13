@@ -34,7 +34,9 @@ export const ItemDetailScreen: React.FC<Props> = ({
   //   setItemDetails(res);
   // };
 
-  const onPressDecision = () => {};
+  const onPressDecision = () => {
+    console.log("Decision");
+  };
 
   return (
     <SafeAreaView style={styles.container}>

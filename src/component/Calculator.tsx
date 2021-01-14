@@ -3,12 +3,12 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type Props = {
   data: number | string;
-  // onPress: () => void;
+  onPress: () => void;
 };
 
-export const Calculator: React.FC<Props> = ({ data }: Props) => {
+export const Calculator: React.FC<Props> = ({ data, onPress }: Props) => {
   return (
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
       <Text style={styles.text}>{data}</Text>
     </TouchableOpacity>
   );

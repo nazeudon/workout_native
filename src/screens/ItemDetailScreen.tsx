@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, SafeAreaView, Text, FlatList, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -11,6 +11,8 @@ import { SegmentedControl } from "../component/SegmentedControl";
 import { Decision } from "../component/Decision";
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";
+/* context */
+import { WeightsContext } from "../context/weightsContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;
@@ -22,17 +24,12 @@ export const ItemDetailScreen: React.FC<Props> = ({
   route,
 }: Props) => {
   const { itemDetail } = route.params;
-  const [weights, setWeights] = useState<number>(itemDetail.weights);
-  const [times, setTimes] = useState<number>(itemDetail.times);
+  const { setWeights } = useContext(WeightsContext);
 
-  // useEffect(() => {
-  //   fetchItemDetails();
-  // }, []);
-
-  // const fetchItemDetails = async () => {
-  //   const res = await getItemDetails(item.id);
-  //   setItemDetails(res);
-  // };
+  useEffect(() => {
+    const weights = itemDetail.weights.toFixed(1);
+    setWeights(weights);
+  }, []);
 
   const onPressDecision = () => {
     console.log("Decision");

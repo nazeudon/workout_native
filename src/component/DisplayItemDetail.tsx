@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
@@ -12,14 +12,14 @@ type Props = {
 };
 
 export const DisplayItemDetail: React.FC<Props> = ({ data }: Props) => {
-  const { weights, setWeights } = useContext(WeightsContext);
-  const { times, setTimes } = useContext(TimesContext);
+  const { weights } = useContext(WeightsContext);
+  const { times } = useContext(TimesContext);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{data.weights} Kg</Text>
+      <Text style={styles.text}>{weights} Kg</Text>
       <Text style={styles.text}> / </Text>
-      <Text style={styles.text}>{data.times} 回</Text>
+      <Text style={styles.text}>{times} 回</Text>
     </View>
   );
 };

@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
 type WeightsContextValue = {
-  weights: number | string | undefined;
-  setWeights: (weights: number | string | undefined) => void;
+  weights: string | undefined;
+  setWeights: (weights: string | undefined) => void;
 };
 
 export const WeightsContext = createContext<WeightsContextValue>({

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type Props = {
-  data: number | string;
+  data: string;
   onPress: () => void;
 };
 

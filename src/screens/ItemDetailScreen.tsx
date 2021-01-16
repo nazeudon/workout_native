@@ -27,7 +27,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
   const { setWeights } = useContext(WeightsContext);
 
   useEffect(() => {
-    const weights = itemDetail.weights.toFixed(1);
+    const weights = String(itemDetail.weights);
     setWeights(weights);
   }, []);
 

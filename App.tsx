@@ -10,7 +10,7 @@ import AppNavigator from "./src/navigation/AppNavigator";
 const App = () => {
   const [event, setEvent] = useState<string | undefined>("");
   const [item, setItem] = useState<string | undefined>("");
-  const [weights, setWeights] = useState<number | string | undefined>(0);
+  const [weights, setWeights] = useState<string | undefined>(0);
   const [times, setTimes] = useState<number | undefined>(0);
 
   return (

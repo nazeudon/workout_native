@@ -10,11 +10,31 @@ export const NumberInputScreen = () => {
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
 
-  const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, ".", "C"];
-  const onPressInput = (inputNum: number | string) => {
+  const nums = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "C"];
+  const onPressInput = (inputNum: string) => {
     // console.log(String(weights).length);
-    const newWeights = String(weights) + String(inputNum);
-    setWeights(newWeights);
+    if (inputNum === "C") {
+      setWeights("0");
+    } else if (inputNum === ".") {
+      console.log(weights);
+      if (weights?.match(".")) {
+        //うまく行ってません。。
+        // setWeights(weights + ".");
+        console.log("True");
+        null;
+      } else {
+        setWeights(weights + ".");
+        console.log("false");
+        // null;
+      }
+    } else {
+      if (weights === "0") {
+        setWeights(inputNum);
+      } else {
+        const newWeights = weights + inputNum;
+        setWeights(newWeights);
+      }
+    }
   };
 
   return (
@@ -24,7 +44,7 @@ export const NumberInputScreen = () => {
         numColumns={3}
         contentContainerStyle={styles.button}
         data={nums}
-        renderItem={({ item }: { item: number | string }) => (
+        renderItem={({ item }: { item: string }) => (
           <Calculator data={item} onPress={() => onPressInput(item)} />
         )}
         keyExtractor={(item, index) => index.toString()}

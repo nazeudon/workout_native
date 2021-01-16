@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import SegmentedControlTab from "react-native-segmented-control-tab";
+/* context */
+import { SegmentContext } from "../context/segmentContext";
 
 export const SegmentedControl = () => {
   const [state, setState] = useState({ selectedIndex: 0 });
+  const { setSegment } = useContext(SegmentContext);
+  const segments = {
+    0: "weights",
+    1: "times",
+  };
+
   const handleIndexChange = (index: number) => {
     setState({
       ...state,
       selectedIndex: index,
     });
+    index === 0 ? setSegment(segments[0]) : setSegment(segments[1]);
   };
   return (
     <SegmentedControlTab

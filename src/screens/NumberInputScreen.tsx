@@ -5,35 +5,42 @@ import { Calculator } from "../component/Calculator";
 /* context */
 import { WeightsContext } from "../context/weightsContext";
 import { TimesContext } from "../context/timesContext";
+import { SegmentContext } from "../context/segmentContext";
 
 export const NumberInputScreen = () => {
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
+  const { segment } = useContext(SegmentContext);
 
   const nums = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "C"];
   const onPressInput = (inputNum: string) => {
-    // console.log(String(weights).length);
-    if (inputNum === "C") {
-      setWeights("0");
-    } else if (inputNum === ".") {
-      console.log(weights);
-      if (weights?.match(".")) {
-        //うまく行ってません。。
-        // setWeights(weights + ".");
-        console.log("True");
-        null;
+    if (segment === "weights") {
+      if (inputNum === "C") {
+        setWeights("0");
+      } else if (inputNum === ".") {
+        if (weights?.indexOf(".") !== -1) {
+          null;
+        } else {
+          setWeights(weights + ".");
+        }
       } else {
-        setWeights(weights + ".");
-        console.log("false");
-        // null;
+        if (weights === "0") {
+          setWeights(inputNum);
+        } else {
+          if (weights?.slice(-1) === ".") {
+            const newWeights = weights + inputNum;
+            setWeights(newWeights);
+          } else if (weights?.slice(-2).slice(0, 1) === ".") {
+          } else if (Number(weights) >= 100) {
+            null;
+          } else {
+            const newWeights = weights + inputNum;
+            setWeights(newWeights);
+          }
+        }
       }
-    } else {
-      if (weights === "0") {
-        setWeights(inputNum);
-      } else {
-        const newWeights = weights + inputNum;
-        setWeights(newWeights);
-      }
+    } else if (segment === "times") {
+      null;
     }
   };
 

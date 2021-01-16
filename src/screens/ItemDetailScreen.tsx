@@ -13,6 +13,7 @@ import { Decision } from "../component/Decision";
 import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
 import { WeightsContext } from "../context/weightsContext";
+import { SegmentContext } from "../context/segmentContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;
@@ -25,10 +26,12 @@ export const ItemDetailScreen: React.FC<Props> = ({
 }: Props) => {
   const { itemDetail } = route.params;
   const { setWeights } = useContext(WeightsContext);
+  const { setSegment } = useContext(SegmentContext);
 
   useEffect(() => {
     const weights = String(itemDetail.weights);
     setWeights(weights);
+    setSegment("weights");
   }, []);
 
   const onPressDecision = () => {

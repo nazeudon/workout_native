@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  LayoutChangeEvent,
+} from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
 /* context */
@@ -14,12 +20,28 @@ type Props = {
 export const DisplayItemDetail: React.FC<Props> = ({ data }: Props) => {
   const { weights } = useContext(WeightsContext);
   const { times } = useContext(TimesContext);
+  const [viewWidth, setViewWidth] = useState(0);
+
+  const onLayout = (e: LayoutChangeEvent) => {
+    setViewWidth(e.nativeEvent.layout.width);
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{weights} Kg</Text>
-      <Text style={styles.text}> / </Text>
-      <Text style={styles.text}>{times} 回</Text>
+      <Text style={styles.text}>{weights}</Text>
+      <Text style={styles.kg}>Kg</Text>
+
+      <Text
+        onLayout={onLayout}
+        style={{
+          ...styles.separate,
+          transform: [{ translateX: -(viewWidth / 4) }],
+        }}
+      >
+        /
+      </Text>
+      <Text style={styles.text}>{times}</Text>
+      <Text style={styles.text}>回</Text>
     </View>
   );
 };
@@ -27,8 +49,9 @@ export const DisplayItemDetail: React.FC<Props> = ({ data }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: "relative",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    // justifyContent: "space-evenly",
     alignSelf: "center",
     alignItems: "center",
     maxHeight: "15%",
@@ -37,10 +60,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#0076FF",
   },
-  text: {
+  kg: {
     fontSize: 28,
     color: "#eee",
     fontWeight: "bold",
-    // fontFamily: "",
+    position: "absolute",
+    left: "30%",
+  },
+  separate: {
+    fontSize: 28,
+    color: "#eee",
+    fontWeight: "bold",
+    position: "absolute",
+    left: "50%",
   },
 });

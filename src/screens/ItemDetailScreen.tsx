@@ -9,6 +9,8 @@ import { ItemDetailType } from "../types/item";
 import { DisplayItemDetail } from "../component/DisplayItemDetail";
 import { SegmentedControl } from "../component/SegmentedControl";
 import { Decision } from "../component/Decision";
+import { TabViewExample } from "../component/TabView";
+
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
@@ -44,6 +46,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
       <SegmentedControl />
       <NumberInputScreen />
       <Decision onPress={onPressDecision} />
+      {/* <TabViewExample /> */}
     </SafeAreaView>
   );
 };

@@ -40,7 +40,19 @@ export const NumberInputScreen = () => {
         }
       }
     } else if (segment === "times") {
-      null;
+      if (inputNum === "C") {
+        setTimes(0);
+      } else {
+        if (times === 0) {
+          setTimes(Number(inputNum));
+        } else if (Number(times) >= 10) {
+          null;
+        } else {
+          //エラー回避で三項演算子
+          const newTimes = String(times) + inputNum;
+          setTimes(Number(newTimes));
+        }
+      }
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 /* context */
 import { SegmentContext } from "../context/segmentContext";

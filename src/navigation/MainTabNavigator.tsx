@@ -25,6 +25,16 @@ export const MainTabNavigator = () => {
           ),
         }}
       />
+      <Tab.Screen
+        name="Info"
+        component={HomeStackNavigator}
+        options={{
+          tabBarLabel: "Info",
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="info" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

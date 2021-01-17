@@ -1,5 +1,7 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import React, { useContext } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+/* context */
+import { SegmentContext } from "../context/segmentContext";
 
 type Props = {
   data: string;
@@ -7,11 +9,16 @@ type Props = {
 };
 
 export const Calculator: React.FC<Props> = ({ data, onPress }: Props) => {
-  return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{data}</Text>
-    </TouchableOpacity>
-  );
+  const { segment } = useContext(SegmentContext);
+  if (segment === "times" && data === ".") {
+    return <View style={styles.unvisible}></View>;
+  } else {
+    return (
+      <TouchableOpacity style={styles.button} onPress={onPress}>
+        <Text style={styles.text}>{data}</Text>
+      </TouchableOpacity>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -29,5 +36,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "#333",
+  },
+  unvisible: {
+    flex: 1,
+    paddingVertical: "7%",
+    marginBottom: "3%",
+    margin: "1%",
+    borderWidth: 1,
+    borderColor: "#eee",
   },
 });

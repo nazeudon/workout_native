@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, SafeAreaView, Text, FlatList, View } from "react-native";
+import React, { useEffect, useContext } from "react";
+import { StyleSheet, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
+/* lib */
+import { UpdateItemDetails } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
-import { ItemDetailType } from "../types/item";
 /* component */
 import { DisplayItemDetail } from "../component/DisplayItemDetail";
 import { SegmentedControl } from "../component/SegmentedControl";
 import { Decision } from "../component/Decision";
-import { TabViewExample } from "../component/TabView";
-
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
 import { WeightsContext } from "../context/weightsContext";
+import { TimesContext } from "../context/timesContext";
 import { SegmentContext } from "../context/segmentContext";
 
 type Props = {
@@ -27,17 +27,32 @@ export const ItemDetailScreen: React.FC<Props> = ({
   route,
 }: Props) => {
   const { itemDetail } = route.params;
-  const { setWeights } = useContext(WeightsContext);
+  const itemDetailID = itemDetail.id;
+  const { weights, setWeights } = useContext(WeightsContext);
+  const { times, setTimes } = useContext(TimesContext);
   const { setSegment } = useContext(SegmentContext);
 
   useEffect(() => {
     const weights = String(itemDetail.weights);
+    const times = itemDetail.times;
     setWeights(weights);
+    setTimes(times);
     setSegment("weights");
   }, []);
 
-  const onPressDecision = () => {
-    console.log("Decision");
+  const onPressDecision = async () => {
+    await fetchUpdateItemDetails();
+    navigation.goBack();
+    setWeights("0");
+    setTimes(0);
+  };
+
+  const fetchUpdateItemDetails = async () => {
+    const res = await UpdateItemDetails(
+      itemDetailID,
+      Number(weights),
+      Number(times)
+    );
   };
 
   return (
@@ -46,7 +61,6 @@ export const ItemDetailScreen: React.FC<Props> = ({
       <SegmentedControl />
       <NumberInputScreen />
       <Decision onPress={onPressDecision} />
-      {/* <TabViewExample /> */}
     </SafeAreaView>
   );
 };

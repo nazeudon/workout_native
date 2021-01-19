@@ -59,7 +59,6 @@ export const getItemDetails = (itemsId: number) => {
     db.transaction(
       (tx) => {
         tx.executeSql(
-          // "select * from items (eventId) value ?;",
           "select * from item where itemsId = ?;",
           [itemsId],
           (_, resultSet) => {
@@ -77,6 +76,35 @@ export const getItemDetails = (itemsId: number) => {
     );
   });
 };
+export const UpdateItemDetails = (
+  id: number,
+  weights: number,
+  times: number
+) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "update item set weights = ?, times = ? where id = ?;",
+          [weights, times, id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[update itemsDetails] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
+/**********************************************/
 
 export const _initDB = () => {
   db.transaction((tx) => {

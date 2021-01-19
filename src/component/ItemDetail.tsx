@@ -17,13 +17,13 @@ export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
         <View style={styles.sets}>
           <Text style={styles.text}>{data.setNum}セット</Text>
         </View>
-        <View style={styles.separate}>
+        <View style={styles.separate1}>
           <Text style={styles.text}>/</Text>
         </View>
         <View style={styles.weights}>
           <Text style={styles.text}>{data.weights}kg</Text>
         </View>
-        <View style={styles.separate}>
+        <View style={styles.separate2}>
           <Text style={styles.text}>/</Text>
         </View>
         <View style={styles.times}>
@@ -42,6 +42,7 @@ export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
 const styles = StyleSheet.create({
   item: {
     height: 50,
+    position: "relative",
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderColor: "#eee",
@@ -53,10 +54,13 @@ const styles = StyleSheet.create({
     marginLeft: "3%",
   },
   weights: {
-    // width: "14%",
+    position: "absolute",
+    right: "63%",
   },
   times: {
-    // width: "10%",
+    width: "10%",
+    position: "absolute",
+    left: "43%",
   },
   text: {
     alignSelf: "flex-end",
@@ -67,7 +71,14 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "3%",
   },
-  separate: {
+  separate1: {
     marginHorizontal: "1%",
+    position: "absolute",
+    left: "18%",
+  },
+  separate2: {
+    marginHorizontal: "1%",
+    position: "absolute",
+    left: "38%",
   },
 });

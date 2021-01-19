@@ -10,6 +10,7 @@ import { RootStackParamList } from "../types/navigation";
 import { ItemDetailType } from "../types/item";
 /* component */
 import { ItemDetail } from "../component/ItemDetail";
+import { FloatingActionButton } from "../component/FloatingActionButton";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Item">;
@@ -19,10 +20,22 @@ type Props = {
 export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { item } = route.params;
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
+  const itemDetail: ItemDetailType = {
+    id: 4,
+    itemsId: item.id,
+    setNum: 4,
+    weights: 0,
+    times: 0,
+  };
 
   useEffect(() => {
-    fetchItemDetails();
-  }, []);
+    // navigation.addListenerの役割は
+    // nabigation.goBack()したときに再レンダーされるように
+    const refresh = navigation.addListener("focus", () => {
+      fetchItemDetails();
+    });
+    return refresh;
+  }, [navigation]);
 
   const fetchItemDetails = async () => {
     const res = await getItemDetails(item.id);
@@ -55,6 +68,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           )}
           keyExtractor={(item, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
+        />
+        <FloatingActionButton
+          iconName="plus"
+          onPress={() => navigation.navigate("ItemDetail", { itemDetail })}
         />
       </SafeAreaView>
     </>

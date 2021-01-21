@@ -20,13 +20,14 @@ type Props = {
 export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { item } = route.params;
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
-  const itemDetail: ItemDetailType = {
-    id: 4,
+  // イケテナイ
+  const [itemDetail, setItemDetial] = useState<ItemDetailType>({
+    id: 0,
     itemsId: item.id,
-    setNum: 4,
+    setNum: 0,
     weights: 0,
     times: 0,
-  };
+  });
 
   useEffect(() => {
     // navigation.addListenerの役割は
@@ -39,12 +40,24 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   const fetchItemDetails = async () => {
     const res = await getItemDetails(item.id);
-    setItemDetails(res);
+    const maxId = res.reduce((a: any, b: any) => (a.id > b.id ? a : b).id);
+
+    await setItemDetails(res);
+    // イケテナイ
+    await setItemDetial({
+      id: maxId + 1,
+      itemsId: item.id,
+      setNum: res.length + 1,
+      weights: 200,
+      times: 0,
+    });
   };
 
   const onPressItemDetail = (itemDetail: ItemDetailType) => {
     navigation.navigate("ItemDetail", { itemDetail });
   };
+
+  const onPressAddItemDetail = () => {};
 
   return (
     <>
@@ -69,10 +82,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           keyExtractor={(item, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
         />
-        <FloatingActionButton
-          iconName="plus"
-          onPress={() => navigation.navigate("ItemDetail", { itemDetail })}
-        />
+        <FloatingActionButton iconName="plus" onPress={onPressAddItemDetail} />
       </SafeAreaView>
     </>
   );

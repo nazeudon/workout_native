@@ -12,6 +12,7 @@ import { ItemType, ItemDetailType } from "../types/item";
 import { Item } from "../component/Item";
 /* context */
 import { ItemContext } from "../context/itemContext";
+import { FloatingActionButton } from "../component/FloatingActionButton";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Event">;
@@ -37,6 +38,8 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     navigation.navigate("Item", { item });
   };
 
+  const onPressAddItem = () => {};
+
   return (
     <>
       <View style={styles.descs}>
@@ -61,6 +64,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
         />
       </SafeAreaView>
+      <FloatingActionButton iconName="plus" onPress={onPressAddItem} />
     </>
   );
 };

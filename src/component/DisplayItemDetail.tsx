@@ -1,11 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  LayoutChangeEvent,
-} from "react-native";
+import React, { useContext, useState } from "react";
+import { StyleSheet, Text, View, LayoutChangeEvent } from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
 /* context */

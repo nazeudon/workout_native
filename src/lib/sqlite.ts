@@ -104,6 +104,59 @@ export const UpdateItemDetails = (
   });
 };
 
+export const InsertItemDetails = (
+  itemsId: number,
+  setNum: number,
+  weights: number,
+  times: number
+) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "insert into item (itemsId, setNum, weights, times) values (?,?,?,?);",
+          [itemsId, setNum, weights, times],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[insert itemsDetails] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
+export const InsertItem = (eventId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "insert into items (eventId) values ?;",
+          [eventId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[insert item] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
 /**********************************************/
 
 export const _initDB = () => {
@@ -127,12 +180,12 @@ export const _initDB = () => {
 export const _insertToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "insert into items (eventId) values (?);",
-      [1],
-      //"insert into events (id, event) values (?, ?),(?, ?), (?, ?);",
-      //[1, "ベンチプレス ", 2, "デッドリフト", 3, "スクワット"],
+      // "insert into items (eventId) values (?);",
+      // [1],
+      // "insert into events (id, event) values (?, ?),(?, ?), (?, ?);",
+      // [1, "ベンチプレス ", 2, "デッドリフト", 3, "スクワット"],
       // "insert into item (itemsId, setNum, weights, times) values (?,?,?,?),(?,?,?,?),(?,?,?,?);",
-      // [1, 1, 100.0, 10, 1, 2, 100.0, 9, 1, 3, 100.0, 8],
+      // [2, 1, 100.0, 10, 2, 2, 100.0, 9, 2, 3, 100.0, 8],
       () => {
         console.log("success");
       }, // 成功時のコールバック関数

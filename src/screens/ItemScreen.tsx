@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, SafeAreaView, Text, View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
 import { getItemDetails } from "../lib/sqlite";
+import { IsNewContext } from "../context/itemDetailContext";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemDetailType } from "../types/item";
@@ -19,9 +20,9 @@ type Props = {
 
 export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { item } = route.params;
+  const { setIsNew } = useContext(IsNewContext);
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
-  // イケテナイ
-  const [itemDetail, setItemDetial] = useState<ItemDetailType>({
+  const [initItemDetail, setInitItemDetial] = useState<ItemDetailType>({
     id: 0,
     itemsId: item.id,
     setNum: 0,
@@ -40,15 +41,15 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   const fetchItemDetails = async () => {
     const res = await getItemDetails(item.id);
-    const maxId = res.reduce((a: any, b: any) => (a.id > b.id ? a : b).id);
+    // const maxId = res.reduce((a: any, b: any) => (a.id > b.id ? a : b).id);
 
     await setItemDetails(res);
-    // イケテナイ
-    await setItemDetial({
-      id: maxId + 1,
+    await setInitItemDetial({
+      // id: maxId + 1, // これ実際はいらない
+      id: 0,
       itemsId: item.id,
       setNum: res.length + 1,
-      weights: 200,
+      weights: 0,
       times: 0,
     });
   };
@@ -56,8 +57,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const onPressItemDetail = (itemDetail: ItemDetailType) => {
     navigation.navigate("ItemDetail", { itemDetail });
   };
-
-  const onPressAddItemDetail = () => {};
+  const onPressInsertItemDetail = (itemDetail: ItemDetailType) => {
+    setIsNew(true);
+    navigation.navigate("ItemDetail", { itemDetail });
+  };
 
   return (
     <>
@@ -82,7 +85,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           keyExtractor={(item, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
         />
-        <FloatingActionButton iconName="plus" onPress={onPressAddItemDetail} />
+        <FloatingActionButton
+          iconName="plus"
+          onPress={() => onPressInsertItemDetail(initItemDetail)}
+        />
       </SafeAreaView>
     </>
   );

@@ -4,7 +4,7 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
-import { getItems } from "../lib/sqlite";
+import { getItems, InsertItem } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemType, ItemDetailType } from "../types/item";
@@ -22,7 +22,22 @@ type Props = {
 export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
+  const [insertItemsId, setInserItemsId] = useState<number>(0);
   const { setItem } = useContext(ItemContext);
+
+  const initItem: ItemType = {
+    id: 0,
+    eventId: event.id,
+    createdAt: "",
+  };
+
+  const initItemDetail: ItemDetailType = {
+    id: 0,
+    itemsId: insertItemsId,
+    setNum: 1,
+    weights: 0,
+    times: 0,
+  };
 
   useEffect(() => {
     fetchItems();
@@ -33,12 +48,20 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     setItems(res);
   };
 
+  const fetchInsertItem = async () => {
+    const res: number = await InsertItem(initItem.eventId);
+    setInserItemsId(res);
+  };
+
   const onPressItem = (item: ItemType) => {
     setItem(item.createdAt);
     navigation.navigate("Item", { item });
   };
 
-  const onPressAddItem = () => {};
+  const onPressInsertItem = async (item: ItemType) => {
+    await fetchInsertItem();
+    navigation.navigate("Item", { item });
+  };
 
   return (
     <>
@@ -64,7 +87,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
         />
       </SafeAreaView>
-      <FloatingActionButton iconName="plus" onPress={onPressAddItem} />
+      <FloatingActionButton iconName="plus" onPress={() => onPressInsertItem} />
     </>
   );
 };

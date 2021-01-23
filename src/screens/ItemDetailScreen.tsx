@@ -3,7 +3,7 @@ import { StyleSheet, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
-import { UpdateItemDetails } from "../lib/sqlite";
+import { UpdateItemDetails, InsertItemDetails } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
@@ -16,6 +16,7 @@ import { NumberInputScreen } from "../screens/NumberInputScreen";
 import { WeightsContext } from "../context/weightsContext";
 import { TimesContext } from "../context/timesContext";
 import { SegmentContext } from "../context/segmentContext";
+import { IsNewContext } from "../context/itemDetailContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;
@@ -27,10 +28,11 @@ export const ItemDetailScreen: React.FC<Props> = ({
   route,
 }: Props) => {
   const { itemDetail } = route.params;
-  const itemDetailID = itemDetail.id;
+  const { id, itemsId, setNum } = itemDetail;
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
   const { setSegment } = useContext(SegmentContext);
+  const { isNew, setIsNew } = useContext(IsNewContext);
 
   useEffect(() => {
     const weights = String(itemDetail.weights);
@@ -41,15 +43,25 @@ export const ItemDetailScreen: React.FC<Props> = ({
   }, []);
 
   const onPressDecision = async () => {
-    await fetchUpdateItemDetails();
+    if (isNew) {
+      await fetchInsertItemDetails();
+    } else {
+      await fetchUpdateItemDetails();
+    }
     navigation.goBack();
+    setIsNew(false);
     setWeights("0");
     setTimes(0);
   };
 
   const fetchUpdateItemDetails = async () => {
-    const res = await UpdateItemDetails(
-      itemDetailID,
+    const res = await UpdateItemDetails(id, Number(weights), Number(times));
+  };
+
+  const fetchInsertItemDetails = async () => {
+    const res = await InsertItemDetails(
+      itemsId,
+      setNum,
       Number(weights),
       Number(times)
     );

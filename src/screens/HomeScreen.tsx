@@ -4,12 +4,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
 import { Event } from "../component/Event";
 /* lib */
-import { getEvents, _initDB, _insertToDB, _deleteDB } from "../lib/sqlite";
+import {
+  getEvents,
+  _initDB,
+  _insertToDB,
+  _deleteDB,
+  _deleteItem,
+  _deleteItems,
+} from "../lib/sqlite";
 /* types */
 import { EventType } from "../types/event";
 import { RootStackParamList } from "../types/navigation";
-/* context */
-import { EventContext } from "../context/eventContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Home">;
@@ -17,7 +22,6 @@ type Props = {
 
 export const HomeScreen = ({ navigation }: Props) => {
   const [events, setEvents] = useState<EventType[]>([]);
-  const { setEvent } = useContext(EventContext);
 
   useEffect(() => {
     fetchEvents();
@@ -29,7 +33,6 @@ export const HomeScreen = ({ navigation }: Props) => {
   };
 
   const onPressEvent = (event: EventType) => {
-    setEvent(event.event);
     navigation.navigate("Event", { event });
   };
 
@@ -47,6 +50,8 @@ export const HomeScreen = ({ navigation }: Props) => {
       <Button title="insertToDB" onPress={_insertToDB} />
       <Button title="deleteDB" onPress={_deleteDB} />
       <Button title="getFromDB" onPress={fetchEvents} />
+      <Button title="deleteItem" onPress={_deleteItem} />
+      <Button title="deleteItems" onPress={_deleteItems} />
       {/* <Button title="getFromDB" onPress={getEvents} /> */}
       {/* <Button title="changeDB" onPress={changeDB} /> */}
     </SafeAreaView>

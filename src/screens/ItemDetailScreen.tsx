@@ -10,6 +10,7 @@ import { RootStackParamList } from "../types/navigation";
 import { DisplayItemDetail } from "../component/DisplayItemDetail";
 import { SegmentedControl } from "../component/SegmentedControl";
 import { Decision } from "../component/Decision";
+import { IconButton } from "../component/IconButton";
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
@@ -33,6 +34,15 @@ export const ItemDetailScreen: React.FC<Props> = ({
   const { times, setTimes } = useContext(TimesContext);
   const { setSegment } = useContext(SegmentContext);
   const { isNew, setIsNew } = useContext(IsNewContext);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: String(itemDetail.setNum) + "セット目",
+      headerLeft: () => (
+        <IconButton name="closecircleo" onPress={() => navigation.goBack()} />
+      ),
+    });
+  }, []);
 
   useEffect(() => {
     const weights = String(itemDetail.weights);

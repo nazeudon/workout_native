@@ -53,6 +53,30 @@ export const getItems = (eventId: number) => {
   });
 };
 
+export const getItem = (id: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "select * from items where id = ?;",
+          [id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get item] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
 export const getItemDetails = (itemsId: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
@@ -133,13 +157,55 @@ export const InsertItemDetails = (
   });
 };
 
+export const InsertInitItemDetails = (
+  itemsId: number,
+  setNum: number,
+  weights: number,
+  times: number
+) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "insert into item (itemsId, setNum, weights, times) values (?,?,?,?), (?,?,?,?), (?,?,?,?);",
+          [
+            itemsId,
+            setNum,
+            weights,
+            times,
+            itemsId,
+            setNum + 1,
+            weights,
+            times,
+            itemsId,
+            setNum + 2,
+            weights,
+            times,
+          ],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[insert itemsDetails] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
 export const InsertItem = (eventId: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
     db.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into items (eventId) values ?;",
+          "insert into items (eventId) values (?);",
           [eventId],
           (_, resultSet) => {
             // 成功時の処理
@@ -152,6 +218,30 @@ export const InsertItem = (eventId: number) => {
         );
       },
       () => reject(new Error("[insert item] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
+export const DeleteItemDetail = (id: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "delete from item where id = ?;",
+          [id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[delete itemDetail] transaction failed")),
       () => resolve(results.insertId)
     );
   });
@@ -204,6 +294,39 @@ export const _deleteDB = () => {
       // 実行したいSQL文
       "drop table events;",
       null, // SQL文の引数
+      () => {
+        console.log("success");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+      } // 失敗時のコールバック関数
+    );
+  });
+};
+
+export const _deleteItem = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // 実行したいSQL文
+      // "delete from item where itemsId = ?;",
+      "delete from item where setNum = ?;",
+      [11], // SQL文の引数
+      () => {
+        console.log("success");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+      } // 失敗時のコールバック関数
+    );
+  });
+};
+
+export const _deleteItems = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // 実行したいSQL文
+      "delete from items where id = ?;",
+      [23], // SQL文の引数
       () => {
         console.log("success");
       }, // 成功時のコールバック関数

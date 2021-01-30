@@ -28,8 +28,8 @@ export const ItemDetailScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { itemDetail } = route.params;
-  const { id, itemsId, setNum } = itemDetail;
+  const { itemDetail, index } = route.params;
+  const { id, itemsId } = itemDetail;
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
   const { setSegment } = useContext(SegmentContext);
@@ -37,7 +37,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      title: String(itemDetail.setNum) + "セット目",
+      title: String(index + 1) + "セット目",
       headerLeft: () => (
         <IconButton name="closecircleo" onPress={() => navigation.goBack()} />
       ),
@@ -71,7 +71,6 @@ export const ItemDetailScreen: React.FC<Props> = ({
   const fetchInsertItemDetails = async () => {
     const res = await InsertItemDetails(
       itemsId,
-      setNum,
       Number(weights),
       Number(times)
     );

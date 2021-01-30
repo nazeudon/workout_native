@@ -55,7 +55,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const fetchInsertInitItemDetail = async (id: number) => {
-    const res: number = await InsertInitItemDetails(id, 1, 0, 0);
+    const res: number = await InsertInitItemDetails(id, 0, 0);
   };
 
   const fetchGetItem = async (id: number) => {
@@ -75,9 +75,29 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await navigation.navigate("Item", { item });
   };
 
-  const onPressDeleteItemDetail = (item: ItemType) => {
+  const onPressDeleteItem = async (
+    rowMap: any,
+    item: ItemType,
+    index: number
+  ) => {
+    await closeRow(rowMap, index);
+    await deleteRow(item.id);
     DeleteItem(item.id);
     fetchGetItems();
+  };
+
+  const closeRow = (rowMap: any, rowKey: any) => {
+    // https://snack.expo.io/@rollindeep/react-native-swipe-list-view
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
+  };
+
+  const deleteRow = (rowKey: any) => {
+    const newData = [...items];
+    const prevIndex = items.findIndex((item) => item.id === rowKey);
+    newData.splice(prevIndex, 1);
+    setItems(newData);
   };
 
   return (
@@ -101,16 +121,15 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             <Item data={item} onPress={() => onPressItem(item)} />
           )}
           keyExtractor={(item, index) => index.toString()}
-          renderHiddenItem={({ item }: { item: ItemType }) => (
+          renderHiddenItem={(data, rowMap) => (
             <View style={styles.delete}>
               <IconButton
                 name="delete"
                 color={"#fff"}
-                onPress={() => onPressDeleteItemDetail(item)}
+                onPress={() => onPressDeleteItem(rowMap, data.item, data.index)}
               />
             </View>
           )}
-          onRowClose={(rowKey, rowMap) => {}}
           rightOpenValue={-72}
           stopRightSwipe={-72}
           disableRightSwipe={true}

@@ -5,17 +5,22 @@ import { ItemDetailType } from "../types/item";
 
 type Props = {
   data: ItemDetailType;
+  index: number;
   onPress: () => void;
 };
 
-export const ItemDetail: React.FC<Props> = ({ data, onPress }: Props) => {
+export const ItemDetail: React.FC<Props> = ({
+  data,
+  index,
+  onPress,
+}: Props) => {
   const volume: number = data.weights * data.times;
 
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.item}>
         <View style={styles.sets}>
-          <Text style={styles.text}>{data.setNum}セット</Text>
+          <Text style={styles.text}>{index + 1}セット</Text>
         </View>
         <View style={styles.separate1}>
           <Text style={styles.text}>/</Text>

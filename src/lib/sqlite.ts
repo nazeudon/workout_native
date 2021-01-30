@@ -130,7 +130,6 @@ export const UpdateItemDetails = (
 
 export const InsertItemDetails = (
   itemsId: number,
-  setNum: number,
   weights: number,
   times: number
 ) => {
@@ -139,8 +138,8 @@ export const InsertItemDetails = (
     db.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into item (itemsId, setNum, weights, times) values (?,?,?,?);",
-          [itemsId, setNum, weights, times],
+          "insert into item (itemsId, weights, times) values (?,?,?);",
+          [itemsId, weights, times],
           (_, resultSet) => {
             // 成功時の処理
             results = resultSet;
@@ -159,7 +158,6 @@ export const InsertItemDetails = (
 
 export const InsertInitItemDetails = (
   itemsId: number,
-  setNum: number,
   weights: number,
   times: number
 ) => {
@@ -168,18 +166,15 @@ export const InsertInitItemDetails = (
     db.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into item (itemsId, setNum, weights, times) values (?,?,?,?), (?,?,?,?), (?,?,?,?);",
+          "insert into item (itemsId,  weights, times) values (?,?,?), (?,?,?), (?,?,?);",
           [
             itemsId,
-            setNum,
             weights,
             times,
             itemsId,
-            setNum + 1,
             weights,
             times,
             itemsId,
-            setNum + 2,
             weights,
             times,
           ],
@@ -278,7 +273,7 @@ export const _initDB = () => {
       // 実行したいSQL文
       //"create table if not exists items (id integer primary key not null, eventId integer not null, createdAt TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')) not null);",
       //"create table if not exists events (id integer primary key not null, event text not null);",
-      "create table if not exists item (id integer primary key not null, itemsId integer not null, setNum integer not null, weights real not null, times integer not null);",
+      "create table if not exists item (id integer primary key not null, itemsId integer not null, weights real not null, times integer not null);",
       null, // SQL文の引数
       () => {
         console.log("success");
@@ -297,8 +292,8 @@ export const _insertToDB = () => {
       // [1],
       // "insert into events (id, event) values (?, ?),(?, ?), (?, ?);",
       // [1, "ベンチプレス ", 2, "デッドリフト", 3, "スクワット"],
-      // "insert into item (itemsId, setNum, weights, times) values (?,?,?,?),(?,?,?,?),(?,?,?,?);",
-      // [2, 1, 100.0, 10, 2, 2, 100.0, 9, 2, 3, 100.0, 8],
+      "insert into item (itemsId, weights, times) values (?,?,?),(?,?,?),(?,?,?);",
+      [2, 100.0, 10, 2, 100.0, 9, 2, 100.0, 8],
       () => {
         console.log("success");
       }, // 成功時のコールバック関数
@@ -350,6 +345,21 @@ export const _deleteItems = () => {
       // 実行したいSQL文
       "delete from items where id = ?;",
       [23], // SQL文の引数
+      () => {
+        console.log("success");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+      } // 失敗時のコールバック関数
+    );
+  });
+};
+export const _DropTable = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // 実行したいSQL文
+      "drop table item;",
+      null, // SQL文の引数
       () => {
         console.log("success");
       }, // 成功時のコールバック関数

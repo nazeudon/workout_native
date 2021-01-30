@@ -11,6 +11,7 @@ import {
   _deleteDB,
   _deleteItem,
   _deleteItems,
+  _DropTable,
 } from "../lib/sqlite";
 /* types */
 import { EventType } from "../types/event";
@@ -52,6 +53,7 @@ export const HomeScreen = ({ navigation }: Props) => {
       <Button title="getFromDB" onPress={fetchEvents} />
       <Button title="deleteItem" onPress={_deleteItem} />
       <Button title="deleteItems" onPress={_deleteItems} />
+      <Button title="DropTable" onPress={_DropTable} />
       {/* <Button title="getFromDB" onPress={getEvents} /> */}
       {/* <Button title="changeDB" onPress={changeDB} /> */}
     </SafeAreaView>

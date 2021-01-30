@@ -7,7 +7,6 @@ export type ItemType = {
 export type ItemDetailType = {
   id: number;
   itemsId: number;
-  setNum: number;
   weights: number;
   times: number;
 };

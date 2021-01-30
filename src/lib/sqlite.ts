@@ -223,6 +223,29 @@ export const InsertItem = (eventId: number) => {
   });
 };
 
+export const DeleteItem = (id: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "delete from items where id = ?;",
+          [id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[delete item] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
 export const DeleteItemDetail = (id: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;

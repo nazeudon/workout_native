@@ -9,12 +9,14 @@ import {
   getItems,
   InsertItem,
   InsertInitItemDetails,
+  DeleteItem,
 } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemType } from "../types/item";
 /* component */
 import { Item } from "../component/Item";
+import { IconButton } from "../component/IconButton";
 /* context */
 import { FloatingActionButton } from "../component/FloatingActionButton";
 
@@ -73,6 +75,11 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await navigation.navigate("Item", { item });
   };
 
+  const onPressDeleteItemDetail = (item: ItemType) => {
+    DeleteItem(item.id);
+    fetchGetItems();
+  };
+
   return (
     <>
       <View style={styles.descs}>
@@ -94,7 +101,20 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             <Item data={item} onPress={() => onPressItem(item)} />
           )}
           keyExtractor={(item, index) => index.toString()}
-          renderHiddenItem={(data, rowMap) => <Text>Left</Text>}
+          renderHiddenItem={({ item }: { item: ItemType }) => (
+            <View style={styles.delete}>
+              <IconButton
+                name="delete"
+                color={"#fff"}
+                onPress={() => onPressDeleteItemDetail(item)}
+              />
+            </View>
+          )}
+          onRowClose={(rowKey, rowMap) => {}}
+          rightOpenValue={-72}
+          stopRightSwipe={-72}
+          disableRightSwipe={true}
+          closeOnRowBeginSwipe={true}
         />
       </SafeAreaView>
       <FloatingActionButton
@@ -135,5 +155,15 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     backgroundColor: "#eee",
+  },
+  delete: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    // marginRight: WIDTH * 0.05,
+    paddingRight: 20,
+    marginLeft: 50, //背景の赤色が見えないように
+    backgroundColor: "#ff3b30",
   },
 });

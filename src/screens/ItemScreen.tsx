@@ -40,11 +40,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     weights: 0,
     times: 0,
   });
-  const [state, setState] = useState({
-    listViewData: Array(20)
-      .fill("")
-      .map((_, i) => ({ key: `${i}`, text: `item #${i}` })),
-  });
+
+  // const [state, setState] = useState({
+  //   listViewData: Array(20)
+  //     .fill("")
+  //     .map((_, i) => ({ key: `${i}`, text: `item #${i}` })),
+  // });
 
   useEffect(() => {
     navigation.setOptions({
@@ -81,36 +82,61 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     navigation.navigate("ItemDetail", { itemDetail });
   };
 
-  const onPressDeleteItemDetail = (itemDetail: ItemDetailType) => {
-    DeleteItemDetail(itemDetail.id);
-    fetchItemDetails();
+  const onPressDeleteItemDetail = async (
+    rowMap: any,
+    itemDetail: ItemDetailType
+  ) => {
+    await closeRow(rowMap, itemDetail.id);
+    await deleteRow(rowMap, itemDetail.id);
+    await DeleteItemDetail(itemDetail.id);
+    await fetchItemDetails();
   };
 
-  const onSwipeValueChange = (swipeData: any) => {
-    const { key, value } = swipeData;
-    let rowTranslateAnimatedValues: any = {};
-    Array(20)
-      .fill("")
-      .forEach((_, i) => {
-        rowTranslateAnimatedValues[`${i}`] = new Animated.Value(1);
-      });
-    let animationIsRunning = false;
-    if (value < -375 && !animationIsRunning) {
-      animationIsRunning = true;
-      Animated.timing(rowTranslateAnimatedValues[key], {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(() => {
-        const newData = [...state.listViewData];
-        const prevIndex = state.listViewData.findIndex(
-          (item: any) => item.key === key
-        );
-        newData.splice(prevIndex, 1);
-        setState({ listViewData: newData });
-        animationIsRunning = false;
-      });
+  // const onSwipeValueChange = (swipeData: any) => {
+  //   // https://github.com/jemise111/react-native-swipe-list-view/issues/254
+  //   const { key, value } = swipeData;
+  //   let rowTranslateAnimatedValues: any = {};
+  //   Array(20)
+  //     .fill("")
+  //     .forEach((_, i) => {
+  //       rowTranslateAnimatedValues[`${i}`] = new Animated.Value(1);
+  //     });
+  //   let animationIsRunning = false;
+  //   if (value < -375 && !animationIsRunning) {
+  //     animationIsRunning = true;
+  //     Animated.timing(rowTranslateAnimatedValues[key], {
+  //       toValue: 0,
+  //       duration: 200,
+  //       useNativeDriver: true,
+  //     }).start(() => {
+  //       // const newData = [...state.listViewData];
+  //       const newData = itemDetails;
+  //       const prevIndex = state.listViewData.findIndex(
+  //         (item: any) => item.key === key
+  //       );
+  //       newData.splice(prevIndex, 1);
+  //       // setState({ listViewData: newData });
+  //       setItemDetails(newData);
+  //       animationIsRunning = false;
+  //     });
+  //   }
+  // };
+
+  const closeRow = (rowMap: any, rowKey: any) => {
+    // https://snack.expo.io/@rollindeep/react-native-swipe-list-view
+    console.log(rowKey); // idなので0から始まっているわけではない
+    console.log(rowMap); // 0から始まっている
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
     }
+  };
+
+  const deleteRow = (rowMap: any, rowKey: any) => {
+    closeRow(rowMap, rowKey);
+    const newData = [...itemDetails];
+    const prevIndex = itemDetails.findIndex((item) => item.id === rowKey);
+    newData.splice(prevIndex, 1);
+    setItemDetails(newData);
   };
 
   return (
@@ -129,27 +155,26 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       </View>
       <SafeAreaView style={styles.list}>
         <SwipeListView
+          useFlatList
           data={itemDetails}
           renderItem={({ item }: { item: ItemDetailType }) => (
             <ItemDetail data={item} onPress={() => onPressItemDetail(item)} />
           )}
-          renderHiddenItem={({ item }: { item: ItemDetailType }) => (
+          renderHiddenItem={(data, rowMap) => (
             <View style={styles.delete}>
               <IconButton
                 name="delete"
                 color={"#fff"}
-                onPress={() => onPressDeleteItemDetail(item)}
+                onPress={() => onPressDeleteItemDetail(rowMap, data.item)}
               />
             </View>
           )}
-          onRowClose={(rowKey, rowMap) => {}}
           keyExtractor={(item, index) => index.toString()}
-          // rightOpenValue={-WIDTH * 0.2}
           rightOpenValue={-72}
           stopRightSwipe={-72}
           disableRightSwipe={true}
           closeOnRowBeginSwipe={true}
-          onSwipeValueChange={() => {}}
+          // onSwipeValueChange={onSwipeValueChange}
         />
         <FloatingActionButton
           iconName="plus"

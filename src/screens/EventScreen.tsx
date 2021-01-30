@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, SafeAreaView, Text, View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";

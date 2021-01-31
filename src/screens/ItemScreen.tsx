@@ -111,7 +111,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       </View>
       <SafeAreaView style={styles.list}>
         <SwipeListView
-          useFlatList
           data={itemDetails}
           renderItem={(data, _) => (
             <ItemDetail
@@ -137,6 +136,11 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           disableRightSwipe={true}
           closeOnRowBeginSwipe={true}
         />
+        <View
+          style={{ ...styles.recoveryContainer, top: itemLength * 50 + 30 }}
+        >
+          <Text style={styles.recoveryText}>リカバリー</Text>
+        </View>
         <FloatingActionButton
           iconName="plus"
           onPress={() => onPressInsertItemDetail(initItemDetail, itemLength)}
@@ -176,6 +180,7 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     backgroundColor: "#eee",
+    position: "relative",
   },
   delete: {
     flex: 1,
@@ -185,5 +190,18 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     marginLeft: 50, //背景の赤色が見えないように
     backgroundColor: "#ff3b30",
+  },
+  recoveryContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    position: "absolute",
+    width: "100%",
+    height: 50,
+  },
+  recoveryText: {
+    marginLeft: "3%",
+    fontSize: 16,
   },
 });

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, SafeAreaView, Text, View } from "react-native";
+import { StyleSheet, SafeAreaView, Text, View, TextInput } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 /* lib */
 import { DeleteItemDetail, getItemDetails } from "../lib/sqlite";
 /* context */
@@ -24,6 +25,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { item } = route.params;
   const { setIsNew } = useContext(IsNewContext);
   const [itemLength, setItemLength] = useState<number>(0);
+  const [recovery, setRecovery] = useState("0");
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
   const [initItemDetail, setInitItemDetial] = useState<ItemDetailType>({
     id: 0,
@@ -111,6 +113,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       </View>
       <SafeAreaView style={styles.list}>
         <SwipeListView
+          // keyboardShouldPersistTaps="always"
           data={itemDetails}
           renderItem={(data, _) => (
             <ItemDetail
@@ -136,15 +139,30 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           disableRightSwipe={true}
           closeOnRowBeginSwipe={true}
         />
-        <View
-          style={{ ...styles.recoveryContainer, top: itemLength * 50 + 30 }}
-        >
-          <Text style={styles.recoveryText}>リカバリー</Text>
-        </View>
         <FloatingActionButton
           iconName="plus"
           onPress={() => onPressInsertItemDetail(initItemDetail, itemLength)}
         />
+        <View
+          style={{ ...styles.recoveryContainer, top: itemLength * 50 + 30 }}
+        >
+          <Text style={styles.recoveryText1}>リカバリー</Text>
+          <View
+            //ここで記入スタートさせたい
+            onTouchStart={() => console.log("on tap!")}
+            style={styles.recoveryTextMain}
+          >
+            <Feather name="edit" size={18} color="black" />
+            <TextInput
+              style={styles.recoveryTextInput}
+              keyboardType="phone-pad"
+              returnKeyType="done"
+              onChangeText={(text) => setRecovery(text)}
+              value={recovery}
+            />
+            <Text style={styles.recoveryText2}>分</Text>
+          </View>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -195,13 +213,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     backgroundColor: "#fff",
     position: "absolute",
     width: "100%",
     height: 50,
   },
-  recoveryText: {
+  recoveryText1: {
     marginLeft: "3%",
     fontSize: 16,
+  },
+  recoveryText2: {
+    fontSize: 16,
+  },
+  recoveryTextInput: {
+    fontSize: 16,
+    paddingHorizontal: "3%",
+  },
+  recoveryTextMain: {
+    marginRight: "3%",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

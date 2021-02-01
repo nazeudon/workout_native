@@ -146,16 +146,17 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         <View
           style={{ ...styles.recoveryContainer, top: itemLength * 50 + 30 }}
         >
-          <Text style={styles.recoveryText1}>リカバリー</Text>
+          <View style={styles.recoveryMain1}>
+            <Text style={styles.recoveryText1}>リカバリー</Text>
+          </View>
           <View
-            //ここで記入スタートさせたい
             onTouchStart={() => console.log("on tap!")}
-            style={styles.recoveryTextMain}
+            style={styles.recoveryMain2}
           >
-            <Feather name="edit" size={18} color="black" />
+            {/* <Feather name="edit" size={18} style={styles.icon} color="black" /> */}
             <TextInput
               style={styles.recoveryTextInput}
-              keyboardType="phone-pad"
+              keyboardType="numeric"
               returnKeyType="done"
               onChangeText={(text) => setRecovery(text)}
               value={recovery}
@@ -213,11 +214,24 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     backgroundColor: "#fff",
     position: "absolute",
     width: "100%",
     height: 50,
+  },
+  recoveryMain1: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    width: "100%",
+    height: 50,
+  },
+  recoveryMain2: {
+    marginRight: "3%",
+    flexDirection: "row",
+    alignItems: "center",
   },
   recoveryText1: {
     marginLeft: "3%",
@@ -229,10 +243,11 @@ const styles = StyleSheet.create({
   recoveryTextInput: {
     fontSize: 16,
     paddingHorizontal: "3%",
+    // borderColor: "gray",
+    // borderWidth: 1,
   },
-  recoveryTextMain: {
-    marginRight: "3%",
-    flexDirection: "row",
-    alignItems: "center",
+  icon: {
+    // position: "absolute",
+    // right: 30,
   },
 });

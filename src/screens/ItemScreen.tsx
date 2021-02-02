@@ -34,6 +34,14 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     times: 0,
   });
 
+  const sections = [
+    {
+      title: "セット / 挙上重量 / 回数",
+      data: itemDetails.map((itemDetail) => ({ ...itemDetail, type: "item" })),
+    },
+    { title: "リカバリー", data: [{ type: "rec", time: recovery }] },
+  ];
+
   useEffect(() => {
     navigation.setOptions({
       title: item.createdAt.split(" ")[0],
@@ -100,39 +108,59 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   return (
     <>
       <View style={styles.descs}>
-        <View style={styles.desc}>
+        {/* <View style={styles.desc}>
           <Text style={styles.textDec}>セット</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.textDec}>挙上重量</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.textDec}>回数</Text>
-        </View>
-        <View style={styles.date}>
+        </View> */}
+        {/* <View style={styles.date}>
           <Text style={styles.textDate}>総挙上重量</Text>
-        </View>
+        </View> */}
       </View>
       <SafeAreaView style={styles.list}>
         <SwipeListView
-          // keyboardShouldPersistTaps="always"
-          data={itemDetails}
-          renderItem={(data, _) => (
-            <ItemDetail
-              data={data.item}
-              index={data.index}
-              onPress={() => onPressItemDetail(data.item, data.index)}
-            />
+          useSectionList
+          sections={sections}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.headerTitle}>{title}</Text>
           )}
-          renderHiddenItem={(data, rowMap) => (
-            <View style={styles.delete}>
-              <IconButton
-                name="delete"
-                color={"#fff"}
-                onPress={() =>
-                  onPressDeleteItemDetail(rowMap, data.item, data.index)
-                }
-              />
-            </View>
-          )}
+          // data={itemDetails}
+          renderItem={(data, _) => {
+            if (data.item.type === "item") {
+              return (
+                <ItemDetail
+                  data={data.item}
+                  index={data.index}
+                  onPress={() => onPressItemDetail(data.item, data.index)}
+                />
+              );
+            } else {
+              return (
+                <View>
+                  <Text>リカバリー</Text>
+                </View>
+              );
+            }
+          }}
+          renderHiddenItem={(data, rowMap) => {
+            if (data.item.type === "item") {
+              return (
+                <View style={styles.delete}>
+                  <IconButton
+                    name="delete"
+                    color={"#fff"}
+                    onPress={() =>
+                      onPressDeleteItemDetail(rowMap, data.item, data.index)
+                    }
+                  />
+                </View>
+              );
+            } else {
+              return null;
+            }
+          }}
           keyExtractor={(item, index) => index.toString()}
           rightOpenValue={-72}
           stopRightSwipe={-72}
@@ -143,7 +171,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           iconName="plus"
           onPress={() => onPressInsertItemDetail(initItemDetail, itemLength)}
         />
-        <View
+        {/* <View
           style={{ ...styles.recoveryContainer, top: itemLength * 50 + 30 }}
         >
           <View style={styles.recoveryMain1}>
@@ -152,9 +180,9 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           <View
             onTouchStart={() => console.log("on tap!")}
             style={styles.recoveryMain2}
-          >
-            {/* <Feather name="edit" size={18} style={styles.icon} color="black" /> */}
-            <TextInput
+          > */}
+        {/* <Feather name="edit" size={18} style={styles.icon} color="black" /> */}
+        {/* <TextInput
               style={styles.recoveryTextInput}
               keyboardType="numeric"
               returnKeyType="done"
@@ -163,7 +191,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             />
             <Text style={styles.recoveryText2}>分</Text>
           </View>
-        </View>
+        </View> */}
       </SafeAreaView>
     </>
   );
@@ -249,5 +277,12 @@ const styles = StyleSheet.create({
   icon: {
     // position: "absolute",
     // right: 30,
+  },
+  headerTitle: {
+    marginLeft: "3%",
+    marginBottom: "1%",
+    color: "#555",
+    marginTop: "3%",
+    // backgroundColor: "",
   },
 });

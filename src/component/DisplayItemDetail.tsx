@@ -8,7 +8,6 @@ import { TimesContext } from "../context/timesContext";
 
 type Props = {
   data: ItemDetailType;
-  // onPress: () => void;
 };
 
 export const DisplayItemDetail: React.FC<Props> = ({ data }: Props) => {
@@ -75,9 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     flexDirection: "row",
-    // justifyContent: "space-evenly",
     alignSelf: "center",
-    // alignItems: "center",
     maxHeight: "15%",
     minWidth: "95%",
     marginVertical: "5%",

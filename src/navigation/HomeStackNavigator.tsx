@@ -7,6 +7,7 @@ import { ItemScreen } from "../screens/ItemScreen";
 import { ItemDetailScreen } from "../screens/ItemDetailScreen";
 /* types */
 import { RootStackParamList } from "../types/navigation";
+import { RecoveryScreen } from "../screens/RecoveryScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -43,6 +44,7 @@ export const HomeStackNavigator = () => {
         options={{ headerShown: false }}
       />
       <RootStack.Screen name="ItemDetail" component={ItemDetailScreen} />
+      <RootStack.Screen name="Recovery" component={RecoveryScreen} />
     </RootStack.Navigator>
   );
 };

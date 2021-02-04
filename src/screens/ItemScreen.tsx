@@ -3,18 +3,20 @@ import { StyleSheet, SafeAreaView, Text, View, TextInput } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
 /* lib */
 import { DeleteItemDetail, getItemDetails } from "../lib/sqlite";
 /* context */
 import { IsNewContext } from "../context/itemDetailContext";
+import { SegmentContext } from "../context/segmentContext";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemDetailType } from "../types/item";
 /* component */
 import { ItemDetail } from "../component/ItemDetail";
+import { Recovery } from "../component/Recovery";
 import { FloatingActionButton } from "../component/FloatingActionButton";
 import { IconButton } from "../component/IconButton";
+import { RecoveryType } from "../types/recovery";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Item">;
@@ -24,6 +26,7 @@ type Props = {
 export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { item } = route.params;
   const { setIsNew } = useContext(IsNewContext);
+  const { setSegment } = useContext(SegmentContext);
   const [itemLength, setItemLength] = useState<number>(0);
   const [recovery, setRecovery] = useState("0");
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
@@ -53,6 +56,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
       fetchItemDetails();
+      setSegment("weight");
     });
     return refresh;
   }, [navigation]);
@@ -72,6 +76,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const onPressItemDetail = (itemDetail: ItemDetailType, index: number) => {
     navigation.navigate("ItemDetail", { itemDetail, index });
   };
+
   const onPressInsertItemDetail = (
     itemDetail: ItemDetailType,
     index: number
@@ -89,6 +94,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await deleteRow(itemDetail.id);
     await DeleteItemDetail(itemDetail.id);
     await fetchItemDetails();
+  };
+
+  const onPressRecovery = (recovery: RecoveryType) => {
+    navigation.navigate("Recovery", { recovery });
   };
 
   const closeRow = (rowMap: any, rowKey: any) => {
@@ -138,9 +147,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
               );
             } else {
               return (
-                <View>
-                  <Text>リカバリー</Text>
-                </View>
+                <Recovery
+                  data={data.item.time}
+                  onPress={() => onPressRecovery(data.item.time)}
+                />
               );
             }
           }}
@@ -171,27 +181,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           iconName="plus"
           onPress={() => onPressInsertItemDetail(initItemDetail, itemLength)}
         />
-        {/* <View
-          style={{ ...styles.recoveryContainer, top: itemLength * 50 + 30 }}
-        >
-          <View style={styles.recoveryMain1}>
-            <Text style={styles.recoveryText1}>リカバリー</Text>
-          </View>
-          <View
-            onTouchStart={() => console.log("on tap!")}
-            style={styles.recoveryMain2}
-          > */}
-        {/* <Feather name="edit" size={18} style={styles.icon} color="black" /> */}
-        {/* <TextInput
-              style={styles.recoveryTextInput}
-              keyboardType="numeric"
-              returnKeyType="done"
-              onChangeText={(text) => setRecovery(text)}
-              value={recovery}
-            />
-            <Text style={styles.recoveryText2}>分</Text>
-          </View>
-        </View> */}
       </SafeAreaView>
     </>
   );
@@ -238,51 +227,10 @@ const styles = StyleSheet.create({
     marginLeft: 50, //背景の赤色が見えないように
     backgroundColor: "#ff3b30",
   },
-  recoveryContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    // justifyContent: "space-between",
-    backgroundColor: "#fff",
-    position: "absolute",
-    width: "100%",
-    height: 50,
-  },
-  recoveryMain1: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    width: "100%",
-    height: 50,
-  },
-  recoveryMain2: {
-    marginRight: "3%",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  recoveryText1: {
-    marginLeft: "3%",
-    fontSize: 16,
-  },
-  recoveryText2: {
-    fontSize: 16,
-  },
-  recoveryTextInput: {
-    fontSize: 16,
-    paddingHorizontal: "3%",
-    // borderColor: "gray",
-    // borderWidth: 1,
-  },
-  icon: {
-    // position: "absolute",
-    // right: 30,
-  },
   headerTitle: {
     marginLeft: "3%",
     marginBottom: "1%",
     color: "#555",
     marginTop: "3%",
-    // backgroundColor: "",
   },
 });

@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
-import { SafeAreaView, StyleSheet, FlatList, Button, View } from "react-native";
+import { StyleSheet, FlatList, View } from "react-native";
 /* conponent */
 import { Calculator } from "../component/Calculator";
 /* context */
 import { WeightsContext } from "../context/weightsContext";
 import { TimesContext } from "../context/timesContext";
 import { SegmentContext } from "../context/segmentContext";
+import { recoveryContext } from "../context/recoveryContext";
 
 export const NumberInputScreen = () => {
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
+  const { recovery, setRecovery } = useContext(recoveryContext);
   const { segment } = useContext(SegmentContext);
 
   const nums = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "C"];
@@ -51,6 +53,20 @@ export const NumberInputScreen = () => {
           //エラー回避で三項演算子
           const newTimes = String(times) + inputNum;
           setTimes(Number(newTimes));
+        }
+      }
+    } else if (segment === "recovery") {
+      if (inputNum === "C") {
+        setRecovery("0");
+      } else {
+        if (recovery === "0") {
+          setRecovery(inputNum);
+        } else if (Number(recovery) >= 10) {
+          null;
+        } else {
+          //エラー回避で三項演算子
+          const newRecovery = String(recovery) + inputNum;
+          setRecovery(newRecovery);
         }
       }
     }

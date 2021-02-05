@@ -12,6 +12,8 @@ export const Calculator: React.FC<Props> = ({ data, onPress }: Props) => {
   const { segment } = useContext(SegmentContext);
   if (segment === "times" && data === ".") {
     return <View style={styles.unvisible}></View>;
+  } else if (segment === "recovery" && data === ".") {
+    return <View style={styles.unvisible}></View>;
   } else {
     return (
       <TouchableOpacity style={styles.button} onPress={onPress}>

@@ -16,7 +16,6 @@ import { ItemDetail } from "../component/ItemDetail";
 import { Recovery } from "../component/Recovery";
 import { FloatingActionButton } from "../component/FloatingActionButton";
 import { IconButton } from "../component/IconButton";
-import { RecoveryType } from "../types/recovery";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Item">;
@@ -96,7 +95,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await fetchItemDetails();
   };
 
-  const onPressRecovery = (recovery: RecoveryType) => {
+  const onPressRecovery = (recovery: string) => {
     navigation.navigate("Recovery", { recovery });
   };
 

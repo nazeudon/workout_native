@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { StyleSheet, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -13,6 +13,8 @@ import { DisplayRecovery } from "../component/DisplayRecovery";
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
+import { recoveryContext } from "../context/recoveryContext";
+import { SegmentContext } from "../context/segmentContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Recovery">;
@@ -23,7 +25,9 @@ export const RecoveryScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { recovery } = route.params;
+  //   const { recovery } = route.params;
+  const { recovery, setRecovery } = useContext(recoveryContext);
+  const { setSegment } = useContext(SegmentContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -34,9 +38,16 @@ export const RecoveryScreen: React.FC<Props> = ({
     });
   }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const { recovery } = route.params;
+    setRecovery(recovery);
+    setSegment("recovery");
+  }, []);
 
-  const onPressDecision = async () => {};
+  const onPressDecision = async () => {
+    navigation.goBack();
+    setRecovery("0");
+  };
 
   return (
     <SafeAreaView style={styles.container}>

@@ -7,6 +7,6 @@ export type RootStackParamList = {
   Event: { event: EventType };
   Item: { item: ItemType };
   ItemDetail: { itemDetail: ItemDetailType; index: number };
-  Recovery: { recovery: RecoveryType };
+  Recovery: { recovery: string };
   Main: undefined;
 };

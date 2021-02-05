@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, LayoutChangeEvent } from "react-native";
 /* type */
 import { RecoveryType } from "../types/recovery";
 /* context */
+import { recoveryContext } from "../context/recoveryContext";
 
 type Props = {
-  data: RecoveryType;
+  data: string;
 };
 
 export const DisplayRecovery: React.FC<Props> = ({ data }: Props) => {
-  const recovery = data;
+  //   const recovery = data;
+  const { recovery } = useContext(recoveryContext);
   const [viewWidth, setViewWidth] = useState(0);
   const [viewHeight, setViewHeight] = useState(0);
 

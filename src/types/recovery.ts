@@ -1,3 +1,3 @@
 export type RecoveryType = {
-  recovery: number;
+  recovery: string;
 };

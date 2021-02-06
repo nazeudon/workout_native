@@ -1,3 +1,5 @@
 export type RecoveryType = {
-  recovery: string;
+  id: number;
+  itemsId: number;
+  min: number;
 };

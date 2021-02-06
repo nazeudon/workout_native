@@ -100,6 +100,7 @@ export const getItemDetails = (itemsId: number) => {
     );
   });
 };
+
 export const UpdateItemDetails = (
   id: number,
   weights: number,
@@ -261,6 +262,54 @@ export const DeleteItemDetail = (id: number) => {
       },
       () => reject(new Error("[delete itemDetail] transaction failed")),
       () => resolve(results.insertId)
+    );
+  });
+};
+
+export const getRecovery = (itemsId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "select * from recovery where itemsId = ?;",
+          [itemsId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get recovery] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
+export const UpdateRecovery = (id: number, min: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "update recovery set min = ? where id = ?;",
+          [min, id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[update recovery] transaction failed")),
+      () => resolve(results.rows._array)
     );
   });
 };

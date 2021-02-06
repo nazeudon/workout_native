@@ -4,13 +4,14 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
-import { DeleteItemDetail, getItemDetails } from "../lib/sqlite";
+import { DeleteItemDetail, getItemDetails, getRecovery } from "../lib/sqlite";
 /* context */
 import { IsNewContext } from "../context/itemDetailContext";
 import { SegmentContext } from "../context/segmentContext";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemDetailType } from "../types/item";
+import { RecoveryType } from "../types/recovery";
 /* component */
 import { ItemDetail } from "../component/ItemDetail";
 import { Recovery } from "../component/Recovery";
@@ -27,7 +28,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { setIsNew } = useContext(IsNewContext);
   const { setSegment } = useContext(SegmentContext);
   const [itemLength, setItemLength] = useState<number>(0);
-  const [recovery, setRecovery] = useState("0");
+  const [recovery, setRecovery] = useState<RecoveryType[]>([]);
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
   const [initItemDetail, setInitItemDetial] = useState<ItemDetailType>({
     id: 0,
@@ -41,7 +42,11 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       title: "セット / 挙上重量 / 回数",
       data: itemDetails.map((itemDetail) => ({ ...itemDetail, type: "item" })),
     },
-    { title: "リカバリー", data: [{ type: "rec", time: recovery }] },
+    // { title: "リカバリー", data: [{ type: "rec", time: recovery }] },
+    {
+      title: "リカバリー",
+      data: recovery.map((rec) => ({ ...rec, type: "rec" })),
+    },
   ];
 
   useEffect(() => {
@@ -55,6 +60,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
       fetchItemDetails();
+      fetchGetRecovery();
       setSegment("weight");
     });
     return refresh;
@@ -70,6 +76,11 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       times: 0,
     });
     await setItemLength(res.length);
+  };
+
+  const fetchGetRecovery = async () => {
+    const res = await getRecovery(item.id);
+    await setRecovery(res);
   };
 
   const onPressItemDetail = (itemDetail: ItemDetailType, index: number) => {
@@ -95,7 +106,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await fetchItemDetails();
   };
 
-  const onPressRecovery = (recovery: string) => {
+  const onPressRecovery = (recovery: RecoveryType) => {
     navigation.navigate("Recovery", { recovery });
   };
 
@@ -147,8 +158,8 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             } else {
               return (
                 <Recovery
-                  data={data.item.time}
-                  onPress={() => onPressRecovery(data.item.time)}
+                  data={data.item.min}
+                  onPress={() => onPressRecovery(data.item)}
                 />
               );
             }

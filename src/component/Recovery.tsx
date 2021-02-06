@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { RecoveryType } from "../types/recovery";
 
 type Props = {
-  data: RecoveryType;
+  data: string;
   onPress: () => void;
 };
 

@@ -3,6 +3,7 @@ import { StyleSheet, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
+import { UpdateRecovery } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
@@ -15,6 +16,7 @@ import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
 import { recoveryContext } from "../context/recoveryContext";
 import { SegmentContext } from "../context/segmentContext";
+import { min } from "react-native-reanimated";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Recovery">;
@@ -39,14 +41,21 @@ export const RecoveryScreen: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    const { recovery } = route.params;
-    setRecovery(recovery);
+    // const { recovery } = route.params;
+    // const min = String(recovery.min);
+    setRecovery(String(route.params.recovery.min));
     setSegment("recovery");
   }, []);
 
   const onPressDecision = async () => {
+    const id = route.params.recovery.id;
+    fetchUpdateRecovery(id, Number(recovery));
     navigation.goBack();
     setRecovery("0");
+  };
+
+  const fetchUpdateRecovery = async (id: number, min: number) => {
+    const res = await UpdateRecovery(id, min);
   };
 
   return (

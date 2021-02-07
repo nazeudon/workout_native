@@ -19,19 +19,11 @@ export const ItemDetail: React.FC<Props> = ({
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.item}>
-        <View style={styles.sets}>
-          <Text style={styles.text}>{index + 1}セット</Text>
-        </View>
-        <View style={styles.separate1}>
-          <Text style={styles.text}>/</Text>
-        </View>
-        <View style={styles.weights}>
+        <View style={styles.desc}>
+          <Text style={styles.text}>{index + 1}セット目</Text>
+          <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{data.weights}kg</Text>
-        </View>
-        <View style={styles.separate2}>
-          <Text style={styles.text}>/</Text>
-        </View>
-        <View style={styles.times}>
+          <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{data.times}回</Text>
         </View>
         <View style={styles.volume}>
@@ -47,42 +39,27 @@ export const ItemDetail: React.FC<Props> = ({
 const styles = StyleSheet.create({
   item: {
     height: 50,
-    position: "relative",
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderColor: "#eee",
     flexDirection: "row",
     alignItems: "center",
   },
-  sets: {
+  desc: {
     marginLeft: "3%",
-  },
-  weights: {
-    position: "absolute",
-    right: "63%",
-  },
-  times: {
-    width: "10%",
-    position: "absolute",
-    left: "43%",
+    flexDirection: "row",
   },
   text: {
-    alignSelf: "flex-end",
+    fontSize: 16,
+    color: "#333",
+  },
+  separate: {
+    marginHorizontal: "2%",
     fontSize: 16,
     color: "#333",
   },
   volume: {
     marginLeft: "auto",
     marginRight: "3%",
-  },
-  separate1: {
-    marginHorizontal: "1%",
-    position: "absolute",
-    left: "18%",
-  },
-  separate2: {
-    marginHorizontal: "1%",
-    position: "absolute",
-    left: "38%",
   },
 });

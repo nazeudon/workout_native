@@ -7,18 +7,18 @@ type Props = {
   onPress: () => void;
 };
 
-export const Recovery: React.FC<Props> = ({ data, onPress }: Props) => {
+export const Trial: React.FC<Props> = ({ data, onPress }: Props) => {
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
-      <View style={styles.recovery}>
-        <Text style={styles.text}>{data} 分</Text>
+      <View style={styles.trial}>
+        <Text style={styles.text}>{data} 種目目</Text>
       </View>
     </TouchableHighlight>
   );
 };
 
 const styles = StyleSheet.create({
-  recovery: {
+  trial: {
     height: 50,
     backgroundColor: "#fff",
     flexDirection: "row",

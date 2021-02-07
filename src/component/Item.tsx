@@ -13,9 +13,10 @@ type Props = {
 export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
   const [itemLength, setItemLength] = useState<number>(0);
   const [totalWeights, setTotalWeights] = useState<number>(0);
+  const [recovery, setRecovery] = useState<number>(0);
 
   useEffect(() => {
-    fetchItemDetails();
+    fetchItemInfos();
   }, []);
 
   const sumWeights = (res: ItemDetailType[]) => {
@@ -26,10 +27,12 @@ export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
     setTotalWeights(total);
   };
 
-  const fetchItemDetails = async () => {
-    const res = await getItemDetails(data.id);
-    await sumWeights(res);
-    await setItemLength(res.length);
+  const fetchItemInfos = async () => {
+    const itemDetailRes = await getItemDetails(data.id);
+    const recoveryRes = await getRecovery(data.id);
+    await sumWeights(itemDetailRes);
+    await setItemLength(itemDetailRes.length);
+    await setRecovery(recoveryRes[0].min);
   };
 
   const date = data.createdAt.split(" ")[0];
@@ -38,6 +41,8 @@ export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
       <View style={styles.items}>
         <View style={styles.desc}>
           <Text style={styles.text}>{itemLength}セット</Text>
+          <Text style={styles.separate}>/</Text>
+          <Text style={styles.text}>{recovery}分</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{totalWeights}kg</Text>
         </View>
@@ -74,6 +79,6 @@ const styles = StyleSheet.create({
   separate: {
     fontSize: 16,
     color: "#333",
-    marginHorizontal: "5%",
+    marginHorizontal: "2%",
   },
 });

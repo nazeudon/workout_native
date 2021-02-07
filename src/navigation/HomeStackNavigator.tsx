@@ -1,13 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 /* screens */
 import { HomeScreen } from "../screens/HomeScreen";
 import { EventScreen } from "../screens/EventScreen";
 import { ItemScreen } from "../screens/ItemScreen";
 import { ItemDetailScreen } from "../screens/ItemDetailScreen";
+import { RecoveryScreen } from "../screens/RecoveryScreen";
+import { TrialScreen } from "../screens/TrialScreen";
 /* types */
 import { RootStackParamList } from "../types/navigation";
-import { RecoveryScreen } from "../screens/RecoveryScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -45,6 +46,7 @@ export const HomeStackNavigator = () => {
       />
       <RootStack.Screen name="ItemDetail" component={ItemDetailScreen} />
       <RootStack.Screen name="Recovery" component={RecoveryScreen} />
+      <RootStack.Screen name="Trial" component={TrialScreen} />
     </RootStack.Navigator>
   );
 };

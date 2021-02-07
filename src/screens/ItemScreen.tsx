@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, SafeAreaView, Text, View, TextInput } from "react-native";
+import { StyleSheet, SafeAreaView, Text, View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -126,18 +126,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   return (
     <>
-      <View style={styles.descs}>
-        {/* <View style={styles.desc}>
-          <Text style={styles.textDec}>セット</Text>
-          <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>挙上重量</Text>
-          <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>回数</Text>
-        </View> */}
-        {/* <View style={styles.date}>
-          <Text style={styles.textDate}>総挙上重量</Text>
-        </View> */}
-      </View>
       <SafeAreaView style={styles.list}>
         <SwipeListView
           useSectionList
@@ -197,31 +185,11 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  descs: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  desc: {
-    marginTop: "3%",
-    marginLeft: "3%",
-    flexDirection: "row",
-    alignItems: "center",
-  },
   date: {
     marginTop: "3%",
     marginRight: "3%",
     flexDirection: "row",
     alignItems: "center",
-  },
-  textDec: {
-    color: "#555",
-  },
-  separate: {
-    color: "#555",
-    marginHorizontal: "1%",
-  },
-  textDate: {
-    color: "#555",
   },
   list: {
     flex: 1,

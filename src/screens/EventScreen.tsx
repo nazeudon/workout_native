@@ -9,7 +9,10 @@ import {
   getItems,
   InsertItem,
   InsertInitItemDetails,
+  InsertInitRecovery,
   DeleteItem,
+  DeleteItemDetailByItemsId,
+  DeleteRecoveryByItemsId,
 } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
@@ -29,6 +32,31 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
 
+  const SwipeListViewReturn = () => {
+    return (
+      <SwipeListView
+        data={items}
+        renderItem={({ item }: { item: ItemType }) => (
+          <Item data={item} onPress={() => onPressItem(item)} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        renderHiddenItem={(data, rowMap) => (
+          <View style={styles.delete}>
+            <IconButton
+              name="delete"
+              color={"#fff"}
+              onPress={() => onPressDeleteItem(rowMap, data.item, data.index)}
+            />
+          </View>
+        )}
+        rightOpenValue={-72}
+        stopRightSwipe={-72}
+        disableRightSwipe={true}
+        closeOnRowBeginSwipe={true}
+      />
+    );
+  };
+
   useEffect(() => {
     navigation.setOptions({
       title: event.event,
@@ -42,7 +70,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       fetchGetItems();
     });
     return refresh;
-  }, [navigation]);
+  }, [navigation, SwipeListViewReturn]);
 
   const fetchGetItems = async () => {
     const res = await getItems(event.id);
@@ -54,8 +82,8 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     return res;
   };
 
-  const fetchInsertInitItemDetail = async (id: number) => {
-    const res: number = await InsertInitItemDetails(id, 0, 0);
+  const fetchInsertInitItemDetail = async (itemsId: number) => {
+    const res: number = await InsertInitItemDetails(itemsId, 0, 0);
   };
 
   const fetchGetItem = async (id: number) => {
@@ -63,14 +91,19 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     return res;
   };
 
+  const fetchInsertInitRecovery = async (itemsId: number) => {
+    const res: number = await InsertInitRecovery(itemsId, 0);
+  };
+
   const onPressItem = (item: ItemType) => {
     navigation.navigate("Item", { item });
   };
 
   const onPressInsertItem = async () => {
-    const id = await fetchInsertItem();
-    await fetchInsertInitItemDetail(id);
-    const items: ItemType[] = await fetchGetItem(id);
+    const itemsId = await fetchInsertItem();
+    await fetchInsertInitItemDetail(itemsId);
+    await fetchInsertInitRecovery(itemsId);
+    const items: ItemType[] = await fetchGetItem(itemsId);
     const item: ItemType = await items[0];
     await navigation.navigate("Item", { item });
   };
@@ -83,6 +116,8 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await closeRow(rowMap, index);
     await deleteRow(item.id);
     DeleteItem(item.id);
+    DeleteItemDetailByItemsId(item.id);
+    DeleteRecoveryByItemsId(item.id);
     fetchGetItems();
   };
 
@@ -106,16 +141,21 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         <View style={styles.desc}>
           <Text style={styles.textDec}>総セット数</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>総挙上重量</Text>
+          <Text style={styles.textDec}>種目目</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>推定Max重量</Text>
+          <Text style={styles.textDec}>リカバリー</Text>
+          <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>総挙上重量</Text>
+          {/* <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>推定Max重量</Text> */}
         </View>
         <View style={styles.date}>
           <Text style={styles.textDate}>年-月-日</Text>
         </View>
       </View>
       <SafeAreaView style={styles.list}>
-        <SwipeListView
+        <SwipeListViewReturn />
+        {/* <SwipeListView
           data={items}
           renderItem={({ item }: { item: ItemType }) => (
             <Item data={item} onPress={() => onPressItem(item)} />
@@ -134,7 +174,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           stopRightSwipe={-72}
           disableRightSwipe={true}
           closeOnRowBeginSwipe={true}
-        />
+        /> */}
       </SafeAreaView>
       <FloatingActionButton
         iconName="plus"

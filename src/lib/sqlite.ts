@@ -266,6 +266,31 @@ export const DeleteItemDetail = (id: number) => {
   });
 };
 
+export const DeleteItemDetailByItemsId = (itemsId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "delete from item where itemsId = ?;",
+          [itemsId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () =>
+        reject(new Error("[delete itemDetail by itemsId] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
 export const getRecovery = (itemsId: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
@@ -310,6 +335,55 @@ export const UpdateRecovery = (id: number, min: number) => {
       },
       () => reject(new Error("[update recovery] transaction failed")),
       () => resolve(results.rows._array)
+    );
+  });
+};
+
+export const InsertInitRecovery = (itemsId: number, min: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "insert into recovery (itemsId, min) values (?,?);",
+          [itemsId, min],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[insert recovery] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
+export const DeleteRecoveryByItemsId = (itemsId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "delete from recovery where itemsId = ?;",
+          [itemsId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () =>
+        reject(new Error("[delete recovery by itemsId] transaction failed")),
+      () => resolve(results.insertId)
     );
   });
 };
@@ -379,8 +453,9 @@ export const _deleteItem = () => {
     tx.executeSql(
       // 実行したいSQL文
       // "delete from item where itemsId = ?;",
-      "delete from item where setNum = ?;",
-      [11], // SQL文の引数
+      // "delete from item where itemsId = ?;",
+      "delete from recovery where itemsId = ?;",
+      [12], // SQL文の引数
       () => {
         console.log("success");
       }, // 成功時のコールバック関数

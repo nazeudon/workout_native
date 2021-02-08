@@ -127,6 +127,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     navigation.navigate("Recovery", { recovery });
   };
 
+  const onPressTrial = (trial: TrialType) => {
+    navigation.navigate("Trial", { trial });
+  };
+
   const closeRow = (rowMap: any, rowKey: any) => {
     // https://snack.expo.io/@rollindeep/react-native-swipe-list-view
     if (rowMap[rowKey]) {
@@ -167,7 +171,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                 />
               );
             } else {
-              return <Trial data={data.item.trialNum} onPress={() => {}} />;
+              return (
+                <Trial
+                  data={data.item.trialNum}
+                  onPress={() => onPressTrial(data.item)}
+                />
+              );
             }
           }}
           renderHiddenItem={(data, rowMap) => {

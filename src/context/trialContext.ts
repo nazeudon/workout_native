@@ -6,6 +6,6 @@ type trialContextValue = {
 };
 
 export const trialContext = createContext<trialContextValue>({
-  trial: "1",
+  trial: "0",
   setTrial: () => {},
 });

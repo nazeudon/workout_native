@@ -16,7 +16,6 @@ import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
 import { recoveryContext } from "../context/recoveryContext";
 import { SegmentContext } from "../context/segmentContext";
-import { min } from "react-native-reanimated";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Recovery">;

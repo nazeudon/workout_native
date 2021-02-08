@@ -10,9 +10,11 @@ import {
   InsertItem,
   InsertInitItemDetails,
   InsertInitRecovery,
+  InsertInitTrial,
   DeleteItem,
   DeleteItemDetailByItemsId,
   DeleteRecoveryByItemsId,
+  DeleteTrialByItemsId,
 } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
@@ -32,31 +34,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
 
-  const SwipeListViewReturn = () => {
-    return (
-      <SwipeListView
-        data={items}
-        renderItem={({ item }: { item: ItemType }) => (
-          <Item data={item} onPress={() => onPressItem(item)} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        renderHiddenItem={(data, rowMap) => (
-          <View style={styles.delete}>
-            <IconButton
-              name="delete"
-              color={"#fff"}
-              onPress={() => onPressDeleteItem(rowMap, data.item, data.index)}
-            />
-          </View>
-        )}
-        rightOpenValue={-72}
-        stopRightSwipe={-72}
-        disableRightSwipe={true}
-        closeOnRowBeginSwipe={true}
-      />
-    );
-  };
-
   useEffect(() => {
     navigation.setOptions({
       title: event.event,
@@ -70,7 +47,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       fetchGetItems();
     });
     return refresh;
-  }, [navigation, SwipeListViewReturn]);
+  }, [navigation]);
 
   const fetchGetItems = async () => {
     const res = await getItems(event.id);
@@ -95,6 +72,10 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const res: number = await InsertInitRecovery(itemsId, 0);
   };
 
+  const fetchInsertInitTrial = async (itemsId: number) => {
+    const res: number = await InsertInitTrial(itemsId, 1);
+  };
+
   const onPressItem = (item: ItemType) => {
     navigation.navigate("Item", { item });
   };
@@ -103,6 +84,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const itemsId = await fetchInsertItem();
     await fetchInsertInitItemDetail(itemsId);
     await fetchInsertInitRecovery(itemsId);
+    await fetchInsertInitTrial(itemsId);
     const items: ItemType[] = await fetchGetItem(itemsId);
     const item: ItemType = await items[0];
     await navigation.navigate("Item", { item });
@@ -114,10 +96,10 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     index: number
   ) => {
     await closeRow(rowMap, index);
-    await deleteRow(item.id);
     DeleteItem(item.id);
     DeleteItemDetailByItemsId(item.id);
     DeleteRecoveryByItemsId(item.id);
+    DeleteTrialByItemsId(item.id);
     fetchGetItems();
   };
 
@@ -126,13 +108,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
     }
-  };
-
-  const deleteRow = (rowKey: any) => {
-    const newData = [...items];
-    const prevIndex = items.findIndex((item) => item.id === rowKey);
-    newData.splice(prevIndex, 1);
-    setItems(newData);
   };
 
   return (
@@ -154,8 +129,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         </View>
       </View>
       <SafeAreaView style={styles.list}>
-        <SwipeListViewReturn />
-        {/* <SwipeListView
+        <SwipeListView
           data={items}
           renderItem={({ item }: { item: ItemType }) => (
             <Item data={item} onPress={() => onPressItem(item)} />
@@ -174,7 +148,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           stopRightSwipe={-72}
           disableRightSwipe={true}
           closeOnRowBeginSwipe={true}
-        /> */}
+        />
       </SafeAreaView>
       <FloatingActionButton
         iconName="plus"

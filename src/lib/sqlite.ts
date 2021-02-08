@@ -490,11 +490,11 @@ export const _initDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
       // 実行したいSQL文
-      //"create table if not exists items (id integer primary key not null, eventId integer not null, createdAt TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')) not null);",
+      "create table if not exists items (id integer primary key not null, eventId integer not null, createdAt TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')) not null, sets integer not null, totalWeights real not null);",
       //"create table if not exists events (id integer primary key not null, event text not null);",
       // "create table if not exists item (id integer primary key not null, itemsId integer not null, weights real not null, times integer not null);",
       // "create table if not exists recovery (id integer primary key not null, itemsId integer not null, min integer not null);",
-      "create table if not exists trial (id integer primary key not null, itemsId integer not null, trialNum integer not null);",
+      // "create table if not exists trial (id integer primary key not null, itemsId integer not null, trialNum integer not null);",
       null, // SQL文の引数
       () => {
         console.log("success");
@@ -509,15 +509,32 @@ export const _initDB = () => {
 export const _insertToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      // "insert into items (eventId) values (?);",
+      "insert into items (id, eventId, sets, totalWeights) values (?, ?, ?, ?), (?, ?, ?, ?);",
       // [1],
       // "insert into events (id, event) values (?, ?),(?, ?), (?, ?);",
       // [1, "ベンチプレス ", 2, "デッドリフト", 3, "スクワット"],
       // "insert into item (itemsId, weights, times) values (?,?,?),(?,?,?),(?,?,?);",
       // [2, 100.0, 10, 2, 100.0, 9, 2, 100.0, 8],
       // "insert into recovery (itemsId, min) values (?,?);",
-      "insert into trial (itemsId, trialNum) values (?,?);",
-      [13, 2],
+      // "insert into trial (itemsId, trialNum) values (?,?);",
+      [10, 1, 3, 1500, 13, 1, 3, 1000],
+      () => {
+        console.log("success");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+
+        return true; // ロールバックする場合はtrueを返す
+      } // 失敗時のコールバック関数
+    );
+  });
+};
+
+export const _addColumnToDB = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "alter table items add column sets integer;",
+      null,
       () => {
         console.log("success");
       }, // 成功時のコールバック関数
@@ -534,7 +551,7 @@ export const _deleteDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
       // 実行したいSQL文
-      "drop table events;",
+      "drop table items;",
       null, // SQL文の引数
       () => {
         console.log("success");
@@ -594,31 +611,3 @@ export const _DropTable = () => {
     );
   });
 };
-// export const getEvents = () => {
-//   db.transaction(
-//     (tx) => {
-//       tx.executeSql(
-//         //"select * from events where id = ?;",
-//         "select * from events;",
-//         [],
-//         (_, resultSet) => {
-//           // SUCCESS
-//           console.log("1");
-//           console.log(resultSet);
-//           return resultSet;
-//         },
-//         () => {
-//           // FAIL
-//           console.log("fail");
-//           return false; // nothing to do.
-//         }
-//       );
-//     },
-//     () => {
-//       console.log("fail all");
-//     }, // 失敗時のコールバック関数
-//     () => {
-//       console.log("success");
-//     } // 成功時のコールバック関数
-//   );
-// };

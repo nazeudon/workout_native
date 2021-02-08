@@ -7,11 +7,13 @@ import { WeightsContext } from "../context/weightsContext";
 import { TimesContext } from "../context/timesContext";
 import { SegmentContext } from "../context/segmentContext";
 import { recoveryContext } from "../context/recoveryContext";
+import { trialContext } from "../context/trialContext";
 
 export const NumberInputScreen = () => {
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
   const { recovery, setRecovery } = useContext(recoveryContext);
+  const { trial, setTrial } = useContext(trialContext);
   const { segment } = useContext(SegmentContext);
 
   const nums = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ".", "C"];
@@ -67,6 +69,20 @@ export const NumberInputScreen = () => {
           //エラー回避で三項演算子
           const newRecovery = String(recovery) + inputNum;
           setRecovery(newRecovery);
+        }
+      }
+    } else if (segment === "trial") {
+      if (inputNum === "C") {
+        setTrial("0");
+      } else {
+        if (trial === "0") {
+          setTrial(inputNum);
+        } else if (Number(trial) >= 10) {
+          null;
+        } else {
+          //エラー回避で三項演算子
+          const newTrial = String(trial) + inputNum;
+          setTrial(newTrial);
         }
       }
     }

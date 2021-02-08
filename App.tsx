@@ -14,7 +14,7 @@ const App = () => {
   const [weights, setWeights] = useState<string | undefined>("0");
   const [times, setTimes] = useState<number | undefined>(0);
   const [recovery, setRecovery] = useState<string>("0");
-  const [trial, setTrial] = useState<string>("1");
+  const [trial, setTrial] = useState<string>("0");
   const [segment, setSegment] = useState<string | undefined>("weights");
   const [isNew, setIsNew] = useState<boolean>(false);
 

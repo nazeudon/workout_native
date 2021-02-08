@@ -45,6 +45,19 @@ export const RecoverySegment = () => {
   );
 };
 
+export const TrialSegment = () => {
+  return (
+    <SegmentedControlTab
+      values={["種目目"]}
+      selectedIndex={0}
+      borderRadius={5}
+      tabsContainerStyle={styles.tabsContainerStyle}
+      tabStyle={styles.tabStyle}
+      tabTextStyle={styles.tabTextStyle}
+    />
+  );
+};
+
 const styles = StyleSheet.create({
   tabsContainerStyle: {
     alignSelf: "center",

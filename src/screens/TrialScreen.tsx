@@ -7,10 +7,10 @@ import { UpdateTrial } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
-// import { RecoverySegment } from "../component/SegmentedControl";
+import { TrialSegment } from "../component/SegmentedControl";
 import { Decision } from "../component/Decision";
 import { IconButton } from "../component/IconButton";
-// import { DisplayRecovery } from "../component/DisplayRecovery";
+import { DisplayTrial } from "../component/DisplayTrial";
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";
 /* context */
@@ -53,8 +53,8 @@ export const TrialScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <DisplayRecovery data={trial} />
-      <RecoverySegment />
+      <DisplayTrial data={trial} />
+      <TrialSegment />
       <NumberInputScreen />
       <Decision onPress={onPressDecision} />
     </SafeAreaView>

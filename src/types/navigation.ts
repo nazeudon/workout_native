@@ -7,7 +7,11 @@ export type RootStackParamList = {
   Home: undefined;
   Event: { event: EventType };
   Item: { item: ItemType };
-  ItemDetail: { itemDetail: ItemDetailType; index: number };
+  ItemDetail: {
+    itemDetail: ItemDetailType;
+    index: number;
+    totalWeights: number;
+  };
   Recovery: { recovery: RecoveryType };
   Trial: { trial: TrialType };
   Main: undefined;

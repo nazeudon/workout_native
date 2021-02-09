@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 /* lib */
-import { getItemDetails, getRecovery } from "../lib/sqlite";
 /* type */
-import { ItemType, ItemDetailType } from "../types/item";
+import { ItemType } from "../types/item";
 
 type Props = {
   data: ItemType;
@@ -11,43 +10,22 @@ type Props = {
 };
 
 export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
-  const [itemLength, setItemLength] = useState<number>(0);
-  const [totalWeights, setTotalWeights] = useState<number>(0);
-  const [recovery, setRecovery] = useState<number>(0);
+  const createdAt = data.createdAt.split(" ")[0];
+  const sets = data.sets;
+  const totalWeights = data.totalWeights;
 
-  useEffect(() => {
-    fetchItemInfos();
-  }, []);
-
-  const sumWeights = (res: ItemDetailType[]) => {
-    let total: number = 0;
-    res.map((r) => {
-      total += r.weights * r.times;
-    });
-    setTotalWeights(total);
-  };
-
-  const fetchItemInfos = async () => {
-    const itemDetailRes = await getItemDetails(data.id);
-    const recoveryRes = await getRecovery(data.id);
-    await sumWeights(itemDetailRes);
-    await setItemLength(itemDetailRes.length);
-    await setRecovery(recoveryRes[0].min);
-  };
-
-  const date = data.createdAt.split(" ")[0];
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.items}>
         <View style={styles.desc}>
-          <Text style={styles.text}>{itemLength}セット</Text>
+          <Text style={styles.text}>{sets}セット</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.text}>{recovery}分</Text>
+          <Text style={styles.text}>min</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{totalWeights}kg</Text>
         </View>
-        <View style={styles.date}>
-          <Text style={styles.text}>{date}</Text>
+        <View style={styles.createdAt}>
+          <Text style={styles.text}>{createdAt}</Text>
         </View>
       </View>
     </TouchableHighlight>
@@ -69,7 +47,7 @@ const styles = StyleSheet.create({
     marginLeft: "3%",
     flexDirection: "row",
   },
-  date: {
+  createdAt: {
     marginRight: "3%",
   },
   text: {

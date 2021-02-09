@@ -134,7 +134,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           renderItem={({ item }: { item: ItemType }) => (
             <Item data={item} onPress={() => onPressItem(item)} />
           )}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => (
             <View style={styles.delete}>
               <IconButton

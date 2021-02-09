@@ -9,6 +9,7 @@ import {
   getItemDetails,
   getRecovery,
   getTrial,
+  UpdateItemSets,
 } from "../lib/sqlite";
 /* context */
 import { IsNewContext } from "../context/itemDetailContext";
@@ -35,6 +36,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { setIsNew } = useContext(IsNewContext);
   const { setSegment } = useContext(SegmentContext);
   const [itemLength, setItemLength] = useState<number>(0);
+  const [totalWeights, setTotalWeights] = useState<number>(0);
   const [recovery, setRecovery] = useState<RecoveryType[]>([]);
   const [trial, setTrial] = useState<TrialType[]>([]);
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
@@ -60,6 +62,18 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     },
   ];
 
+  const sumWeights = (res: ItemDetailType[]) => {
+    let total: number = 0;
+    res.map((r) => {
+      total += r.weights * r.times;
+    });
+    setTotalWeights(total);
+  };
+
+  const subWeights = (weight: number) => {
+    return totalWeights - weight;
+  };
+
   useEffect(() => {
     navigation.setOptions({
       title: item.createdAt.split(" ")[0],
@@ -81,6 +95,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const fetchGetItemDetails = async () => {
     const res = await getItemDetails(item.id);
     await setItemDetails(res);
+    await sumWeights(res);
     await setInitItemDetial({
       id: 0,
       itemsId: item.id,
@@ -100,16 +115,26 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await setTrial(res);
   };
 
-  const onPressItemDetail = (itemDetail: ItemDetailType, index: number) => {
-    navigation.navigate("ItemDetail", { itemDetail, index });
+  const fetchUpdateItemSets = async (weights: number) => {
+    const newWeights = subWeights(weights);
+    const res = await UpdateItemSets(item.id, itemLength - 1, newWeights);
+  };
+
+  const onPressItemDetail = (
+    itemDetail: ItemDetailType,
+    index: number,
+    totalWeights: number
+  ) => {
+    navigation.navigate("ItemDetail", { itemDetail, index, totalWeights });
   };
 
   const onPressInsertItemDetail = (
     itemDetail: ItemDetailType,
-    index: number
+    index: number,
+    totalWeights: number
   ) => {
     setIsNew(true);
-    navigation.navigate("ItemDetail", { itemDetail, index });
+    navigation.navigate("ItemDetail", { itemDetail, index, totalWeights });
   };
 
   const onPressDeleteItemDetail = async (
@@ -118,9 +143,9 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     index: number
   ) => {
     await closeRow(rowMap, index);
-    // await deleteRow(itemDetail.id);
     await DeleteItemDetail(itemDetail.id);
     await fetchGetItemDetails();
+    await fetchUpdateItemSets(itemDetail.weights * itemDetail.times);
   };
 
   const onPressRecovery = (recovery: RecoveryType) => {
@@ -160,7 +185,9 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                 <ItemDetail
                   data={data.item}
                   index={data.index}
-                  onPress={() => onPressItemDetail(data.item, data.index)}
+                  onPress={() =>
+                    onPressItemDetail(data.item, data.index, totalWeights)
+                  }
                 />
               );
             } else if (data.item.type === "rec") {
@@ -204,7 +231,9 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         />
         <FloatingActionButton
           iconName="plus"
-          onPress={() => onPressInsertItemDetail(initItemDetail, itemLength)}
+          onPress={() =>
+            onPressInsertItemDetail(initItemDetail, itemLength, totalWeights)
+          }
         />
       </SafeAreaView>
     </>

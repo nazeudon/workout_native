@@ -3,7 +3,11 @@ import { StyleSheet, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
-import { UpdateItemDetails, InsertItemDetails } from "../lib/sqlite";
+import {
+  UpdateItemDetails,
+  UpdateItemSets,
+  InsertItemDetails,
+} from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
@@ -28,7 +32,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { itemDetail, index } = route.params;
+  const { itemDetail, index, totalWeights } = route.params;
   const { id, itemsId } = itemDetail;
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
@@ -55,6 +59,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
   const onPressDecision = async () => {
     if (isNew) {
       await fetchInsertItemDetails();
+      await fetchUpdateItemSets();
     } else {
       await fetchUpdateItemDetails();
     }
@@ -66,6 +71,10 @@ export const ItemDetailScreen: React.FC<Props> = ({
 
   const fetchUpdateItemDetails = async () => {
     const res = await UpdateItemDetails(id, Number(weights), Number(times));
+  };
+  const fetchUpdateItemSets = async () => {
+    const newTotalWeights = totalWeights + Number(weights) * Number(times);
+    const res = await UpdateItemSets(itemsId, index + 1, newTotalWeights);
   };
 
   const fetchInsertItemDetails = async () => {

@@ -7,6 +7,8 @@ import { RouteProp } from "@react-navigation/native";
 import {
   getItem,
   getItems,
+  getRecovery,
+  getRecoveryByEventId,
   InsertItem,
   InsertInitItemDetails,
   InsertInitRecovery,
@@ -19,6 +21,7 @@ import {
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemType } from "../types/item";
+import { RecoveryType } from "../types/recovery";
 /* component */
 import { Item } from "../component/Item";
 import { IconButton } from "../component/IconButton";
@@ -33,6 +36,15 @@ type Props = {
 export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
+  const [recoverys, setRecoverys] = useState<RecoveryType[]>([]);
+
+  //2月9日ここから途中これをItem componentに渡す予定
+  //それかtotalWeightsなどと同じようにitemsのDBに格納しちゃうのもあり
+  const forItems = items.map((item, idx) => ({
+    item: item,
+    recovery: recoverys[idx],
+  }));
+  console.log(forItems);
 
   useEffect(() => {
     navigation.setOptions({
@@ -45,6 +57,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
       fetchGetItems();
+      fetchGetRecoveryByEventId();
     });
     return refresh;
   }, [navigation]);
@@ -52,6 +65,11 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const fetchGetItems = async () => {
     const res = await getItems(event.id);
     setItems(res);
+  };
+
+  const fetchGetRecoveryByEventId = async () => {
+    const res = await getRecoveryByEventId(event.id);
+    await setRecoverys(res);
   };
 
   const fetchInsertItem = async () => {
@@ -69,7 +87,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const fetchInsertInitRecovery = async (itemsId: number) => {
-    const res: number = await InsertInitRecovery(itemsId, 0);
+    const res: number = await InsertInitRecovery(itemsId, 0, event.id);
   };
 
   const fetchInsertInitTrial = async (itemsId: number) => {

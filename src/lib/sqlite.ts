@@ -344,6 +344,30 @@ export const getRecovery = (itemsId: number) => {
   });
 };
 
+export const getRecoveryByEventId = (eventId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "select * from recovery where eventId = ?;",
+          [eventId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get recovery] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
 export const UpdateRecovery = (id: number, min: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
@@ -368,14 +392,18 @@ export const UpdateRecovery = (id: number, min: number) => {
   });
 };
 
-export const InsertInitRecovery = (itemsId: number, min: number) => {
+export const InsertInitRecovery = (
+  itemsId: number,
+  min: number,
+  eventId: number
+) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
     db.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into recovery (itemsId, min) values (?,?);",
-          [itemsId, min],
+          "insert into recovery (itemsId, min, eventId) values (?,?,?);",
+          [itemsId, min, eventId],
           (_, resultSet) => {
             // 成功時の処理
             results = resultSet;
@@ -562,7 +590,7 @@ export const _insertToDB = () => {
 export const _addColumnToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "alter table items add column sets integer;",
+      "alter table recovery add column eventId integer not null default 1;",
       null,
       () => {
         console.log("success");

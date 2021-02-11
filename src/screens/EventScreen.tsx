@@ -7,7 +7,6 @@ import { RouteProp } from "@react-navigation/native";
 import {
   getItem,
   getItems,
-  getRecovery,
   getRecoveryByEventId,
   InsertItem,
   InsertInitItemDetails,
@@ -44,7 +43,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     item: item,
     recovery: recoverys[idx],
   }));
-  console.log(forItems);
 
   useEffect(() => {
     navigation.setOptions({
@@ -56,8 +54,9 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // navigation.addListenerの役割は
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
-      fetchGetItems();
+      // なぜかfetchの順番逆だとrecoverysの配列が空になる
       fetchGetRecoveryByEventId();
+      fetchGetItems();
     });
     return refresh;
   }, [navigation]);
@@ -69,7 +68,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   const fetchGetRecoveryByEventId = async () => {
     const res = await getRecoveryByEventId(event.id);
-    await setRecoverys(res);
+    setRecoverys(res);
   };
 
   const fetchInsertItem = async () => {
@@ -106,6 +105,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const items: ItemType[] = await fetchGetItem(itemsId);
     const item: ItemType = await items[0];
     await navigation.navigate("Item", { item });
+    //これを押した後に、直で戻るとセット数が0になってる
   };
 
   const onPressDeleteItem = async (
@@ -148,17 +148,21 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       </View>
       <SafeAreaView style={styles.list}>
         <SwipeListView
-          data={items}
-          renderItem={({ item }: { item: ItemType }) => (
-            <Item data={item} onPress={() => onPressItem(item)} />
-          )}
+          data={forItems}
+          renderItem={({
+            item,
+          }: {
+            item: { item: ItemType; recovery: RecoveryType };
+          }) => <Item data={item} onPress={() => onPressItem(item.item)} />}
           keyExtractor={(_, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => (
             <View style={styles.delete}>
               <IconButton
                 name="delete"
                 color={"#fff"}
-                onPress={() => onPressDeleteItem(rowMap, data.item, data.index)}
+                onPress={() =>
+                  onPressDeleteItem(rowMap, data.item.item, data.index)
+                }
               />
             </View>
           )}

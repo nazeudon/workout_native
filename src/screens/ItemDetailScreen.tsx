@@ -32,7 +32,7 @@ export const ItemDetailScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { itemDetail, index, totalWeights } = route.params;
+  const { itemDetail, index, totalWeights, itemLength } = route.params;
   const { id, itemsId } = itemDetail;
   const { weights, setWeights } = useContext(WeightsContext);
   const { times, setTimes } = useContext(TimesContext);
@@ -59,9 +59,11 @@ export const ItemDetailScreen: React.FC<Props> = ({
   const onPressDecision = async () => {
     if (isNew) {
       await fetchInsertItemDetails();
-      await fetchUpdateItemSets();
+      await fetchUpdateItemSetsByNew();
     } else {
       await fetchUpdateItemDetails();
+      //total setがうまく反映されない
+      await fetchUpdateItemSets();
     }
     navigation.goBack();
     setIsNew(false);
@@ -72,9 +74,13 @@ export const ItemDetailScreen: React.FC<Props> = ({
   const fetchUpdateItemDetails = async () => {
     const res = await UpdateItemDetails(id, Number(weights), Number(times));
   };
-  const fetchUpdateItemSets = async () => {
+  const fetchUpdateItemSetsByNew = async () => {
     const newTotalWeights = totalWeights + Number(weights) * Number(times);
     const res = await UpdateItemSets(itemsId, index + 1, newTotalWeights);
+  };
+  const fetchUpdateItemSets = async () => {
+    const newTotalWeights = totalWeights + Number(weights) * Number(times);
+    const res = await UpdateItemSets(itemsId, itemLength, newTotalWeights);
   };
 
   const fetchInsertItemDetails = async () => {

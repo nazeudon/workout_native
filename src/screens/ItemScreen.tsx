@@ -123,18 +123,30 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const onPressItemDetail = (
     itemDetail: ItemDetailType,
     index: number,
-    totalWeights: number
+    totalWeights: number,
+    itemLength: number
   ) => {
-    navigation.navigate("ItemDetail", { itemDetail, index, totalWeights });
+    navigation.navigate("ItemDetail", {
+      itemDetail,
+      index,
+      totalWeights,
+      itemLength,
+    });
   };
 
   const onPressInsertItemDetail = (
     itemDetail: ItemDetailType,
     index: number,
-    totalWeights: number
+    totalWeights: number,
+    itemLength: number
   ) => {
     setIsNew(true);
-    navigation.navigate("ItemDetail", { itemDetail, index, totalWeights });
+    navigation.navigate("ItemDetail", {
+      itemDetail,
+      index,
+      totalWeights,
+      itemLength,
+    });
   };
 
   const onPressDeleteItemDetail = async (
@@ -186,7 +198,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                   data={data.item}
                   index={data.index}
                   onPress={() =>
-                    onPressItemDetail(data.item, data.index, totalWeights)
+                    onPressItemDetail(
+                      data.item,
+                      data.index,
+                      totalWeights,
+                      itemLength
+                    )
                   }
                 />
               );
@@ -214,7 +231,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                     name="delete"
                     color={"#fff"}
                     onPress={() =>
-                      onPressDeleteItemDetail(rowMap, data.item, data.index)
+                      onPressDeleteItemDetail(
+                        rowMap,
+                        data.item,
+                        data.index,
+                        itemLength
+                      )
                     }
                   />
                 </View>

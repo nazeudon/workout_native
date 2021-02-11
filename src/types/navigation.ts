@@ -11,6 +11,7 @@ export type RootStackParamList = {
     itemDetail: ItemDetailType;
     index: number;
     totalWeights: number;
+    itemLength: number;
   };
   Recovery: { recovery: RecoveryType };
   Trial: { trial: TrialType };

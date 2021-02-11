@@ -3,16 +3,19 @@ import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 /* lib */
 /* type */
 import { ItemType } from "../types/item";
+import { RecoveryType } from "../types/recovery";
 
 type Props = {
-  data: ItemType;
+  data: { item: ItemType; recovery: RecoveryType };
   onPress: () => void;
 };
 
 export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
-  const createdAt = data.createdAt.split(" ")[0];
-  const sets = data.sets;
-  const totalWeights = data.totalWeights;
+  const createdAt = data.item.createdAt.split(" ")[0];
+  const sets = data.item.sets;
+  const totalWeights = data.item.totalWeights;
+  // console.log(data);
+  const recovery = data.recovery.min;
 
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
@@ -20,7 +23,7 @@ export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
         <View style={styles.desc}>
           <Text style={styles.text}>{sets}セット</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.text}>min</Text>
+          <Text style={styles.text}>{recovery}min</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{totalWeights}kg</Text>
         </View>

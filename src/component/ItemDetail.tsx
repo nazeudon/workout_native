@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 /* type */
 import { ItemDetailType } from "../types/item";
+/* component */
+import { Icon } from "./Icon";
 
 type Props = {
   data: ItemDetailType;
@@ -14,11 +16,9 @@ export const ItemDetail: React.FC<Props> = ({
   index,
   onPress,
 }: Props) => {
-  const volume: number = data.weights * data.times;
-
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
-      <View style={styles.item}>
+      <View style={styles.container}>
         <View style={styles.desc}>
           <Text style={styles.text}>{index + 1}セット目</Text>
           <Text style={styles.separate}>/</Text>
@@ -26,10 +26,8 @@ export const ItemDetail: React.FC<Props> = ({
           <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{data.times}回</Text>
         </View>
-        <View style={styles.volume}>
-          <View>
-            <Text style={styles.text}>{volume}kg</Text>
-          </View>
+        <View style={styles.icon}>
+          <Icon name="right" />
         </View>
       </View>
     </TouchableHighlight>
@@ -37,7 +35,7 @@ export const ItemDetail: React.FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  item: {
+  container: {
     height: 50,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
@@ -58,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
-  volume: {
+  icon: {
     marginLeft: "auto",
     marginRight: "3%",
   },

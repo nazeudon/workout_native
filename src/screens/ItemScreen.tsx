@@ -231,12 +231,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                     name="delete"
                     color={"#fff"}
                     onPress={() =>
-                      onPressDeleteItemDetail(
-                        rowMap,
-                        data.item,
-                        data.index,
-                        itemLength
-                      )
+                      onPressDeleteItemDetail(rowMap, data.item, data.index)
                     }
                   />
                 </View>
@@ -254,7 +249,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         <FloatingActionButton
           iconName="plus"
           onPress={() =>
-            onPressInsertItemDetail(initItemDetail, itemLength, totalWeights)
+            onPressInsertItemDetail(
+              initItemDetail,
+              itemLength,
+              totalWeights,
+              itemLength
+            )
           }
         />
       </SafeAreaView>

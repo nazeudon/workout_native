@@ -469,6 +469,30 @@ export const getTrial = (itemsId: number) => {
   });
 };
 
+export const getTrialByEventId = (eventId: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "select * from trial where eventId = ?;",
+          [eventId],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[get trial] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
 export const UpdateTrial = (id: number, trialNum: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
@@ -493,14 +517,18 @@ export const UpdateTrial = (id: number, trialNum: number) => {
   });
 };
 
-export const InsertInitTrial = (itemsId: number, trialNum: number) => {
+export const InsertInitTrial = (
+  itemsId: number,
+  trialNum: number,
+  eventId: number
+) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
     db.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into trial (itemsId, trialNum) values (?,?);",
-          [itemsId, trialNum],
+          "insert into trial (itemsId, trialNum, eventId) values (?,?,?);",
+          [itemsId, trialNum, eventId],
           (_, resultSet) => {
             // 成功時の処理
             results = resultSet;
@@ -590,7 +618,7 @@ export const _insertToDB = () => {
 export const _addColumnToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "alter table recovery add column eventId integer not null default 1;",
+      "alter table trial add column eventId integer not null default 1;",
       null,
       () => {
         console.log("success");
@@ -626,8 +654,8 @@ export const _deleteItem = () => {
       // 実行したいSQL文
       // "delete from item where itemsId = ?;",
       // "delete from item where itemsId = ?;",
-      "delete from recovery where itemsId = ?;",
-      [12], // SQL文の引数
+      "delete from item where itemsId = ?;",
+      [15], // SQL文の引数
       () => {
         console.log("success");
       }, // 成功時のコールバック関数
@@ -643,7 +671,7 @@ export const _deleteItems = () => {
     tx.executeSql(
       // 実行したいSQL文
       "delete from items where id = ?;",
-      [23], // SQL文の引数
+      [15], // SQL文の引数
       () => {
         console.log("success");
       }, // 成功時のコールバック関数

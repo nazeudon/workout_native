@@ -79,7 +79,10 @@ export const ItemDetailScreen: React.FC<Props> = ({
     const res = await UpdateItemSets(itemsId, index + 1, newTotalWeights);
   };
   const fetchUpdateItemSets = async () => {
-    const newTotalWeights = totalWeights + Number(weights) * Number(times);
+    const newTotalWeights =
+      totalWeights -
+      itemDetail.weights * itemDetail.times +
+      Number(weights) * Number(times);
     const res = await UpdateItemSets(itemsId, itemLength, newTotalWeights);
   };
 

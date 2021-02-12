@@ -4,9 +4,10 @@ import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 /* type */
 import { ItemType } from "../types/item";
 import { RecoveryType } from "../types/recovery";
+import { TrialType } from "../types/trial";
 
 type Props = {
-  data: { item: ItemType; recovery: RecoveryType };
+  data: { item: ItemType; recovery: RecoveryType; trial: TrialType };
   onPress: () => void;
 };
 
@@ -16,12 +17,15 @@ export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
   const totalWeights = data.item.totalWeights;
   // console.log(data);
   const recovery = data.recovery.min;
+  const trial = data.trial.trialNum;
 
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.items}>
         <View style={styles.desc}>
           <Text style={styles.text}>{sets}セット</Text>
+          <Text style={styles.separate}>/</Text>
+          <Text style={styles.text}>{trial}種目目</Text>
           <Text style={styles.separate}>/</Text>
           <Text style={styles.text}>{recovery}min</Text>
           <Text style={styles.separate}>/</Text>

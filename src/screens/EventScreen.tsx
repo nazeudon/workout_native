@@ -8,6 +8,7 @@ import {
   getItem,
   getItems,
   getRecoveryByEventId,
+  getTrialByEventId,
   InsertItem,
   InsertInitItemDetails,
   InsertInitRecovery,
@@ -21,6 +22,7 @@ import {
 import { RootStackParamList } from "../types/navigation";
 import { ItemType } from "../types/item";
 import { RecoveryType } from "../types/recovery";
+import { TrialType } from "../types/trial";
 /* component */
 import { Item } from "../component/Item";
 import { IconButton } from "../component/IconButton";
@@ -36,12 +38,14 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
   const [recoverys, setRecoverys] = useState<RecoveryType[]>([]);
+  const [trials, setTrials] = useState<TrialType[]>([]);
 
   //2月9日ここから途中これをItem componentに渡す予定
   //それかtotalWeightsなどと同じようにitemsのDBに格納しちゃうのもあり
   const forItems = items.map((item, idx) => ({
     item: item,
     recovery: recoverys[idx],
+    trial: trials[idx],
   }));
 
   useEffect(() => {
@@ -56,6 +60,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const refresh = navigation.addListener("focus", () => {
       // なぜかfetchの順番逆だとrecoverysの配列が空になる
       fetchGetRecoveryByEventId();
+      fetchGetTrialByEventId();
       fetchGetItems();
     });
     return refresh;
@@ -69,6 +74,11 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const fetchGetRecoveryByEventId = async () => {
     const res = await getRecoveryByEventId(event.id);
     setRecoverys(res);
+  };
+
+  const fetchGetTrialByEventId = async () => {
+    const res = await getTrialByEventId(event.id);
+    setTrials(res);
   };
 
   const fetchInsertItem = async () => {
@@ -90,7 +100,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const fetchInsertInitTrial = async (itemsId: number) => {
-    const res: number = await InsertInitTrial(itemsId, 1);
+    const res: number = await InsertInitTrial(itemsId, 1, event.id);
   };
 
   const onPressItem = (item: ItemType) => {
@@ -105,7 +115,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const items: ItemType[] = await fetchGetItem(itemsId);
     const item: ItemType = await items[0];
     await navigation.navigate("Item", { item });
-    //これを押した後に、直で戻るとセット数が0になってる
+    // [ToDo] これを押した後に、直で戻るとセット数が0になってる
   };
 
   const onPressDeleteItem = async (
@@ -152,7 +162,7 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           renderItem={({
             item,
           }: {
-            item: { item: ItemType; recovery: RecoveryType };
+            item: { item: ItemType; recovery: RecoveryType; trial: TrialType };
           }) => <Item data={item} onPress={() => onPressItem(item.item)} />}
           keyExtractor={(_, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => (

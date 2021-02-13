@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 /* screens */
 import { HomeScreen } from "../screens/HomeScreen";
 import { EventScreen } from "../screens/EventScreen";
+import { AddEventScreen } from "../screens/AddEventScreen";
 import { ItemScreen } from "../screens/ItemScreen";
 import { ItemDetailScreen } from "../screens/ItemDetailScreen";
 import { RecoveryScreen } from "../screens/RecoveryScreen";
@@ -47,6 +48,7 @@ export const HomeStackNavigator = () => {
       <RootStack.Screen name="ItemDetail" component={ItemDetailScreen} />
       <RootStack.Screen name="Recovery" component={RecoveryScreen} />
       <RootStack.Screen name="Trial" component={TrialScreen} />
+      <RootStack.Screen name="AddEvent" component={AddEventScreen} />
     </RootStack.Navigator>
   );
 };

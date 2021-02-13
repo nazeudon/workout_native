@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, FlatList, Button } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
 import { Event } from "../component/Event";
+import { FloatingActionButton } from "../component/FloatingActionButton";
 /* lib */
 import {
   getEvents,
@@ -38,27 +39,37 @@ export const HomeScreen = ({ navigation }: Props) => {
     navigation.navigate("Event", { event });
   };
 
+  const onPressInsertEvent = () => {
+    navigation.navigate("AddEvent");
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={events}
-        renderItem={({ item }: { item: EventType }) => (
-          <Event data={item} onPress={() => onPressEvent(item)} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
+    <>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={events}
+          renderItem={({ item }: { item: EventType }) => (
+            <Event data={item} onPress={() => onPressEvent(item)} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+        />
+        <Button title="initDB" onPress={_initDB} />
+        <Button title="insertToDB" onPress={_insertToDB} />
+        <Button title="deleteDB" onPress={_deleteDB} />
+        <Button title="getFromDB" onPress={fetchEvents} />
+        <Button title="deleteItem" onPress={_deleteItem} />
+        <Button title="deleteItems" onPress={_deleteItems} />
+        <Button title="DropTable" onPress={_DropTable} />
+        <Button title="AddColumn" onPress={_addColumnToDB} />
+        {/* <Button title="getFromDB" onPress={getEvents} /> */}
+        {/* <Button title="changeDB" onPress={changeDB} /> */}
+      </SafeAreaView>
+      <FloatingActionButton
+        iconName="plus"
+        onPress={async () => await onPressInsertEvent()}
       />
-      <Button title="initDB" onPress={_initDB} />
-      <Button title="insertToDB" onPress={_insertToDB} />
-      <Button title="deleteDB" onPress={_deleteDB} />
-      <Button title="getFromDB" onPress={fetchEvents} />
-      <Button title="deleteItem" onPress={_deleteItem} />
-      <Button title="deleteItems" onPress={_deleteItems} />
-      <Button title="DropTable" onPress={_DropTable} />
-      <Button title="AddColumn" onPress={_addColumnToDB} />
-      {/* <Button title="getFromDB" onPress={getEvents} /> */}
-      {/* <Button title="changeDB" onPress={changeDB} /> */}
-    </SafeAreaView>
+    </>
   );
 };
 

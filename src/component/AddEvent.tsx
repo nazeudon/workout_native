@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+/* context */
+import { addEventContext } from "../context/eventContext";
+import {
+  partContext,
+  partDetailContext,
+  TrainingTypeContext,
+} from "../context/partContext";
 
 type PART_DETAILS = {
   label: string;
@@ -8,22 +15,18 @@ type PART_DETAILS = {
 };
 
 export const AddEvent = () => {
-  const [eventName, setEventName] = useState<string>();
-  const [part, setPart] = useState<string>("");
-  const [partDetail, setPartDetail] = useState<string>("");
+  const { addEvent, setAddEvent } = useContext(addEventContext);
+  const { part, setPart } = useContext(partContext);
+  const { partDetail, setPartDetail } = useContext(partDetailContext);
   const [partDetails, setPartDetails] = useState<PART_DETAILS[]>([]);
-  const handleChangePartDetails = (part: string) => {
-    if (part === "sholder") {
-      setPartDetails(partsDetailSholders);
-    }
-  };
+  const { trainingType, setTrainingType } = useContext(TrainingTypeContext);
 
   const parts = [
     { label: "肩", value: "sholder" },
     { label: "胸", value: "chest" },
     { label: "背中", value: "back" },
     { label: "腕", value: "arm" },
-    { label: "腹", value: "stomach" },
+    { label: "腹", value: "ab" },
     { label: "尻", value: "hip" },
     { label: "足", value: "leg" },
   ];
@@ -71,6 +74,35 @@ export const AddEvent = () => {
     value: null,
     color: "#9EA0A4",
   };
+  const placeholderTrainingTypes = {
+    label: "種目タイプを選択",
+    value: null,
+    color: "#9EA0A4",
+  };
+
+  const trainingTypes = [
+    { label: "フリーウエイト", value: "freeWeight" },
+    { label: "マシン", value: "machine" },
+    { label: "自重", value: "ownWeight" },
+  ];
+
+  const handleChangePartDetails = (part: string) => {
+    if (part === "sholder") {
+      setPartDetails(partsDetailSholders);
+    } else if (part === "chest") {
+      setPartDetails(partsDetailChests);
+    } else if (part === "back") {
+      setPartDetails(partsDetailBacks);
+    } else if (part === "arm") {
+      setPartDetails(partsDetailArms);
+    } else if (part === "ab") {
+      setPartDetails(partsDetailAbs);
+    } else if (part === "hip") {
+      setPartDetails(partsDetailHips);
+    } else if (part === "leg") {
+      setPartDetails(partsDetailLegs);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -78,10 +110,21 @@ export const AddEvent = () => {
       <TextInput
         placeholder={"種目名を入力"}
         style={styles.eventNameInput}
-        value={eventName}
-        onChangeText={(text) => setEventName(text)}
+        value={addEvent}
+        onChangeText={(text) => setAddEvent(text)}
         keyboardType="default"
         autoCapitalize="none"
+      />
+      <Text style={styles.text}>種目タイプ (必須)</Text>
+      <RNPickerSelect
+        placeholder={placeholderTrainingTypes}
+        items={trainingTypes}
+        onValueChange={(value) => {
+          setTrainingType(value);
+        }}
+        style={pickerSelectStyles}
+        value={trainingType}
+        useNativeAndroidPickerStyle={false}
       />
       <Text style={styles.text}>部位 (必須)</Text>
       <RNPickerSelect
@@ -116,24 +159,26 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#333",
+    marginTop: "5%",
+    marginBottom: "1%",
+    fontSize: 16,
   },
   eventNameInput: {
-    height: 40,
-    fontSize: 18,
+    height: 50,
+    fontSize: 20,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "#0076FF",
     color: "#555",
     backgroundColor: "#fff",
-    // paddingVertical: "2%",
   },
 });
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    height: 40,
-    fontSize: 18,
+    height: 50,
+    fontSize: 20,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "#0076FF",
@@ -142,8 +187,8 @@ const pickerSelectStyles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   inputAndroid: {
-    height: 40,
-    fontSize: 18,
+    height: 50,
+    fontSize: 20,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "#0076FF",

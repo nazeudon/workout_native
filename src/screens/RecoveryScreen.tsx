@@ -8,7 +8,7 @@ import { UpdateRecovery } from "../lib/sqlite";
 import { RootStackParamList } from "../types/navigation";
 /* component */
 import { RecoverySegment } from "../component/SegmentedControl";
-import { Decision } from "../component/Decision";
+import { Decision } from "../component/DecisionButton";
 import { IconButton } from "../component/IconButton";
 import { DisplayRecovery } from "../component/DisplayRecovery";
 /* screen */

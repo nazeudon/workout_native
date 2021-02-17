@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SafeAreaView, StyleSheet, FlatList, Button } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
@@ -18,6 +18,13 @@ import {
 /* types */
 import { EventType } from "../types/event";
 import { RootStackParamList } from "../types/navigation";
+/* context */
+import { addEventContext } from "../context/eventContext";
+import {
+  partContext,
+  partDetailContext,
+  TrainingTypeContext,
+} from "../context/partContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Home">;
@@ -25,12 +32,25 @@ type Props = {
 
 export const HomeScreen = ({ navigation }: Props) => {
   const [events, setEvents] = useState<EventType[]>([]);
+  const { setAddEvent } = useContext(addEventContext);
+  const { setPart } = useContext(partContext);
+  const { setPartDetail } = useContext(partDetailContext);
+  const { setTrainingType } = useContext(TrainingTypeContext);
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    // navigation.addListenerの役割は
+    // nabigation.goBack()したときに再レンダーされるように
+    const refresh = navigation.addListener("focus", () => {
+      fetchGetEvents();
+      setAddEvent("");
+      setPart("");
+      setPartDetail("");
+      setTrainingType("");
+    });
+    return refresh;
+  }, [navigation]);
 
-  const fetchEvents = async () => {
+  const fetchGetEvents = async () => {
     const res = await getEvents();
     setEvents(res);
   };
@@ -39,7 +59,7 @@ export const HomeScreen = ({ navigation }: Props) => {
     navigation.navigate("Event", { event });
   };
 
-  const onPressInsertEvent = () => {
+  const onPressInsertEvent = async () => {
     navigation.navigate("AddEvent");
   };
 
@@ -57,12 +77,11 @@ export const HomeScreen = ({ navigation }: Props) => {
         <Button title="initDB" onPress={_initDB} />
         <Button title="insertToDB" onPress={_insertToDB} />
         <Button title="deleteDB" onPress={_deleteDB} />
-        <Button title="getFromDB" onPress={fetchEvents} />
         <Button title="deleteItem" onPress={_deleteItem} />
         <Button title="deleteItems" onPress={_deleteItems} />
         <Button title="DropTable" onPress={_DropTable} />
         <Button title="AddColumn" onPress={_addColumnToDB} />
-        {/* <Button title="getFromDB" onPress={getEvents} /> */}
+        {/* <Button title="getFromDB" onPress={fetchGetEvents} /> */}
         {/* <Button title="changeDB" onPress={changeDB} /> */}
       </SafeAreaView>
       <FloatingActionButton

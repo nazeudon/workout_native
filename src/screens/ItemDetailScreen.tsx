@@ -13,7 +13,7 @@ import { RootStackParamList } from "../types/navigation";
 /* component */
 import { DisplayItemDetail } from "../component/DisplayItemDetail";
 import { SegmentedControl } from "../component/SegmentedControl";
-import { Decision } from "../component/Decision";
+import { Decision } from "../component/DecisionButton";
 import { IconButton } from "../component/IconButton";
 /* screen */
 import { NumberInputScreen } from "../screens/NumberInputScreen";

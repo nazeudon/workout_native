@@ -28,6 +28,35 @@ export const getEvents = () => {
   });
 };
 
+export const InsertEvent = (
+  event: string,
+  trainingType: string,
+  part: string,
+  partDetail: string
+) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "insert into events (event, trainingType, part, partDetail) values (?, ?, ?, ?);",
+          [event, trainingType, part, partDetail],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[insert event] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
+
 export const getItems = (eventId: number) => {
   return new Promise<any>((resolve, reject) => {
     let results: SQLite.SQLResultSet;
@@ -618,7 +647,7 @@ export const _insertToDB = () => {
 export const _addColumnToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "alter table trial add column eventId integer not null default 1;",
+      "alter table events add column partDetail string not null default greaterPectoralsMiddle;",
       null,
       () => {
         console.log("success");

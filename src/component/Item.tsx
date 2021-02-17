@@ -5,6 +5,8 @@ import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 import { ItemType } from "../types/item";
 import { RecoveryType } from "../types/recovery";
 import { TrialType } from "../types/trial";
+/* component */
+import { Icon } from "../component/Icon";
 
 type Props = {
   data: { item: ItemType; recovery: RecoveryType; trial: TrialType };
@@ -12,7 +14,7 @@ type Props = {
 };
 
 export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
-  const createdAt = data.item.createdAt.split(" ")[0];
+  const createdAt = data.item.createdAt.split(" ")[0].slice(-8);
   const sets = data.item.sets;
   const totalWeights = data.item.totalWeights;
   // console.log(data);
@@ -33,6 +35,9 @@ export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
         </View>
         <View style={styles.createdAt}>
           <Text style={styles.text}>{createdAt}</Text>
+        </View>
+        <View style={styles.icon}>
+          <Icon name="right" />
         </View>
       </View>
     </TouchableHighlight>
@@ -55,7 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   createdAt: {
-    marginRight: "3%",
+    marginRight: "0%",
   },
   text: {
     fontSize: 16,
@@ -65,5 +70,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     marginHorizontal: "2%",
+  },
+  icon: {
+    marginRight: "1%",
   },
 });

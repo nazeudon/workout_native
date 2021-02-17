@@ -8,7 +8,7 @@ import { UpdateTrial } from "../lib/sqlite";
 import { RootStackParamList } from "../types/navigation";
 /* component */
 import { TrialSegment } from "../component/SegmentedControl";
-import { Decision } from "../component/Decision";
+import { Decision } from "../component/DecisionButton";
 import { IconButton } from "../component/IconButton";
 import { DisplayTrial } from "../component/DisplayTrial";
 /* screen */

@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: "auto",
-    marginRight: "3%",
+    marginRight: "1%",
   },
 });

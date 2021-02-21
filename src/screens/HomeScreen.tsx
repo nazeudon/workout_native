@@ -4,6 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
 import { Event } from "../component/Event";
 import { FloatingActionButton } from "../component/FloatingActionButton";
+import { ModalSelection } from "../component/ModalSelection";
 /* lib */
 import {
   getEvents,
@@ -36,6 +37,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const { setPart } = useContext(partContext);
   const { setPartDetail } = useContext(partDetailContext);
   const { setTrainingType } = useContext(TrainingTypeContext);
+  const [isModal, setIsModal] = useState<Boolean>(false);
 
   useEffect(() => {
     // navigation.addListenerの役割は
@@ -69,18 +71,22 @@ export const HomeScreen = ({ navigation }: Props) => {
         <FlatList
           data={events}
           renderItem={({ item }: { item: EventType }) => (
-            <Event data={item} onPress={() => onPressEvent(item)} />
+            <Event
+              data={item}
+              onPress={() => onPressEvent(item)}
+              navigation={navigation}
+            />
           )}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
         />
-        <Button title="initDB" onPress={_initDB} />
+        {/* <Button title="initDB" onPress={_initDB} />
         <Button title="insertToDB" onPress={_insertToDB} />
         <Button title="deleteDB" onPress={_deleteDB} />
         <Button title="deleteItem" onPress={_deleteItem} />
         <Button title="deleteItems" onPress={_deleteItems} />
         <Button title="DropTable" onPress={_DropTable} />
-        <Button title="AddColumn" onPress={_addColumnToDB} />
+        <Button title="AddColumn" onPress={_addColumnToDB} /> */}
         {/* <Button title="getFromDB" onPress={fetchGetEvents} /> */}
         {/* <Button title="changeDB" onPress={changeDB} /> */}
       </SafeAreaView>

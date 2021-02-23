@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { PART_DETAILS } from "../types/part";
 
 type PartContextValue = {
   part: string;
@@ -8,6 +9,16 @@ type PartContextValue = {
 export const partContext = createContext<PartContextValue>({
   part: "",
   setPart: () => {},
+});
+
+type PartDetailsContextValue = {
+  partDetails: PART_DETAILS[];
+  setPartDetails: (partDetails: PART_DETAILS[]) => void;
+};
+
+export const partDetailsContext = createContext<PartDetailsContextValue>({
+  partDetails: [],
+  setPartDetails: () => {},
 });
 
 type PartDetailContextValue = {

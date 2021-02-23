@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SafeAreaView, StyleSheet, FlatList, Button } from "react-native";
+import { SafeAreaView, StyleSheet, FlatList } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
 import { Event } from "../component/Event";
 import { FloatingActionButton } from "../component/FloatingActionButton";
-import { ModalSelection } from "../component/ModalSelection";
 /* lib */
 import {
   getEvents,
@@ -23,6 +22,7 @@ import { RootStackParamList } from "../types/navigation";
 import { addEventContext } from "../context/eventContext";
 import {
   partContext,
+  partDetailsContext,
   partDetailContext,
   TrainingTypeContext,
 } from "../context/partContext";
@@ -35,9 +35,9 @@ export const HomeScreen = ({ navigation }: Props) => {
   const [events, setEvents] = useState<EventType[]>([]);
   const { setAddEvent } = useContext(addEventContext);
   const { setPart } = useContext(partContext);
+  const { setPartDetails } = useContext(partDetailsContext);
   const { setPartDetail } = useContext(partDetailContext);
   const { setTrainingType } = useContext(TrainingTypeContext);
-  const [isModal, setIsModal] = useState<Boolean>(false);
 
   useEffect(() => {
     // navigation.addListenerの役割は
@@ -46,6 +46,7 @@ export const HomeScreen = ({ navigation }: Props) => {
       fetchGetEvents();
       setAddEvent("");
       setPart("");
+      setPartDetails([]);
       setPartDetail("");
       setTrainingType("");
     });

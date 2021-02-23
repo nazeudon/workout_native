@@ -1,69 +1,51 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 /* context */
 import { addEventContext } from "../context/eventContext";
 import {
   partContext,
+  partDetailsContext,
   partDetailContext,
   TrainingTypeContext,
 } from "../context/partContext";
-
-type PART_DETAILS = {
-  label: string;
-  value: string;
-};
+/* lib */
+import {
+  parts,
+  partsDetailSholders,
+  partsDetailChests,
+  partsDetailBacks,
+  partsDetailArms,
+  partsDetailAbs,
+  partsDetailHips,
+  partsDetailLegs,
+} from "../lib/parts";
 
 export const AddEvent = () => {
   const { addEvent, setAddEvent } = useContext(addEventContext);
   const { part, setPart } = useContext(partContext);
   const { partDetail, setPartDetail } = useContext(partDetailContext);
-  const [partDetails, setPartDetails] = useState<PART_DETAILS[]>([]);
+  const { partDetails, setPartDetails } = useContext(partDetailsContext);
   const { trainingType, setTrainingType } = useContext(TrainingTypeContext);
 
-  const parts = [
-    { label: "肩", value: "sholder" },
-    { label: "胸", value: "chest" },
-    { label: "背中", value: "back" },
-    { label: "腕", value: "arm" },
-    { label: "腹", value: "ab" },
-    { label: "尻", value: "hip" },
-    { label: "足", value: "leg" },
-  ];
-  const partsDetailSholders = [
-    { label: "僧帽筋上部", value: "trapeziusUpper" },
-    { label: "三角筋前部", value: "deltoidFront" },
-    { label: "三角筋中部", value: "deltoidMiddle" },
-    { label: "三角筋後部", value: "deltoidRear" },
-  ];
-  const partsDetailChests = [
-    { label: "大胸筋上部", value: "greaterPectoralsUpper" },
-    { label: "大胸筋中部", value: "greaterPectoralsMiddle" },
-    { label: "大胸筋下部", value: "greaterPectoralsLower" },
-  ];
-  const partsDetailBacks = [
-    { label: "僧帽筋中下部", value: "trapeziusMiddle" },
-    { label: "広背筋上部", value: "latissimusDorsiUpper" },
-    { label: "広背筋下部", value: "latissimusDorsiLower" },
-    { label: "脊柱起立筋", value: "erectorSpinae" },
-  ];
-  const partsDetailArms = [
-    { label: "上腕二頭筋", value: "biceps" },
-    { label: "上腕三頭筋", value: "triceps" },
-  ];
-  const partsDetailAbs = [
-    { label: "腹直筋", value: "rectusAbs" },
-    { label: "腹斜筋", value: "obliquesAbs" },
-  ];
-  const partsDetailHips = [
-    { label: "大臀筋", value: "gluteusMaximus" },
-    { label: "中臀筋", value: "gluteusMedius" },
-  ];
-  const partsDetailLegs = [
-    { label: "大腿二頭筋(ハムストリングス)", value: "hamstring" },
-    { label: "大腿四頭筋", value: "quadriceps" },
-    { label: "ヒラメ筋", value: "soleus" },
-  ];
+  const handleChangePartDetails = (part: string) => {
+    if (part === "sholder") {
+      setPartDetails(partsDetailSholders);
+    } else if (part === "chest") {
+      setPartDetails(partsDetailChests);
+    } else if (part === "back") {
+      setPartDetails(partsDetailBacks);
+    } else if (part === "arm") {
+      setPartDetails(partsDetailArms);
+    } else if (part === "ab") {
+      setPartDetails(partsDetailAbs);
+    } else if (part === "hip") {
+      setPartDetails(partsDetailHips);
+    } else if (part === "leg") {
+      setPartDetails(partsDetailLegs);
+    }
+  };
+
   const placeholderParts = {
     label: "部位を選択",
     value: null,
@@ -85,24 +67,6 @@ export const AddEvent = () => {
     { label: "マシン", value: "machine" },
     { label: "自重", value: "ownWeight" },
   ];
-
-  const handleChangePartDetails = (part: string) => {
-    if (part === "sholder") {
-      setPartDetails(partsDetailSholders);
-    } else if (part === "chest") {
-      setPartDetails(partsDetailChests);
-    } else if (part === "back") {
-      setPartDetails(partsDetailBacks);
-    } else if (part === "arm") {
-      setPartDetails(partsDetailArms);
-    } else if (part === "ab") {
-      setPartDetails(partsDetailAbs);
-    } else if (part === "hip") {
-      setPartDetails(partsDetailHips);
-    } else if (part === "leg") {
-      setPartDetails(partsDetailLegs);
-    }
-  };
 
   return (
     <View style={styles.container}>

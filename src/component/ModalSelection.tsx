@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ModalSelector from "react-native-modal-selector";
 /* types */
 import { RootStackParamList } from "../types/navigation";
 import { EventType } from "../types/event";
-import { event } from "react-native-reanimated";
+/* context */
+import { addEventContext } from "../context/eventContext";
+import {
+  partContext,
+  partDetailsContext,
+  partDetailContext,
+  TrainingTypeContext,
+} from "../context/partContext";
+/* lib */
+import {
+  parts,
+  partsDetailSholders,
+  partsDetailChests,
+  partsDetailBacks,
+  partsDetailArms,
+  partsDetailAbs,
+  partsDetailHips,
+  partsDetailLegs,
+} from "../lib/parts";
 
 type Props = {
   event: EventType;
@@ -20,8 +38,41 @@ export const ModalSelection = (props: Props) => {
     { key: 4, label: "削除" },
   ];
 
-  const onPressEvent = (event: EventType) => {
-    props.navigation.navigate("Event", { event });
+  const { setAddEvent } = useContext(addEventContext);
+  const { setPart } = useContext(partContext);
+  const { setPartDetails } = useContext(partDetailsContext);
+  const { setPartDetail } = useContext(partDetailContext);
+  const { setTrainingType } = useContext(TrainingTypeContext);
+
+  const handleChangePartDetails = (part: string) => {
+    if (part === "sholder") {
+      setPartDetails(partsDetailSholders);
+    } else if (part === "chest") {
+      setPartDetails(partsDetailChests);
+    } else if (part === "back") {
+      setPartDetails(partsDetailBacks);
+    } else if (part === "arm") {
+      setPartDetails(partsDetailArms);
+    } else if (part === "ab") {
+      setPartDetails(partsDetailAbs);
+    } else if (part === "hip") {
+      setPartDetails(partsDetailHips);
+    } else if (part === "leg") {
+      setPartDetails(partsDetailLegs);
+    }
+  };
+
+  const onPressEvent = (key: number, event: EventType) => {
+    if (key === 2) {
+      props.navigation.navigate("Event", { event });
+    } else if (key === 3) {
+      setAddEvent(event.event);
+      setPart(event.part);
+      handleChangePartDetails(event.part);
+      setPartDetail(event.partDetail);
+      setTrainingType(event.trainingType);
+      props.navigation.navigate("AddEvent");
+    }
   };
 
   return (
@@ -39,7 +90,7 @@ export const ModalSelection = (props: Props) => {
         optionContainerStyle={styles.optionContainerStyle}
         cancelStyle={styles.cancelStyle}
         animationType={"fade"}
-        onChange={() => onPressEvent(props.event)}
+        onChange={(key) => onPressEvent(key.key, props.event)}
       >
         <Text style={styles.TextStyle}>{props.event.event}</Text>
       </ModalSelector>

@@ -26,6 +26,7 @@ import {
   partDetailContext,
   TrainingTypeContext,
 } from "../context/partContext";
+import { IsNewEventContext } from "../context/isNew";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Home">;
@@ -38,6 +39,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const { setPartDetails } = useContext(partDetailsContext);
   const { setPartDetail } = useContext(partDetailContext);
   const { setTrainingType } = useContext(TrainingTypeContext);
+  const { setIsNewEvent } = useContext(IsNewEventContext);
 
   useEffect(() => {
     // navigation.addListenerの役割は
@@ -49,6 +51,7 @@ export const HomeScreen = ({ navigation }: Props) => {
       setPartDetails([]);
       setPartDetail("");
       setTrainingType("");
+      setIsNewEvent(false);
     });
     return refresh;
   }, [navigation]);
@@ -63,7 +66,9 @@ export const HomeScreen = ({ navigation }: Props) => {
   };
 
   const onPressInsertEvent = async () => {
-    navigation.navigate("AddEvent");
+    setIsNewEvent(true);
+    const id = 0; // dummy input
+    navigation.navigate("AddEvent", { id });
   };
 
   return (

@@ -5,7 +5,7 @@ import { RouteProp } from "@react-navigation/native";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* lib */
-import { InsertEvent } from "../lib/sqlite";
+import { InsertEvent, UpdateEvent } from "../lib/sqlite";
 /* component */
 import { IconButton } from "../component/IconButton";
 import { AddEvent } from "../component/AddEvent";
@@ -17,6 +17,7 @@ import {
   partDetailContext,
   TrainingTypeContext,
 } from "../context/partContext";
+import { IsNewEventContext } from "../context/isNew";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "AddEvent">;
@@ -31,10 +32,14 @@ export const AddEventScreen: React.FC<Props> = ({
   const { part } = useContext(partContext);
   const { partDetail } = useContext(partDetailContext);
   const { trainingType } = useContext(TrainingTypeContext);
+  const { isNewEvent } = useContext(IsNewEventContext);
+
+  const title = isNewEvent ? "種目追加" : "種目編集";
+  const { id } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
-      title: "種目追加",
+      title: title,
       headerLeft: () => (
         <IconButton name="closecircleo" onPress={() => navigation.goBack()} />
       ),
@@ -42,7 +47,11 @@ export const AddEventScreen: React.FC<Props> = ({
   }, []);
 
   const onPressAddEvent = async () => {
-    InsertEvent(addEvent, trainingType, part, partDetail);
+    if (isNewEvent) {
+      InsertEvent(addEvent, trainingType, part, partDetail);
+    } else {
+      UpdateEvent(id, addEvent, trainingType, part, partDetail);
+    }
     navigation.goBack();
   };
 

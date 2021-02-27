@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 /* types */
 import { PART_DETAILS } from "./src/types/part";
 /* context */
-import { IsNewContext } from "./src/context/itemDetailContext";
+import { IsNewContext, IsNewEventContext } from "./src/context/isNew";
 import { WeightsContext } from "./src/context/weightsContext";
 import { TimesContext } from "./src/context/timesContext";
 import { SegmentContext } from "./src/context/segmentContext";
@@ -26,6 +26,7 @@ const App = () => {
   const [trial, setTrial] = useState<string>("0");
   const [segment, setSegment] = useState<string | undefined>("weights");
   const [isNew, setIsNew] = useState<boolean>(false);
+  const [isNewEvent, setIsNewEvent] = useState<boolean>(false);
   const [addEvent, setAddEvent] = useState<string>("");
   const [part, setPart] = useState<string>("");
   const [partDetails, setPartDetails] = useState<PART_DETAILS[]>([]);
@@ -33,31 +34,33 @@ const App = () => {
   const [trainingType, setTrainingType] = useState<string>("");
 
   return (
-    <TrainingTypeContext.Provider value={{ trainingType, setTrainingType }}>
-      <partDetailContext.Provider value={{ partDetail, setPartDetail }}>
-        <partDetailsContext.Provider value={{ partDetails, setPartDetails }}>
-          <partContext.Provider value={{ part, setPart }}>
-            <addEventContext.Provider value={{ addEvent, setAddEvent }}>
-              <trialContext.Provider value={{ trial, setTrial }}>
-                <recoveryContext.Provider value={{ recovery, setRecovery }}>
-                  <IsNewContext.Provider value={{ isNew, setIsNew }}>
-                    <SegmentContext.Provider value={{ segment, setSegment }}>
-                      <TimesContext.Provider value={{ times, setTimes }}>
-                        <WeightsContext.Provider
-                          value={{ weights, setWeights }}
-                        >
-                          <AppNavigator />
-                        </WeightsContext.Provider>
-                      </TimesContext.Provider>
-                    </SegmentContext.Provider>
-                  </IsNewContext.Provider>
-                </recoveryContext.Provider>
-              </trialContext.Provider>
-            </addEventContext.Provider>
-          </partContext.Provider>
-        </partDetailsContext.Provider>
-      </partDetailContext.Provider>
-    </TrainingTypeContext.Provider>
+    <IsNewEventContext.Provider value={{ isNewEvent, setIsNewEvent }}>
+      <TrainingTypeContext.Provider value={{ trainingType, setTrainingType }}>
+        <partDetailContext.Provider value={{ partDetail, setPartDetail }}>
+          <partDetailsContext.Provider value={{ partDetails, setPartDetails }}>
+            <partContext.Provider value={{ part, setPart }}>
+              <addEventContext.Provider value={{ addEvent, setAddEvent }}>
+                <trialContext.Provider value={{ trial, setTrial }}>
+                  <recoveryContext.Provider value={{ recovery, setRecovery }}>
+                    <IsNewContext.Provider value={{ isNew, setIsNew }}>
+                      <SegmentContext.Provider value={{ segment, setSegment }}>
+                        <TimesContext.Provider value={{ times, setTimes }}>
+                          <WeightsContext.Provider
+                            value={{ weights, setWeights }}
+                          >
+                            <AppNavigator />
+                          </WeightsContext.Provider>
+                        </TimesContext.Provider>
+                      </SegmentContext.Provider>
+                    </IsNewContext.Provider>
+                  </recoveryContext.Provider>
+                </trialContext.Provider>
+              </addEventContext.Provider>
+            </partContext.Provider>
+          </partDetailsContext.Provider>
+        </partDetailContext.Provider>
+      </TrainingTypeContext.Provider>
+    </IsNewEventContext.Provider>
   );
 };
 

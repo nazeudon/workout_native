@@ -56,6 +56,59 @@ export const InsertEvent = (
     );
   });
 };
+export const UpdateEvent = (
+  id: number,
+  event: string,
+  trainingType: string,
+  part: string,
+  partDetail: string
+) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "update events set event = ?, trainingType = ?, part = ?, partDetail = ? where id = ?;",
+          [event, trainingType, part, partDetail, id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[update event] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
+export const DeleteEvent = (id: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "delete from events where id = ?;",
+          [id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[delete events] transaction failed")),
+      () => resolve(results.insertId)
+    );
+  });
+};
 
 export const getItems = (eventId: number) => {
   return new Promise<any>((resolve, reject) => {

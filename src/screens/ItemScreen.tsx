@@ -12,7 +12,7 @@ import {
   UpdateItemSets,
 } from "../lib/sqlite";
 /* context */
-import { IsNewContext } from "../context/itemDetailContext";
+import { IsNewContext } from "../context/isNew";
 import { SegmentContext } from "../context/segmentContext";
 /* type */
 import { RootStackParamList } from "../types/navigation";

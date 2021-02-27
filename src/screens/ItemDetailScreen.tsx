@@ -21,7 +21,7 @@ import { NumberInputScreen } from "../screens/NumberInputScreen";
 import { WeightsContext } from "../context/weightsContext";
 import { TimesContext } from "../context/timesContext";
 import { SegmentContext } from "../context/segmentContext";
-import { IsNewContext } from "../context/itemDetailContext";
+import { IsNewContext } from "../context/isNew";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "ItemDetail">;

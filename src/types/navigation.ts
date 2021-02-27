@@ -5,7 +5,7 @@ import { TrialType } from "./trial";
 
 export type RootStackParamList = {
   Home: undefined;
-  AddEvent: undefined;
+  AddEvent: { id: number };
   Event: { event: EventType };
   Item: { item: ItemType };
   ItemDetail: {

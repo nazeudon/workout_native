@@ -23,8 +23,7 @@ import {
   partsDetailHips,
   partsDetailLegs,
 } from "../lib/parts";
-/* component */
-import { DeleteEventAlert } from "../component/DeleteEventAlert";
+import { DeleteEvent } from "../lib/sqlite";
 
 type Props = {
   event: EventType;
@@ -39,7 +38,6 @@ export const ModalSelection = (props: Props) => {
     {
       key: 4,
       label: "削除",
-      // <DeleteEventAlert id={props.event.id} navigation={props.navigation} />
     },
   ];
 
@@ -48,7 +46,6 @@ export const ModalSelection = (props: Props) => {
   const { setPartDetails } = useContext(partDetailsContext);
   const { setPartDetail } = useContext(partDetailContext);
   const { setTrainingType } = useContext(TrainingTypeContext);
-  // const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const handleChangePartDetails = (part: string) => {
     if (part === "sholder") {
@@ -68,6 +65,10 @@ export const ModalSelection = (props: Props) => {
     }
   };
 
+  const deleteEventById = async (id: number) => {
+    await DeleteEvent(id);
+  };
+
   const onPressEvent = (key: number, event: EventType) => {
     if (key === 2) {
       props.navigation.navigate("Event", { event });
@@ -80,8 +81,7 @@ export const ModalSelection = (props: Props) => {
       setTrainingType(event.trainingType);
       props.navigation.navigate("AddEvent", { id });
     } else if (key === 4) {
-      console.log("削除だよ");
-      // これだとアラートがすぐ消えちゃう
+      const id = event.id;
       const deleteAlert = () => {
         Alert.alert(
           "削除しますか？",
@@ -90,57 +90,48 @@ export const ModalSelection = (props: Props) => {
             {
               text: "削除",
               onPress: () => {
-                console.log("削除しちゃうよん");
-                // deleteEventById(id);
-                // navigation.navigate("Home");
+                deleteEventById(id);
               },
               style: "destructive",
             },
             {
               text: "キャンセル",
-              onPress: () => {
-                console.log("Cancel Pressed");
-              },
+              onPress: () => {},
               style: "cancel",
             },
           ],
           { cancelable: false }
         );
       };
-
-      setTimeout(deleteAlert, 510);
-      // props.navigation.navigate("Home");
+      setTimeout(deleteAlert, 600);
     }
   };
 
   return (
-    // <View style={styles.container}>
-    <ModalSelector
-      data={data}
-      cancelText={"キャンセル"}
-      // initValue={props.eventName}
-      // initValue={props.event.event}
-      // initValueTextStyle={styles.TextStyle}
-      // touchableStyle={styles.touchableStyle}
-      // selectStyle={styles.selectStyle}
-      // sectionStyle={styles.sectionStyle}
-      overlayStyle={styles.overlayStyle}
-      optionStyle={styles.optionStyle}
-      optionContainerStyle={styles.optionContainerStyle}
-      optionTextStyle={styles.optionTextStyle}
-      cancelStyle={styles.cancelStyle}
-      cancelTextStyle={styles.cancelTextStyle}
-      animationType={"fade"}
-      // onChange={(key) => {
-      //   onPressEvent(key.key, props.event);
-      // }}
-      onChange={(option) => {
-        alert(`${option.label} (${option.key}) nom nom nom`);
-      }}
-    >
-      <Text style={styles.TextStyle}>{props.event.event}</Text>
-    </ModalSelector>
-    // </View>
+    <View style={styles.container}>
+      <ModalSelector
+        data={data}
+        cancelText={"キャンセル"}
+        // initValue={props.eventName}
+        // initValue={props.event.event}
+        // initValueTextStyle={styles.TextStyle}
+        // touchableStyle={styles.touchableStyle}
+        // selectStyle={styles.selectStyle}
+        // sectionStyle={styles.sectionStyle}
+        overlayStyle={styles.overlayStyle}
+        optionStyle={styles.optionStyle}
+        optionContainerStyle={styles.optionContainerStyle}
+        optionTextStyle={styles.optionTextStyle}
+        cancelStyle={styles.cancelStyle}
+        cancelTextStyle={styles.cancelTextStyle}
+        animationType={"fade"}
+        onChange={(key) => {
+          onPressEvent(key.key, props.event);
+        }}
+      >
+        <Text style={styles.TextStyle}>{props.event.event}</Text>
+      </ModalSelector>
+    </View>
   );
 };
 

@@ -19,7 +19,7 @@ import {
 import { EventType } from "../types/event";
 import { RootStackParamList } from "../types/navigation";
 /* context */
-import { addEventContext } from "../context/eventContext";
+import { addEventContext, EventContext } from "../context/eventContext";
 import {
   partContext,
   partDetailsContext,
@@ -33,7 +33,8 @@ type Props = {
 };
 
 export const HomeScreen = ({ navigation }: Props) => {
-  const [events, setEvents] = useState<EventType[]>([]);
+  // const [events, setEvents] = useState<EventType[]>([]);
+  const { events, setEvents } = useContext(EventContext);
   const { setAddEvent } = useContext(addEventContext);
   const { setPart } = useContext(partContext);
   const { setPartDetails } = useContext(partDetailsContext);

@@ -6,7 +6,7 @@ import ModalSelector from "react-native-modal-selector";
 import { RootStackParamList } from "../types/navigation";
 import { EventType } from "../types/event";
 /* context */
-import { addEventContext } from "../context/eventContext";
+import { addEventContext, EventContext } from "../context/eventContext";
 import {
   partContext,
   partDetailsContext,
@@ -23,7 +23,7 @@ import {
   partsDetailHips,
   partsDetailLegs,
 } from "../lib/parts";
-import { DeleteEvent } from "../lib/sqlite";
+import { DeleteEvent, getEvents } from "../lib/sqlite";
 
 type Props = {
   event: EventType;
@@ -41,11 +41,22 @@ export const ModalSelection = (props: Props) => {
     },
   ];
 
+  const { events, setEvents } = useContext(EventContext);
   const { setAddEvent } = useContext(addEventContext);
   const { setPart } = useContext(partContext);
   const { setPartDetails } = useContext(partDetailsContext);
   const { setPartDetail } = useContext(partDetailContext);
   const { setTrainingType } = useContext(TrainingTypeContext);
+  let calledCount = 0;
+
+  const fetchGetEvents = async () => {
+    const res = await getEvents();
+    setEvents(res);
+  };
+
+  const deleteEventById = async (id: number) => {
+    await DeleteEvent(id);
+  };
 
   const handleChangePartDetails = (part: string) => {
     if (part === "sholder") {
@@ -65,10 +76,6 @@ export const ModalSelection = (props: Props) => {
     }
   };
 
-  const deleteEventById = async (id: number) => {
-    await DeleteEvent(id);
-  };
-
   const onPressEvent = (key: number, event: EventType) => {
     if (key === 2) {
       props.navigation.navigate("Event", { event });
@@ -81,29 +88,38 @@ export const ModalSelection = (props: Props) => {
       setTrainingType(event.trainingType);
       props.navigation.navigate("AddEvent", { id });
     } else if (key === 4) {
-      const id = event.id;
-      const deleteAlert = () => {
-        Alert.alert(
-          "削除しますか？",
-          "この操作は取り消せません",
-          [
-            {
-              text: "削除",
-              onPress: () => {
-                deleteEventById(id);
+      if (calledCount === 0) {
+        console.log("delete");
+        const id = event.id;
+        setTimeout(() => {
+          Alert.alert(
+            "削除しますか？",
+            "この操作は取り消せません",
+            [
+              {
+                text: "削除",
+                onPress: async () => {
+                  // これしないとalertが削除後にもう一度呼ばれると言う謎挙動
+                  calledCount += 1;
+                  await deleteEventById(id);
+                  await fetchGetEvents();
+                },
+                style: "destructive",
               },
-              style: "destructive",
-            },
-            {
-              text: "キャンセル",
-              onPress: () => {},
-              style: "cancel",
-            },
-          ],
-          { cancelable: false }
-        );
-      };
-      setTimeout(deleteAlert, 600);
+              {
+                text: "キャンセル",
+                onPress: () => {},
+                style: "cancel",
+              },
+            ],
+            { cancelable: true }
+          );
+        }, 600);
+      } else {
+        null;
+      }
+      // setTimeout(deleteAlert, 600);
+      console.log("end");
     }
   };
 

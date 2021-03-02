@@ -1,13 +1,14 @@
 import { createContext } from "react";
+import { EventType } from "../types/event";
 
 type EventContextValue = {
-  event: string | undefined;
-  setEvent: (event: string | undefined) => void;
+  events: EventType[];
+  setEvents: (events: EventType[]) => void;
 };
 
 export const EventContext = createContext<EventContextValue>({
-  event: undefined,
-  setEvent: () => {},
+  events: [],
+  setEvents: () => {},
 });
 
 type addEventContextValue = {

@@ -20,3 +20,13 @@ export const addEventContext = createContext<addEventContextValue>({
   addEvent: "",
   setAddEvent: () => {},
 });
+
+type EventIdContextValue = {
+  eventIds: number[];
+  setEventIds: (eventIds: number[]) => void;
+};
+
+export const EventIdsContext = createContext<EventIdContextValue>({
+  eventIds: [0],
+  setEventIds: () => {},
+});

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ModalSelector from "react-native-modal-selector";
@@ -24,6 +24,12 @@ import {
   partsDetailLegs,
 } from "../lib/parts";
 import { DeleteEvent, getEvents } from "../lib/sqlite";
+import {
+  trainingTypesDict,
+  trainingTypesDictType,
+  partsDetailsDict,
+  partsDetailsDictType,
+} from "../lib/convertDict";
 
 type Props = {
   event: EventType;
@@ -41,6 +47,10 @@ export const ModalSelection = (props: Props) => {
     },
   ];
 
+  const trainingType: keyof trainingTypesDictType = props.event
+    .trainingType as keyof trainingTypesDictType;
+  const partsDetail: keyof partsDetailsDictType = props.event
+    .partDetail as keyof partsDetailsDictType;
   const { events, setEvents } = useContext(EventContext);
   const { setAddEvent } = useContext(addEventContext);
   const { setPart } = useContext(partContext);
@@ -145,7 +155,19 @@ export const ModalSelection = (props: Props) => {
           onPressEvent(key.key, props.event);
         }}
       >
-        <Text style={styles.TextStyle}>{props.event.event}</Text>
+        <View style={styles.textContainerStyle}>
+          <View>
+            <Text style={styles.textEventStyle}>{props.event.event}</Text>
+          </View>
+          <View>
+            <Text style={styles.textDescStyle}>
+              {trainingTypesDict[trainingType]}
+            </Text>
+            <Text style={styles.textDescStyle}>
+              {partsDetailsDict[partsDetail]}
+            </Text>
+          </View>
+        </View>
       </ModalSelector>
     </View>
   );
@@ -155,12 +177,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    // padding: 50,
   },
-  TextStyle: {
+  textContainerStyle: {
+    height: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textEventStyle: {
     fontSize: 22,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     color: "#333",
+  },
+  textDescStyle: {
+    fontSize: 14,
+    color: "#555",
   },
   touchableStyle: {
     // minWidth: "100%",
@@ -188,7 +219,7 @@ const styles = StyleSheet.create({
   },
   sectionStyle: {
     // 一番うえの箇所
-    // backgroundColor:"#333"
+    // backgroundColor: "#333",
   },
   optionStyle: {
     justifyContent: "center",

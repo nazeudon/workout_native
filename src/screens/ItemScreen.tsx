@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingRight: 20,
     marginLeft: 50, //背景の赤色が見えないように
-    backgroundColor: "#ff3b30",
+    backgroundColor: "#ff3b30", //赤
   },
   headerTitle: {
     marginLeft: "3%",

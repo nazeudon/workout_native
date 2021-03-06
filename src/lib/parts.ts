@@ -5,7 +5,7 @@ export const parts = [
   { label: "腕", value: "arm" },
   { label: "腹", value: "ab" },
   { label: "尻", value: "hip" },
-  { label: "足", value: "leg" },
+  { label: "脚", value: "leg" },
 ];
 export const partsDetailSholders = [
   { label: "僧帽筋上部", value: "trapeziusUpper" },

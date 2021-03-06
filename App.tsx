@@ -10,7 +10,11 @@ import { TimesContext } from "./src/context/timesContext";
 import { SegmentContext } from "./src/context/segmentContext";
 import { recoveryContext } from "./src/context/recoveryContext";
 import { trialContext } from "./src/context/trialContext";
-import { addEventContext, EventContext } from "./src/context/eventContext";
+import {
+  addEventContext,
+  EventContext,
+  EventIdsContext,
+} from "./src/context/eventContext";
 import {
   partContext,
   partDetailsContext,
@@ -30,45 +34,52 @@ const App = () => {
   const [isNewEvent, setIsNewEvent] = useState<boolean>(false);
   const [events, setEvents] = useState<EventType[]>([]);
   const [addEvent, setAddEvent] = useState<string>("");
+  const [eventIds, setEventIds] = useState<number[]>([0]);
   const [part, setPart] = useState<string>("");
   const [partDetails, setPartDetails] = useState<PART_DETAILS[]>([]);
   const [partDetail, setPartDetail] = useState<string>("");
   const [trainingType, setTrainingType] = useState<string>("");
 
   return (
-    <EventContext.Provider value={{ events, setEvents }}>
-      <IsNewEventContext.Provider value={{ isNewEvent, setIsNewEvent }}>
-        <TrainingTypeContext.Provider value={{ trainingType, setTrainingType }}>
-          <partDetailContext.Provider value={{ partDetail, setPartDetail }}>
-            <partDetailsContext.Provider
-              value={{ partDetails, setPartDetails }}
-            >
-              <partContext.Provider value={{ part, setPart }}>
-                <addEventContext.Provider value={{ addEvent, setAddEvent }}>
-                  <trialContext.Provider value={{ trial, setTrial }}>
-                    <recoveryContext.Provider value={{ recovery, setRecovery }}>
-                      <IsNewContext.Provider value={{ isNew, setIsNew }}>
-                        <SegmentContext.Provider
-                          value={{ segment, setSegment }}
-                        >
-                          <TimesContext.Provider value={{ times, setTimes }}>
-                            <WeightsContext.Provider
-                              value={{ weights, setWeights }}
-                            >
-                              <AppNavigator />
-                            </WeightsContext.Provider>
-                          </TimesContext.Provider>
-                        </SegmentContext.Provider>
-                      </IsNewContext.Provider>
-                    </recoveryContext.Provider>
-                  </trialContext.Provider>
-                </addEventContext.Provider>
-              </partContext.Provider>
-            </partDetailsContext.Provider>
-          </partDetailContext.Provider>
-        </TrainingTypeContext.Provider>
-      </IsNewEventContext.Provider>
-    </EventContext.Provider>
+    <EventIdsContext.Provider value={{ eventIds, setEventIds }}>
+      <EventContext.Provider value={{ events, setEvents }}>
+        <IsNewEventContext.Provider value={{ isNewEvent, setIsNewEvent }}>
+          <TrainingTypeContext.Provider
+            value={{ trainingType, setTrainingType }}
+          >
+            <partDetailContext.Provider value={{ partDetail, setPartDetail }}>
+              <partDetailsContext.Provider
+                value={{ partDetails, setPartDetails }}
+              >
+                <partContext.Provider value={{ part, setPart }}>
+                  <addEventContext.Provider value={{ addEvent, setAddEvent }}>
+                    <trialContext.Provider value={{ trial, setTrial }}>
+                      <recoveryContext.Provider
+                        value={{ recovery, setRecovery }}
+                      >
+                        <IsNewContext.Provider value={{ isNew, setIsNew }}>
+                          <SegmentContext.Provider
+                            value={{ segment, setSegment }}
+                          >
+                            <TimesContext.Provider value={{ times, setTimes }}>
+                              <WeightsContext.Provider
+                                value={{ weights, setWeights }}
+                              >
+                                <AppNavigator />
+                              </WeightsContext.Provider>
+                            </TimesContext.Provider>
+                          </SegmentContext.Provider>
+                        </IsNewContext.Provider>
+                      </recoveryContext.Provider>
+                    </trialContext.Provider>
+                  </addEventContext.Provider>
+                </partContext.Provider>
+              </partDetailsContext.Provider>
+            </partDetailContext.Provider>
+          </TrainingTypeContext.Provider>
+        </IsNewEventContext.Provider>
+      </EventContext.Provider>
+    </EventIdsContext.Provider>
   );
 };
 

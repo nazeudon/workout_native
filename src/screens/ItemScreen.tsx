@@ -47,18 +47,37 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     times: 0,
   });
 
-  const sections = [
+  // const sections = [
+  //   {
+  //     title: "セット目 / 挙上重量 / 回数",
+  //     data: itemDetails.map((itemDetail) => ({ ...itemDetail, type: "item" })),
+  //   },
+  //   {
+  //     title: "リカバリー",
+  //     data: recovery.map((rec) => ({ ...rec, type: "rec" })),
+  //   },
+  //   {
+  //     title: "種目目",
+  //     data: trial.map((tri) => ({ ...tri, type: "trial" })),
+  //   },
+  // ];
+  // const sections = [
+  const sectionItems = [
     {
       title: "セット目 / 挙上重量 / 回数",
-      data: itemDetails.map((itemDetail) => ({ ...itemDetail, type: "item" })),
+      data: itemDetails, //.map((itemDetail) => ({ ...itemDetail, type: "item" })),
     },
+  ];
+  const sectionRecovery = [
     {
       title: "リカバリー",
-      data: recovery.map((rec) => ({ ...rec, type: "rec" })),
+      data: recovery, //.map((rec) => ({ ...rec, type: "rec" })),
     },
+  ];
+  const sectionTrial = [
     {
       title: "種目目",
-      data: trial.map((tri) => ({ ...tri, type: "trial" })),
+      data: trial, //.map((tri) => ({ ...tri, type: "trial" })),
     },
   ];
 
@@ -187,58 +206,59 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       <SafeAreaView style={styles.list}>
         <SwipeListView
           useSectionList
-          sections={sections}
+          // sections={sections}
+          sections={sectionItems}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.headerTitle}>{title}</Text>
           )}
           renderItem={(data, _) => {
-            if (data.item.type === "item") {
-              return (
-                <ItemDetail
-                  data={data.item}
-                  index={data.index}
-                  onPress={() =>
-                    onPressItemDetail(
-                      data.item,
-                      data.index,
-                      totalWeights,
-                      itemLength
-                    )
-                  }
-                />
-              );
-            } else if (data.item.type === "rec") {
-              return (
-                <Recovery
-                  data={data.item.min}
-                  onPress={() => onPressRecovery(data.item)}
-                />
-              );
-            } else {
-              return (
-                <Trial
-                  data={data.item.trialNum}
-                  onPress={() => onPressTrial(data.item)}
-                />
-              );
-            }
+            // if (data.item.type === "item") {
+            return (
+              <ItemDetail
+                data={data.item}
+                index={data.index}
+                onPress={() =>
+                  onPressItemDetail(
+                    data.item,
+                    data.index,
+                    totalWeights,
+                    itemLength
+                  )
+                }
+              />
+            );
+            // } else if (data.item.type === "rec") {
+            //   return (
+            //     <Recovery
+            //       data={data.item.min}
+            //       onPress={() => onPressRecovery(data.item)}
+            //     />
+            //   );
+            // } else {
+            //   return (
+            //     <Trial
+            //       data={data.item.trialNum}
+            //       onPress={() => onPressTrial(data.item)}
+            //     />
+            //   );
+            // }
           }}
           renderHiddenItem={(data, rowMap) => {
-            if (data.item.type === "item") {
-              return (
-                <View style={styles.delete}>
-                  <IconButton
-                    name="delete"
-                    color={"#fff"}
-                    onPress={() =>
-                      onPressDeleteItemDetail(rowMap, data.item, data.index)
-                    }
-                  />
-                </View>
-              );
-            } else {
-              return null;
-            }
+            // if (data.item.type === "item") {
+            return (
+              <View style={styles.delete}>
+                <IconButton
+                  name="delete"
+                  color={"#fff"}
+                  onPress={() =>
+                    onPressDeleteItemDetail(rowMap, data.item, data.index)
+                  }
+                />
+              </View>
+            );
+            // } else {
+            //   return null;
+            // }
           }}
           keyExtractor={(item, index) => index.toString()}
           rightOpenValue={-72}
@@ -246,33 +266,64 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           disableRightSwipe={true}
           closeOnRowBeginSwipe={true}
         />
-        <FloatingActionButton
-          iconName="plus"
-          onPress={() =>
-            onPressInsertItemDetail(
-              initItemDetail,
-              itemLength,
-              totalWeights,
-              itemLength
-            )
-          }
+        <SwipeListView
+          useSectionList
+          sections={sectionRecovery}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.headerTitle}>{title}</Text>
+          )}
+          renderItem={(data, _) => {
+            return (
+              <Recovery
+                data={data.item.min}
+                onPress={() => onPressRecovery(data.item)}
+              />
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
+        />
+        <SwipeListView
+          useSectionList
+          sections={sectionTrial}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.headerTitle}>{title}</Text>
+          )}
+          renderItem={(data, _) => {
+            return (
+              <Trial
+                data={data.item.trialNum}
+                onPress={() => onPressTrial(data.item)}
+              />
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
         />
       </SafeAreaView>
+      <FloatingActionButton
+        iconName="plus"
+        onPress={() =>
+          onPressInsertItemDetail(
+            initItemDetail,
+            itemLength,
+            totalWeights,
+            itemLength
+          )
+        }
+      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  list: {
+    backgroundColor: "#eee",
+    position: "relative",
+  },
   date: {
     marginTop: "3%",
     marginRight: "3%",
     flexDirection: "row",
     alignItems: "center",
-  },
-  list: {
-    flex: 1,
-    backgroundColor: "#eee",
-    position: "relative",
   },
   delete: {
     flex: 1,

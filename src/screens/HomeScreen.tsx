@@ -151,7 +151,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         <SectionList
           style={styles.list}
           sections={sections}
-          renderItem={({ section: { id, data, colorList }, index }) => {
+          renderItem={({ section: { id, data }, index }) => {
             if (eventIds.includes(0) || eventIds.includes(id)) {
               return (
                 <Event

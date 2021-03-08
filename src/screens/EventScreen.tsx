@@ -40,8 +40,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const [recoverys, setRecoverys] = useState<RecoveryType[]>([]);
   const [trials, setTrials] = useState<TrialType[]>([]);
 
-  //2月9日ここから途中これをItem componentに渡す予定
-  //それかtotalWeightsなどと同じようにitemsのDBに格納しちゃうのもあり
   const forItems = items.map((item, idx) => ({
     item: item,
     recovery: recoverys[idx],
@@ -115,7 +113,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const items: ItemType[] = await fetchGetItem(itemsId);
     const item: ItemType = await items[0];
     await navigation.navigate("Item", { item });
-    // [ToDo] これを押した後に、直で戻るとセット数が0になってる
   };
 
   const onPressDeleteItem = async (
@@ -138,9 +135,33 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     }
   };
 
+  const sections = [
+    {
+      title: (
+        <View style={styles.descs}>
+          <View style={styles.desc}>
+            <Text style={styles.textDec}>総セット数</Text>
+            <Text style={styles.separate}>/</Text>
+            <Text style={styles.textDec}>種目目</Text>
+            <Text style={styles.separate}>/</Text>
+            <Text style={styles.textDec}>リカバリー</Text>
+            <Text style={styles.separate}>/</Text>
+            <Text style={styles.textDec}>総挙上重量</Text>
+            {/* <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>推定Max重量</Text> */}
+          </View>
+          <View style={styles.date}>
+            <Text style={styles.textDate}>年-月-日</Text>
+          </View>
+        </View>
+      ),
+      data: forItems,
+    },
+  ];
+
   return (
     <>
-      <View style={styles.descs}>
+      {/* <View style={styles.descs}>
         <View style={styles.desc}>
           <Text style={styles.textDec}>総セット数</Text>
           <Text style={styles.separate}>/</Text>
@@ -148,17 +169,20 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           <Text style={styles.separate}>/</Text>
           <Text style={styles.textDec}>リカバリー</Text>
           <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>総挙上重量</Text>
-          {/* <Text style={styles.separate}>/</Text>
+          <Text style={styles.textDec}>総挙上重量</Text> */}
+      {/* <Text style={styles.separate}>/</Text>
           <Text style={styles.textDec}>推定Max重量</Text> */}
-        </View>
+      {/* </View>
         <View style={styles.date}>
           <Text style={styles.textDate}>年-月-日</Text>
         </View>
-      </View>
+      </View> */}
       <SafeAreaView style={styles.list}>
         <SwipeListView
-          data={forItems}
+          useSectionList
+          sections={sections}
+          // data={forItems}
+          renderSectionHeader={({ section: { title } }) => title}
           renderItem={({
             item,
           }: {
@@ -194,6 +218,8 @@ const styles = StyleSheet.create({
   descs: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: "1%",
+    // backgroundColor: "#eee",
   },
   desc: {
     marginTop: "3%",

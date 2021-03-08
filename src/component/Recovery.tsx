@@ -5,11 +5,12 @@ import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Icon } from "./Icon";
 
 type Props = {
-  data: string;
+  // data: string;
+  data: number;
   onPress: () => void;
 };
 
-export const Recovery: React.FC<Props> = ({ data, onPress }: Props) => {
+export const Recovery = ({ data, onPress }: Props) => {
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.container}>

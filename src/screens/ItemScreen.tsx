@@ -24,6 +24,7 @@ import { ItemDetail } from "../component/ItemDetail";
 import { Recovery } from "../component/Recovery";
 import { Trial } from "../component/Trial";
 import { FloatingActionButton } from "../component/FloatingActionButton";
+import { FloatingTimerButton } from "../component/FloatingTimerButton";
 import { IconButton } from "../component/IconButton";
 
 type Props = {
@@ -187,6 +188,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     navigation.navigate("Trial", { trial });
   };
 
+  const onPressCountDown = () => {
+    navigation.navigate("CountDown");
+  };
+
   const closeRow = (rowMap: any, rowKey: any) => {
     // https://snack.expo.io/@rollindeep/react-native-swipe-list-view
     if (rowMap[rowKey]) {
@@ -299,6 +304,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </SafeAreaView>
+      {/* <CountDownScreen /> */}
       <FloatingActionButton
         iconName="plus"
         onPress={() =>
@@ -309,6 +315,10 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             itemLength
           )
         }
+      />
+      <FloatingTimerButton
+        iconName={"timer-outline"}
+        onPress={() => onPressCountDown()}
       />
     </>
   );

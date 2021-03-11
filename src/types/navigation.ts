@@ -16,5 +16,6 @@ export type RootStackParamList = {
   };
   Recovery: { recovery: RecoveryType };
   Trial: { trial: TrialType };
+  CountDown: undefined;
   Main: undefined;
 };

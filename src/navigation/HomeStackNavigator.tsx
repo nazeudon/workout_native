@@ -8,6 +8,7 @@ import { ItemScreen } from "../screens/ItemScreen";
 import { ItemDetailScreen } from "../screens/ItemDetailScreen";
 import { RecoveryScreen } from "../screens/RecoveryScreen";
 import { TrialScreen } from "../screens/TrialScreen";
+import { CountDownScreen } from "../screens/CountDownScreen";
 /* types */
 import { RootStackParamList } from "../types/navigation";
 
@@ -49,6 +50,7 @@ export const HomeStackNavigator = () => {
       <RootStack.Screen name="Recovery" component={RecoveryScreen} />
       <RootStack.Screen name="Trial" component={TrialScreen} />
       <RootStack.Screen name="AddEvent" component={AddEventScreen} />
+      <RootStack.Screen name="CountDown" component={CountDownScreen} />
     </RootStack.Navigator>
   );
 };

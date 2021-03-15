@@ -7,18 +7,16 @@ import { RouteProp } from "@react-navigation/native";
 import {
   DeleteItemDetail,
   getItemDetails,
-  getRecovery,
-  getTrial,
   UpdateItemSets,
 } from "../lib/sqlite";
 /* context */
 import { IsNewContext } from "../context/isNew";
 import { SegmentContext } from "../context/segmentContext";
+import { recoveryContext } from "../context/recoveryContext";
+import { trialContext } from "../context/trialContext";
 /* type */
 import { RootStackParamList } from "../types/navigation";
-import { ItemDetailType } from "../types/item";
-import { RecoveryType } from "../types/recovery";
-import { TrialType } from "../types/trial";
+import { ItemDetailType, ItemType } from "../types/item";
 /* component */
 import { ItemDetail } from "../component/ItemDetail";
 import { Recovery } from "../component/Recovery";
@@ -37,8 +35,8 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { setSegment } = useContext(SegmentContext);
   const [itemLength, setItemLength] = useState<number>(0);
   const [totalWeights, setTotalWeights] = useState<number>(0);
-  const [recovery, setRecovery] = useState<RecoveryType[]>([]);
-  const [trial, setTrial] = useState<TrialType[]>([]);
+  const { setRecovery } = useContext(recoveryContext);
+  const { setTrial } = useContext(trialContext);
   const [itemDetails, setItemDetails] = useState<ItemDetailType[]>([]);
   const [initItemDetail, setInitItemDetial] = useState<ItemDetailType>({
     id: 0,
@@ -47,37 +45,22 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     times: 0,
   });
 
-  // const sections = [
-  //   {
-  //     title: "セット目 / 挙上重量 / 回数",
-  //     data: itemDetails.map((itemDetail) => ({ ...itemDetail, type: "item" })),
-  //   },
-  //   {
-  //     title: "リカバリー",
-  //     data: recovery.map((rec) => ({ ...rec, type: "rec" })),
-  //   },
-  //   {
-  //     title: "種目目",
-  //     data: trial.map((tri) => ({ ...tri, type: "trial" })),
-  //   },
-  // ];
-  // const sections = [
   const sectionItems = [
     {
       title: "セット目 / 挙上重量 / 回数",
-      data: itemDetails, //.map((itemDetail) => ({ ...itemDetail, type: "item" })),
+      data: itemDetails,
     },
   ];
   const sectionRecovery = [
     {
       title: "リカバリー",
-      data: recovery, //.map((rec) => ({ ...rec, type: "rec" })),
+      data: [item],
     },
   ];
   const sectionTrial = [
     {
       title: "種目目",
-      data: trial, //.map((tri) => ({ ...tri, type: "trial" })),
+      data: [item],
     },
   ];
 
@@ -97,6 +80,8 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     navigation.setOptions({
       title: item.createdAt.split(" ")[0],
     });
+    setRecovery(String(item.recovery));
+    setTrial(String(item.trial));
   }, [item]);
 
   useEffect(() => {
@@ -104,8 +89,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
       fetchGetItemDetails();
-      fetchGetRecovery();
-      fetchGetTrial();
       setSegment("weight");
     });
     return refresh;
@@ -122,16 +105,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       times: 0,
     });
     await setItemLength(res.length);
-  };
-
-  const fetchGetRecovery = async () => {
-    const res = await getRecovery(item.id);
-    await setRecovery(res);
-  };
-
-  const fetchGetTrial = async () => {
-    const res = await getTrial(item.id);
-    await setTrial(res);
   };
 
   const fetchUpdateItemSets = async (weights: number) => {
@@ -179,16 +152,12 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await fetchUpdateItemSets(itemDetail.weights * itemDetail.times);
   };
 
-  const onPressRecovery = (recovery: RecoveryType) => {
-    navigation.navigate("Recovery", { recovery });
+  const onPressRecovery = (item: ItemType) => {
+    navigation.navigate("Recovery", { item });
   };
 
-  const onPressTrial = (trial: TrialType) => {
-    navigation.navigate("Trial", { trial });
-  };
-
-  const onPressCountDown = () => {
-    navigation.navigate("CountDown");
+  const onPressTrial = (item: ItemType) => {
+    navigation.navigate("Trial", { item });
   };
 
   const closeRow = (rowMap: any, rowKey: any) => {
@@ -210,13 +179,11 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       <SafeAreaView style={styles.list}>
         <SwipeListView
           useSectionList
-          // sections={sections}
           sections={sectionItems}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.headerTitle}>{title}</Text>
           )}
           renderItem={(data, _) => {
-            // if (data.item.type === "item") {
             return (
               <ItemDetail
                 data={data.item}
@@ -233,7 +200,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             );
           }}
           renderHiddenItem={(data, rowMap) => {
-            // if (data.item.type === "item") {
             return (
               <View style={styles.delete}>
                 <IconButton
@@ -259,14 +225,9 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             <Text style={styles.headerTitle}>{title}</Text>
           )}
           renderItem={(data, _) => {
-            return (
-              <Recovery
-                data={data.item.min}
-                onPress={() => onPressRecovery(data.item)}
-              />
-            );
+            return <Recovery onPress={() => onPressRecovery(data.item)} />;
           }}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
         />
         <SwipeListView
           useSectionList
@@ -275,14 +236,9 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             <Text style={styles.headerTitle}>{title}</Text>
           )}
           renderItem={(data, _) => {
-            return (
-              <Trial
-                data={data.item.trialNum}
-                onPress={() => onPressTrial(data.item)}
-              />
-            );
+            return <Trial onPress={() => onPressTrial(data.item)} />;
           }}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
         />
       </SafeAreaView>
       <FloatingActionButton

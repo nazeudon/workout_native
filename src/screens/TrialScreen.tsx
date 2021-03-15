@@ -3,7 +3,7 @@ import { StyleSheet, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 /* lib */
-import { UpdateTrial } from "../lib/sqlite";
+import { UpdateItemTrial } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
@@ -23,7 +23,8 @@ type Props = {
 };
 
 export const TrialScreen: React.FC<Props> = ({ navigation, route }: Props) => {
-  const { trial, setTrial } = useContext(trialContext);
+  const { item } = route.params;
+  const { trial } = useContext(trialContext);
   const { setSegment } = useContext(SegmentContext);
 
   useEffect(() => {
@@ -36,19 +37,17 @@ export const TrialScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    setTrial(String(route.params.trial.trialNum));
     setSegment("trial");
   }, []);
 
   const onPressDecision = async () => {
-    const id = route.params.trial.id;
+    const id = item.id;
     fetchUpdateTrial(id, Number(trial));
     navigation.goBack();
-    setTrial("0");
   };
 
   const fetchUpdateTrial = async (id: number, trialNum: number) => {
-    const res = await UpdateTrial(id, trialNum);
+    const res = await UpdateItemTrial(id, trialNum);
   };
 
   return (

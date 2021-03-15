@@ -4,6 +4,8 @@ export type ItemType = {
   createdAt: string;
   sets: number;
   totalWeights: number;
+  recovery: number;
+  trial: number;
 };
 
 export type ItemDetailType = {

@@ -5,6 +5,7 @@ import {
   View,
   Text,
   SectionList,
+  Button,
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 /* component */
@@ -138,22 +139,6 @@ export const HomeScreen = ({ navigation }: Props) => {
         <EventSegmentedControl />
       </SafeAreaView>
       <SafeAreaView style={styles.container}>
-        {/* <View style={styles.separateStyle}>
-          <Text style={styles.textStyle}>肩 Sholder</Text>
-        </View> */}
-        {/* <FlatList
-          style={styles.list}
-          data={events}
-          renderItem={({ item }: { item: EventType }) => (
-            <Event
-              data={item}
-              onPress={() => onPressEvent(item)}
-              navigation={navigation}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          // numColumns={2}
-        /> */}
         <SectionList
           style={styles.list}
           sections={sections}
@@ -205,9 +190,9 @@ export const HomeScreen = ({ navigation }: Props) => {
         <Button title="deleteItem" onPress={_deleteItem} />
         <Button title="deleteItems" onPress={_deleteItems} />
         <Button title="DropTable" onPress={_DropTable} />
-        <Button title="AddColumn" onPress={_addColumnToDB} /> */}
-      {/* <Button title="getFromDB" onPress={fetchGetEvents} /> */}
+        {/* <Button title="getFromDB" onPress={fetchGetEvents} /> */}
       {/* <Button title="changeDB" onPress={changeDB} /> */}
+      {/* <Button title="AddColumn" onPress={_addColumnToDB} /> */}
     </>
   );
 };

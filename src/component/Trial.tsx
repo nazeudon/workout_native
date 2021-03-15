@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 /* type */
 /* component */
 import { Icon } from "./Icon";
+/* context */
+import { trialContext } from "../context/trialContext";
 
 type Props = {
-  // data: string;
-  data: number;
   onPress: () => void;
 };
 
-export const Trial = ({ data, onPress }: Props) => {
+export const Trial = ({ onPress }: Props) => {
+  const { trial } = useContext(trialContext);
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.container}>
         <View style={styles.trial}>
-          <Text style={styles.text}>{data} 種目目</Text>
+          <Text style={styles.text}>{trial} 種目目</Text>
         </View>
         <View style={styles.icon}>
           <Icon name="right" />

@@ -165,8 +165,8 @@ export const InsertItem = (eventId: number) => {
     db.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into items (eventId, sets, totalWeights) values (?, ?, ?);",
-          [eventId, 0, 0],
+          "insert into items (eventId, sets, totalWeights, recovery, trial) values (?, ?, ?, ?, ?);",
+          [eventId, 0, 0, 0, 1],
           (_, resultSet) => {
             // 成功時の処理
             results = resultSet;
@@ -229,7 +229,55 @@ export const UpdateItemSets = (
           }
         );
       },
-      () => reject(new Error("[update itemsDetails] transaction failed")),
+      () => reject(new Error("[update itemsSets] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
+export const UpdateItemRecovery = (id: number, recovery: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "update items set recovery = ? where id = ?;",
+          [recovery, id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[update itemsRecovery] transaction failed")),
+      () => resolve(results.rows._array)
+    );
+  });
+};
+
+export const UpdateItemTrial = (id: number, trial: number) => {
+  return new Promise<any>((resolve, reject) => {
+    let results: SQLite.SQLResultSet;
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          "update items set trial = ? where id = ?;",
+          [trial, id],
+          (_, resultSet) => {
+            // 成功時の処理
+            results = resultSet;
+          },
+          () => {
+            // エラー時はロールバックする
+            return true;
+          }
+        );
+      },
+      () => reject(new Error("[update itemsTrial] transaction failed")),
       () => resolve(results.rows._array)
     );
   });
@@ -402,255 +450,6 @@ export const DeleteItemDetailByItemsId = (itemsId: number) => {
   });
 };
 
-export const getRecovery = (itemsId: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "select * from recovery where itemsId = ?;",
-          [itemsId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[get recovery] transaction failed")),
-      () => resolve(results.rows._array)
-    );
-  });
-};
-
-export const getRecoveryByEventId = (eventId: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "select * from recovery where eventId = ?;",
-          [eventId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[get recovery] transaction failed")),
-      () => resolve(results.rows._array)
-    );
-  });
-};
-
-export const UpdateRecovery = (id: number, min: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "update recovery set min = ? where id = ?;",
-          [min, id],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[update recovery] transaction failed")),
-      () => resolve(results.rows._array)
-    );
-  });
-};
-
-export const InsertInitRecovery = (
-  itemsId: number,
-  min: number,
-  eventId: number
-) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "insert into recovery (itemsId, min, eventId) values (?,?,?);",
-          [itemsId, min, eventId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[insert recovery] transaction failed")),
-      () => resolve(results.insertId)
-    );
-  });
-};
-
-export const DeleteRecoveryByItemsId = (itemsId: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "delete from recovery where itemsId = ?;",
-          [itemsId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () =>
-        reject(new Error("[delete recovery by itemsId] transaction failed")),
-      () => resolve(results.insertId)
-    );
-  });
-};
-
-export const getTrial = (itemsId: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "select * from trial where itemsId = ?;",
-          [itemsId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[get trial] transaction failed")),
-      () => resolve(results.rows._array)
-    );
-  });
-};
-
-export const getTrialByEventId = (eventId: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "select * from trial where eventId = ?;",
-          [eventId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[get trial] transaction failed")),
-      () => resolve(results.rows._array)
-    );
-  });
-};
-
-export const UpdateTrial = (id: number, trialNum: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "update trial set trialNum = ? where id = ?;",
-          [trialNum, id],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[update trial] transaction failed")),
-      () => resolve(results.rows._array)
-    );
-  });
-};
-
-export const InsertInitTrial = (
-  itemsId: number,
-  trialNum: number,
-  eventId: number
-) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "insert into trial (itemsId, trialNum, eventId) values (?,?,?);",
-          [itemsId, trialNum, eventId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[insert trial] transaction failed")),
-      () => resolve(results.insertId)
-    );
-  });
-};
-
-export const DeleteTrialByItemsId = (itemsId: number) => {
-  return new Promise<any>((resolve, reject) => {
-    let results: SQLite.SQLResultSet;
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          "delete from trial where itemsId = ?;",
-          [itemsId],
-          (_, resultSet) => {
-            // 成功時の処理
-            results = resultSet;
-          },
-          () => {
-            // エラー時はロールバックする
-            return true;
-          }
-        );
-      },
-      () => reject(new Error("[delete trial by itemsId] transaction failed")),
-      () => resolve(results.insertId)
-    );
-  });
-};
-
 /**********************************************/
 
 export const _initDB = () => {
@@ -700,7 +499,7 @@ export const _insertToDB = () => {
 export const _addColumnToDB = () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "alter table events add column partDetail string not null default greaterPectoralsMiddle;",
+      "alter table items add column trial integer not null default 1;",
       null,
       () => {
         console.log("success");

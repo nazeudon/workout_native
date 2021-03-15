@@ -1,7 +1,5 @@
 import { EventType } from "./event";
 import { ItemType, ItemDetailType } from "./item";
-import { RecoveryType } from "./recovery";
-import { TrialType } from "./trial";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -14,8 +12,8 @@ export type RootStackParamList = {
     totalWeights: number;
     itemLength: number;
   };
-  Recovery: { recovery: RecoveryType };
-  Trial: { trial: TrialType };
+  Recovery: { item: ItemType };
+  Trial: { item: ItemType };
   CountDown: undefined;
   Main: undefined;
 };

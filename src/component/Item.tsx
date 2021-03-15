@@ -3,23 +3,20 @@ import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 /* lib */
 /* type */
 import { ItemType } from "../types/item";
-import { RecoveryType } from "../types/recovery";
-import { TrialType } from "../types/trial";
 /* component */
 import { Icon } from "../component/Icon";
 
 type Props = {
-  data: { item: ItemType; recovery: RecoveryType; trial: TrialType };
+  data: ItemType;
   onPress: () => void;
 };
 
 export const Item: React.FC<Props> = ({ data, onPress }: Props) => {
-  const createdAt = data.item.createdAt.split(" ")[0].slice(-8);
-  const sets = data.item.sets;
-  const totalWeights = data.item.totalWeights;
-  // console.log(data);
-  const recovery = data.recovery.min;
-  const trial = data.trial.trialNum;
+  const createdAt = data.createdAt.split(" ")[0].slice(-8);
+  const sets = data.sets;
+  const totalWeights = data.totalWeights;
+  const recovery = data.recovery;
+  const trial = data.trial;
 
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>

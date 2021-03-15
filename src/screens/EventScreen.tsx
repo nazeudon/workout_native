@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, SafeAreaView, Text, View } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -7,27 +7,21 @@ import { RouteProp } from "@react-navigation/native";
 import {
   getItem,
   getItems,
-  getRecoveryByEventId,
-  getTrialByEventId,
   InsertItem,
   InsertInitItemDetails,
-  InsertInitRecovery,
-  InsertInitTrial,
   DeleteItem,
   DeleteItemDetailByItemsId,
-  DeleteRecoveryByItemsId,
-  DeleteTrialByItemsId,
 } from "../lib/sqlite";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemType } from "../types/item";
-import { RecoveryType } from "../types/recovery";
-import { TrialType } from "../types/trial";
 /* component */
 import { Item } from "../component/Item";
 import { IconButton } from "../component/IconButton";
-/* context */
 import { FloatingActionButton } from "../component/FloatingActionButton";
+/* context */
+import { recoveryContext } from "../context/recoveryContext";
+import { trialContext } from "../context/trialContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Event">;
@@ -37,14 +31,8 @@ type Props = {
 export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
-  const [recoverys, setRecoverys] = useState<RecoveryType[]>([]);
-  const [trials, setTrials] = useState<TrialType[]>([]);
-
-  const forItems = items.map((item, idx) => ({
-    item: item,
-    recovery: recoverys[idx],
-    trial: trials[idx],
-  }));
+  const { setRecovery } = useContext(recoveryContext);
+  const { setTrial } = useContext(trialContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -57,9 +45,9 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
       // なぜかfetchの順番逆だとrecoverysの配列が空になる
-      fetchGetRecoveryByEventId();
-      fetchGetTrialByEventId();
       fetchGetItems();
+      setRecovery("0");
+      setTrial("0");
     });
     return refresh;
   }, [navigation]);
@@ -67,16 +55,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const fetchGetItems = async () => {
     const res = await getItems(event.id);
     setItems(res);
-  };
-
-  const fetchGetRecoveryByEventId = async () => {
-    const res = await getRecoveryByEventId(event.id);
-    setRecoverys(res);
-  };
-
-  const fetchGetTrialByEventId = async () => {
-    const res = await getTrialByEventId(event.id);
-    setTrials(res);
   };
 
   const fetchInsertItem = async () => {
@@ -93,14 +71,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     return res;
   };
 
-  const fetchInsertInitRecovery = async (itemsId: number) => {
-    const res: number = await InsertInitRecovery(itemsId, 0, event.id);
-  };
-
-  const fetchInsertInitTrial = async (itemsId: number) => {
-    const res: number = await InsertInitTrial(itemsId, 1, event.id);
-  };
-
   const onPressItem = (item: ItemType) => {
     navigation.navigate("Item", { item });
   };
@@ -108,8 +78,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const onPressInsertItem = async () => {
     const itemsId = await fetchInsertItem();
     await fetchInsertInitItemDetail(itemsId);
-    await fetchInsertInitRecovery(itemsId);
-    await fetchInsertInitTrial(itemsId);
     const items: ItemType[] = await fetchGetItem(itemsId);
     const item: ItemType = await items[0];
     await navigation.navigate("Item", { item });
@@ -123,8 +91,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     await closeRow(rowMap, index);
     DeleteItem(item.id);
     DeleteItemDetailByItemsId(item.id);
-    DeleteRecoveryByItemsId(item.id);
-    DeleteTrialByItemsId(item.id);
     fetchGetItems();
   };
 
@@ -155,48 +121,27 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           </View>
         </View>
       ),
-      data: forItems,
+      data: items,
     },
   ];
 
   return (
     <>
-      {/* <View style={styles.descs}>
-        <View style={styles.desc}>
-          <Text style={styles.textDec}>総セット数</Text>
-          <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>種目目</Text>
-          <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>リカバリー</Text>
-          <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>総挙上重量</Text> */}
-      {/* <Text style={styles.separate}>/</Text>
-          <Text style={styles.textDec}>推定Max重量</Text> */}
-      {/* </View>
-        <View style={styles.date}>
-          <Text style={styles.textDate}>年-月-日</Text>
-        </View>
-      </View> */}
       <SafeAreaView style={styles.list}>
         <SwipeListView
           useSectionList
           sections={sections}
-          // data={forItems}
           renderSectionHeader={({ section: { title } }) => title}
-          renderItem={({
-            item,
-          }: {
-            item: { item: ItemType; recovery: RecoveryType; trial: TrialType };
-          }) => <Item data={item} onPress={() => onPressItem(item.item)} />}
+          renderItem={(data, _) => (
+            <Item data={data.item} onPress={() => onPressItem(data.item)} />
+          )}
           keyExtractor={(_, index) => index.toString()}
           renderHiddenItem={(data, rowMap) => (
             <View style={styles.delete}>
               <IconButton
                 name="delete"
                 color={"#fff"}
-                onPress={() =>
-                  onPressDeleteItem(rowMap, data.item.item, data.index)
-                }
+                onPress={() => onPressDeleteItem(rowMap, data.item, data.index)}
               />
             </View>
           )}

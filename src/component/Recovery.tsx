@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 /* type */
 /* component */
 import { Icon } from "./Icon";
+/* context */
+import { recoveryContext } from "../context/recoveryContext";
 
 type Props = {
-  // data: string;
-  data: number;
   onPress: () => void;
 };
 
-export const Recovery = ({ data, onPress }: Props) => {
+export const Recovery = ({ onPress }: Props) => {
+  const { recovery } = useContext(recoveryContext);
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
       <View style={styles.container}>
         <View style={styles.recovery}>
-          <Text style={styles.text}>{data} 分</Text>
+          <Text style={styles.text}>{recovery} 分</Text>
         </View>
         <View style={styles.icon}>
           <Icon name="right" />

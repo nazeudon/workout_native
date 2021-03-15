@@ -56,7 +56,8 @@ export const HomeScreen = ({ navigation }: Props) => {
       id: 1,
       title: "肩",
       data: events.filter((event) => event.part === "sholder"),
-      colorHeader: "#3CB371",
+      // colorHeader: "#3CB371",
+      colorHeader: "#2980B9",
     },
     {
       id: 2,
@@ -68,31 +69,36 @@ export const HomeScreen = ({ navigation }: Props) => {
       id: 3,
       title: "背中",
       data: events.filter((event) => event.part === "back"),
-      colorHeader: "#7B68EE",
+      // colorHeader: "#7B68EE",
+      colorHeader: "#2980B9",
     },
     {
       id: 4,
       title: "腕",
       data: events.filter((event) => event.part === "arm"),
-      colorHeader: "#001E43",
+      // colorHeader: "#001E43",
+      colorHeader: "#2980B9",
     },
     {
       id: 5,
       title: "腹",
       data: events.filter((event) => event.part === "ab"),
-      colorHeader: "#FF8C00",
+      // colorHeader: "#FF8C00",
+      colorHeader: "#2980B9",
     },
     {
       id: 6,
       title: "尻",
       data: events.filter((event) => event.part === "hip"),
-      colorHeader: "#FF7518",
+      // colorHeader: "#FF7518",
+      colorHeader: "#2980B9",
     },
     {
       id: 7,
       title: "脚",
       data: events.filter((event) => event.part === "leg"),
-      colorHeader: "#950000",
+      // colorHeader: "#950000",
+      colorHeader: "#2980B9",
     },
   ];
 
@@ -223,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   separateStyle: {
-    height: 30,
+    height: 20,
     // marginTop: 5,
     // backgroundColor: "#0076FF",
     width: "100%",
@@ -231,7 +237,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textStyle: {
-    fontSize: 24,
+    fontSize: 18,
     color: "white",
   },
 });

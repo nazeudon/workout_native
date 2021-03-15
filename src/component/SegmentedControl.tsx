@@ -88,7 +88,7 @@ export const EventSegmentedControl = () => {
       // selectedIndex={state.selectedIndex}
       selectedIndices={eventIds}
       onTabPress={handleMultipleIndexSelect}
-      borderRadius={5}
+      borderRadius={2}
       tabsContainerStyle={styles.tabsContainerStyle}
       tabStyle={styles.eventTabStyle}
       tabTextStyle={styles.tabTextStyle}
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   eventTabStyle: {
     backgroundColor: "#fff",
-    marginTop: "5%",
+    marginTop: "10%",
     marginBottom: "2%",
     color: "#ecf0f1",
   },

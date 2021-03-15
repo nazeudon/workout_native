@@ -2,6 +2,9 @@ import React, { useContext } from "react";
 import { StyleSheet, View, Text, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ModalSelector from "react-native-modal-selector";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 /* types */
 import { RootStackParamList } from "../types/navigation";
 import { EventType } from "../types/event";
@@ -30,6 +33,8 @@ import {
   partsDetailsDict,
   partsDetailsDictType,
 } from "../lib/convertDict";
+/* component */
+import { Icon } from "../component/Icon";
 
 type Props = {
   event: EventType;
@@ -156,16 +161,26 @@ export const ModalSelection = (props: Props) => {
         }}
       >
         <View style={styles.textContainerStyle}>
-          <View>
+          <View style={styles.eventContainerStyle}>
+            {trainingType === "freeWeight" ? (
+              <MaterialCommunityIcons name="dumbbell" size={24} color="#333" />
+            ) : trainingType === "ownWeight" ? (
+              <MaterialCommunityIcons name="yoga" size={24} color="#333" />
+            ) : (
+              <MaterialCommunityIcons name="seat" size={24} color="#333" />
+            )}
             <Text style={styles.textEventStyle}>{props.event.event}</Text>
           </View>
-          <View>
+          {/* <View>
             <Text style={styles.textDescStyle}>
               {trainingTypesDict[trainingType]}
             </Text>
             <Text style={styles.textDescStyle}>
               {partsDetailsDict[partsDetail]}
             </Text>
+          </View> */}
+          <View style={styles.icon}>
+            <Icon name="right" />
           </View>
         </View>
       </ModalSelector>
@@ -184,10 +199,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  eventContainerStyle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   textEventStyle: {
     fontSize: 22,
-    // fontWeight: "bold",
     color: "#333",
+    marginLeft: "2%",
   },
   textDescStyle: {
     fontSize: 14,
@@ -247,5 +267,8 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     height: 40,
+  },
+  icon: {
+    marginRight: "-2%",
   },
 });

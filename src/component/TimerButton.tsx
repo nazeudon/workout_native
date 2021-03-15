@@ -9,24 +9,34 @@ import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const WIDTH = Dimensions.get("window").width;
-const SIZE = WIDTH * 0.2;
+const SIZE = WIDTH * 0.22;
 
 type Props = {
   iconName: "controller-jump-to-start" | "controller-stop" | "restart";
   onPress: (event: GestureResponderEvent) => void;
+  disable?: boolean;
 };
 
-export const TimerButton: React.FC<Props> = ({ iconName, onPress }: Props) => {
+export const TimerButton: React.FC<Props> = ({
+  iconName,
+  onPress,
+  disable,
+}: Props) => {
   if (iconName === "restart") {
+    const backgroundColor = disable ? "#9EA0A4" : "#004777";
     return (
-      <TouchableOpacity style={styles.container} onPress={onPress}>
-        <MaterialCommunityIcons name={iconName} color="#fff" size={40} />
+      <TouchableOpacity
+        style={{ ...styles.container, backgroundColor: backgroundColor }}
+        onPress={onPress}
+        disabled={disable}
+      >
+        <MaterialCommunityIcons name={iconName} color="#fff" size={50} />
       </TouchableOpacity>
     );
   } else {
     return (
       <TouchableOpacity style={styles.container} onPress={onPress}>
-        <Entypo name={iconName} color="#fff" size={40} />
+        <Entypo name={iconName} color="#fff" size={50} />
       </TouchableOpacity>
     );
   }

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Animated, Text, Dimensions } from "react-native";
+import { StyleSheet, View, Animated, Alert, Dimensions } from "react-native";
 import Constants from "expo-constants";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
+import { Audio } from "expo-av";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
@@ -19,11 +20,56 @@ type Props = {
 };
 
 export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
-  const [count, setCount] = React.useState(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isPicker, setIsPicker] = useState<boolean>(true);
   const [selectedValue, setSelectedValue] = useState<string>("1");
   const [duration, setDuration] = useState<number>(Number(selectedValue) * 60);
+
+  const sound_tmp = new Audio.Sound();
+  const [sound, setSound] = useState<Audio.Sound>(sound_tmp);
+
+  const loadSound = async () => {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(
+      require("../statics/sounds/Clock-Alarm01-2(Loop).mp3")
+    );
+    setSound(sound);
+  };
+
+  const playSound = async () => {
+    console.log("Playing Sound");
+    await sound.playAsync();
+  };
+
+  const unloadSound = async () => {
+    console.log("unloaded sound");
+    await sound.unloadAsync();
+  };
+
+  const recoveryAlert = () => {
+    Alert.alert(
+      "リカバリー終了",
+      "",
+      [
+        {
+          text: "OK",
+          onPress: async () => {
+            await unloadSound();
+            // await stopSound();
+          },
+          // style: "destructive",
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleOnComplete = async () => {
+    await playSound();
+    await setIsPicker(true);
+    await setIsPlaying(false);
+    await recoveryAlert();
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -60,13 +106,12 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
       {isPicker || (
         <View style={styles.countDownContainer}>
           <CountdownCircleTimer
-            size={(WIDTH / 10) * 8}
+            size={(WIDTH / 10) * 9}
             isPlaying={isPlaying}
             duration={duration}
             colors="#004777"
             onComplete={() => {
-              console.log("ON_COMPLETE BEFORE RETURN");
-              return [true, 0];
+              handleOnComplete();
             }}
           >
             {({ remainingTime, animatedColor }) => {
@@ -86,10 +131,12 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
       <View style={styles.timerButtonContainer}>
         <TimerButton
           iconName="restart"
-          onPress={() => {
+          onPress={async () => {
             setIsPicker(true);
             setIsPlaying(false);
+            await unloadSound();
           }}
+          disable={isPicker || isPlaying}
         />
         {isPlaying && (
           <TimerButton
@@ -102,9 +149,10 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
         {isPlaying || (
           <TimerButton
             iconName="controller-jump-to-start"
-            onPress={() => {
+            onPress={async () => {
               setIsPicker(false);
               setIsPlaying(true);
+              await loadSound();
             }}
           />
         )}
@@ -115,14 +163,14 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   countDownContainer: {
-    height: (WIDTH / 10) * 9,
+    height: WIDTH,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: Constants.statusBarHeight / 2,
     // backgroundColor: "#ecf0f1",
   },
   pickerContainer: {
-    height: (WIDTH / 10) * 9,
+    height: WIDTH,
     justifyContent: "center",
     paddingVertical: Constants.statusBarHeight / 2,
   },

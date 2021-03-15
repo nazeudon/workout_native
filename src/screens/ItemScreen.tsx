@@ -24,7 +24,6 @@ import { ItemDetail } from "../component/ItemDetail";
 import { Recovery } from "../component/Recovery";
 import { Trial } from "../component/Trial";
 import { FloatingActionButton } from "../component/FloatingActionButton";
-import { FloatingTimerButton } from "../component/FloatingTimerButton";
 import { IconButton } from "../component/IconButton";
 
 type Props = {
@@ -232,21 +231,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                 }
               />
             );
-            // } else if (data.item.type === "rec") {
-            //   return (
-            //     <Recovery
-            //       data={data.item.min}
-            //       onPress={() => onPressRecovery(data.item)}
-            //     />
-            //   );
-            // } else {
-            //   return (
-            //     <Trial
-            //       data={data.item.trialNum}
-            //       onPress={() => onPressTrial(data.item)}
-            //     />
-            //   );
-            // }
           }}
           renderHiddenItem={(data, rowMap) => {
             // if (data.item.type === "item") {
@@ -261,9 +245,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
                 />
               </View>
             );
-            // } else {
-            //   return null;
-            // }
           }}
           keyExtractor={(item, index) => index.toString()}
           rightOpenValue={-72}
@@ -304,7 +285,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </SafeAreaView>
-      {/* <CountDownScreen /> */}
       <FloatingActionButton
         iconName="plus"
         onPress={() =>
@@ -315,10 +295,6 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
             itemLength
           )
         }
-      />
-      <FloatingTimerButton
-        iconName={"timer-outline"}
-        onPress={() => onPressCountDown()}
       />
     </>
   );

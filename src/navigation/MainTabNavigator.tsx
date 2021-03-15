@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 /* navigation */
-import { HomeStackNavigator } from "./HomeStackNavigator";
+import { HomeStackNavigator, TimerStackNavigator } from "./HomeStackNavigator";
 /* screens */
 
 const Tab = createBottomTabNavigator();
@@ -26,12 +26,12 @@ export const MainTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Info"
-        component={HomeStackNavigator}
+        name="Timer"
+        component={TimerStackNavigator}
         options={{
-          tabBarLabel: "Info",
+          tabBarLabel: "Timer",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="info" color={color} size={size} />
+            <Feather name="clock" color={color} size={size} />
           ),
         }}
       />

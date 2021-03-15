@@ -29,11 +29,6 @@ export const MainStack = () => {
       />
       <Stack.Screen name="Event" component={EventScreen} />
       <Stack.Screen name="Item" component={ItemScreen} />
-      {/* <Stack.Screen
-        name="ItemDetail"
-        component={ItemDetailScreen}
-        // options={{ title: createdAt }}
-      /> */}
     </Stack.Navigator>
   );
 };
@@ -51,6 +46,18 @@ export const HomeStackNavigator = () => {
       <RootStack.Screen name="Trial" component={TrialScreen} />
       <RootStack.Screen name="AddEvent" component={AddEventScreen} />
       <RootStack.Screen name="CountDown" component={CountDownScreen} />
+    </RootStack.Navigator>
+  );
+};
+
+export const TimerStackNavigator = () => {
+  return (
+    <RootStack.Navigator mode={"modal"}>
+      <RootStack.Screen
+        name="CountDown"
+        component={CountDownScreen}
+        options={{ headerShown: false }}
+      />
     </RootStack.Navigator>
   );
 };

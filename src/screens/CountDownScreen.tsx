@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Animated, Alert, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Animated,
+  Alert,
+  Dimensions,
+  SafeAreaView,
+} from "react-native";
 import Constants from "expo-constants";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -81,7 +88,7 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View>
+    <SafeAreaView>
       {isPicker && (
         <Picker
           style={styles.pickerContainer}
@@ -157,7 +164,7 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
           />
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -10,7 +10,7 @@ type Props = {
   onPress: () => void;
 };
 
-export const Recovery = ({ onPress }: Props) => {
+export const Recovery = React.forwardRef(({ onPress }: Props, ref) => {
   const { recovery } = useContext(recoveryContext);
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
@@ -24,7 +24,7 @@ export const Recovery = ({ onPress }: Props) => {
       </View>
     </TouchableHighlight>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

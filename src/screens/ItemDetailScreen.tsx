@@ -62,7 +62,6 @@ export const ItemDetailScreen: React.FC<Props> = ({
       await fetchUpdateItemSetsByNew();
     } else {
       await fetchUpdateItemDetails();
-      //total setがうまく反映されない
       await fetchUpdateItemSets();
     }
     navigation.goBack();

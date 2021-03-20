@@ -10,7 +10,7 @@ type Props = {
   onPress: () => void;
 };
 
-export const Trial = ({ onPress }: Props) => {
+export const Trial = React.forwardRef(({ onPress }: Props, ref) => {
   const { trial } = useContext(trialContext);
   return (
     <TouchableHighlight onPress={onPress} underlayColor={"#ccc"}>
@@ -24,7 +24,7 @@ export const Trial = ({ onPress }: Props) => {
       </View>
     </TouchableHighlight>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

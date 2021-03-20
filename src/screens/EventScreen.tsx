@@ -44,7 +44,6 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     // navigation.addListenerの役割は
     // nabigation.goBack()したときに再レンダーされるように
     const refresh = navigation.addListener("focus", () => {
-      // なぜかfetchの順番逆だとrecoverysの配列が空になる
       fetchGetItems();
       setRecovery("0");
       setTrial("0");

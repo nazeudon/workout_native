@@ -40,7 +40,6 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
   const [duration, setDuration] = useState<number>(Number(selectedValue) * 60);
 
   const sound_tmp = new Audio.Sound();
-  // const [sound, setSound] = useState<Audio.Sound>(sound_tmp);
 
   const [activeSection, setActiveSection] = useState([]);
 
@@ -119,9 +118,6 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  // 直前になしでタイマー実行してると、次うまく音がならない
-  // 前に読み込んだ音が再生されてる。間に合ってない。
-  // soundをplaysoundにreturnするのはどう？(笑)
   const loadSound = async () => {
     console.log("Loading Sound");
     const { sound } = (await selectedSound.includes("1"))
@@ -135,7 +131,7 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
       : await Audio.Sound.createAsync(
           require("../statics/sounds/Clock-Alarm01-3(Loop).mp3")
         );
-    // await setSound(sound);
+
     return sound;
   };
 
@@ -245,7 +241,6 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
           onPress={async () => {
             setIsPicker(true);
             setIsPlaying(false);
-            // await unloadSound();
           }}
           disable={isPicker || isPlaying}
         />
@@ -263,7 +258,6 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
             onPress={async () => {
               setIsPicker(false);
               setIsPlaying(true);
-              // !selectedSound.includes("0") ? await loadSound() : null;
             }}
           />
         )}

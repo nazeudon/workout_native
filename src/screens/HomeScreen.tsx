@@ -5,7 +5,6 @@ import {
   View,
   Text,
   SectionList,
-  Button,
 } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 /* component */

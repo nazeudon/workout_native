@@ -2,8 +2,6 @@ import React, { useContext } from "react";
 import { StyleSheet, View, Text, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ModalSelector from "react-native-modal-selector";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 /* types */
 import { RootStackParamList } from "../types/navigation";
@@ -28,9 +26,7 @@ import {
 } from "../lib/parts";
 import { DeleteEvent, getEvents } from "../lib/sqlite";
 import {
-  trainingTypesDict,
   trainingTypesDictType,
-  partsDetailsDict,
   partsDetailsDictType,
 } from "../lib/convertDict";
 /* component */

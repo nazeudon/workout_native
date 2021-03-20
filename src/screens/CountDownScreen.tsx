@@ -6,6 +6,8 @@ import {
   Alert,
   Dimensions,
   SafeAreaView,
+  Text,
+  FlatList,
 } from "react-native";
 import Constants from "expo-constants";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
@@ -13,11 +15,14 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import { Audio } from "expo-av";
+import Accordion from "react-native-collapsible/Accordion";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 /* component */
 import { IconButton } from "../component/IconButton";
 import { TimerButton } from "../component/TimerButton";
+import { Icon } from "../component/Icon";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const WIDTH = Dimensions.get("window").width;
 
@@ -29,42 +34,133 @@ type Props = {
 export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isPicker, setIsPicker] = useState<boolean>(true);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [selectedSound, setSelectedSound] = useState<string[]>(["0"]); // [ToDo] 永続化する
   const [selectedValue, setSelectedValue] = useState<string>("1");
   const [duration, setDuration] = useState<number>(Number(selectedValue) * 60);
 
   const sound_tmp = new Audio.Sound();
-  const [sound, setSound] = useState<Audio.Sound>(sound_tmp);
+  // const [sound, setSound] = useState<Audio.Sound>(sound_tmp);
 
-  const loadSound = async () => {
-    console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync(
-      require("../statics/sounds/Clock-Alarm01-2(Loop).mp3")
+  const [activeSection, setActiveSection] = useState([]);
+
+  const SECTIONS = [{}]; // dummy
+
+  const DATA = [
+    { id: "0", title: "なし" },
+    { id: "1", title: "Sound1" },
+    { id: "2", title: "Sound2" },
+    { id: "3", title: "Sound3" },
+  ];
+
+  const renderHeader = (
+    section: any,
+    index: any,
+    isActive: any,
+    sections: any
+  ) => {
+    return (
+      <TouchableOpacity style={styles.soundSelectStyle}>
+        <Text style={styles.textStyle}>タイマー終了時</Text>
+        <View style={styles.soundStyle}>
+          <Text style={styles.soundTextStyle}>
+            {selectedSound.includes("0") ? "なし" : `Sound${selectedSound[0]}`}
+          </Text>
+          <View style={styles.iconStyle}>
+            {isActive ? (
+              <Icon name="up" color="#004777" />
+            ) : (
+              <Icon name="down" color="#004777" />
+            )}
+          </View>
+        </View>
+      </TouchableOpacity>
     );
-    setSound(sound);
   };
 
-  const playSound = async () => {
+  const renderContent = (_: any) => {
+    return (
+      <View>
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+    );
+  };
+
+  const updateSections = (activeSections: any) => {
+    setIsActive(!isActive);
+    setActiveSection(activeSections);
+  };
+
+  const SoundItem = ({ id, title }: any) => (
+    <TouchableOpacity
+      style={styles.accordionListStyle}
+      onPress={() => onPressSoundItem(id)}
+    >
+      <Text style={styles.accordionTextStyle}>{title}</Text>
+      {selectedSound.includes(id) ? (
+        <View style={styles.accordionIconStyle}>
+          <Icon name="check" color={"#004777"} />
+        </View>
+      ) : null}
+    </TouchableOpacity>
+  );
+
+  const renderItem = ({ item }: any) => (
+    <SoundItem id={item.id} title={item.title} />
+  );
+
+  const onPressSoundItem = (id: string) => {
+    if (!selectedSound.includes(id)) {
+      setSelectedSound([id]);
+    }
+  };
+
+  // 直前になしでタイマー実行してると、次うまく音がならない
+  // 前に読み込んだ音が再生されてる。間に合ってない。
+  // soundをplaysoundにreturnするのはどう？(笑)
+  const loadSound = async () => {
+    console.log("Loading Sound");
+    const { sound } = (await selectedSound.includes("1"))
+      ? await Audio.Sound.createAsync(
+          require("../statics/sounds/Clock-Alarm01-1(Loop).mp3")
+        )
+      : (await selectedSound.includes("2"))
+      ? await Audio.Sound.createAsync(
+          require("../statics/sounds/Clock-Alarm01-2(Loop).mp3")
+        )
+      : await Audio.Sound.createAsync(
+          require("../statics/sounds/Clock-Alarm01-3(Loop).mp3")
+        );
+    // await setSound(sound);
+    return sound;
+  };
+
+  const playSound = async (sound: any) => {
     console.log("Playing Sound");
     await sound.playAsync();
   };
 
-  const unloadSound = async () => {
+  const unloadSound = async (sound: any) => {
     console.log("unloaded sound");
     await sound.unloadAsync();
   };
 
-  const recoveryAlert = () => {
+  const recoveryAlert = (sound?: any) => {
     Alert.alert(
       "リカバリー終了",
       "",
       [
         {
           text: "OK",
-          onPress: async () => {
-            await unloadSound();
-            // await stopSound();
-          },
-          // style: "destructive",
+          onPress: sound
+            ? async () => {
+                await unloadSound(sound);
+              }
+            : () => {},
         },
       ],
       { cancelable: true }
@@ -72,10 +168,17 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const handleOnComplete = async () => {
-    await playSound();
-    await setIsPicker(true);
-    await setIsPlaying(false);
-    await recoveryAlert();
+    if (!selectedSound.includes("0")) {
+      const sound = await loadSound();
+      await playSound(sound);
+      await setIsPicker(true);
+      await setIsPlaying(false);
+      await recoveryAlert(sound);
+    } else {
+      await setIsPicker(true);
+      await setIsPlaying(false);
+      await recoveryAlert();
+    }
   };
 
   useEffect(() => {
@@ -98,6 +201,7 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
             setDuration(Number(itemValue) * 60);
           }}
         >
+          <Picker.Item label="3 秒" value="0.05" />
           <Picker.Item label="1 分" value="1" />
           <Picker.Item label="2 分" value="2" />
           <Picker.Item label="3 分" value="3" />
@@ -141,7 +245,7 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
           onPress={async () => {
             setIsPicker(true);
             setIsPlaying(false);
-            await unloadSound();
+            // await unloadSound();
           }}
           disable={isPicker || isPlaying}
         />
@@ -159,25 +263,33 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
             onPress={async () => {
               setIsPicker(false);
               setIsPlaying(true);
-              await loadSound();
+              // !selectedSound.includes("0") ? await loadSound() : null;
             }}
           />
         )}
       </View>
+      <Accordion
+        underlayColor={"#f2f2f2"}
+        sections={SECTIONS}
+        activeSections={activeSection}
+        renderHeader={renderHeader}
+        renderContent={renderContent}
+        onChange={updateSections}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   countDownContainer: {
-    height: WIDTH,
+    height: (WIDTH / 10) * 9,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: Constants.statusBarHeight / 2,
     // backgroundColor: "#ecf0f1",
   },
   pickerContainer: {
-    height: WIDTH,
+    height: (WIDTH / 10) * 9,
     justifyContent: "center",
     paddingVertical: Constants.statusBarHeight / 2,
   },
@@ -185,5 +297,54 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginHorizontal: "3%",
+    marginBottom: "5%",
+  },
+  soundSelectStyle: {
+    height: 50,
+    borderRadius: 5,
+    marginHorizontal: "2%",
+    marginBottom: "2%",
+    backgroundColor: "#e3e3e4",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  soundStyle: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginRight: "2%",
+  },
+  iconStyle: {
+    marginRight: "0%",
+  },
+  soundTextStyle: {
+    fontSize: 18,
+    marginRight: "5%",
+    color: "#004777",
+  },
+  textStyle: {
+    fontSize: 18,
+    marginLeft: "2%",
+  },
+  accordionListStyle: {
+    height: 40,
+    borderRadius: 5,
+    marginRight: "2%",
+    marginLeft: "2%",
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderColor: "#eee",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  accordionIconStyle: {
+    marginRight: "2%",
+  },
+  accordionTextStyle: {
+    color: "#555",
+    fontSize: 16,
+    marginLeft: "2%",
   },
 });

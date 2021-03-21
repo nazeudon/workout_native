@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text, Alert } from "react-native";
+import { StyleSheet, View, Text, Alert, SafeAreaView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ModalSelector from "react-native-modal-selector";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -44,7 +44,11 @@ export const ModalSelection = (props: Props) => {
     { key: 3, label: "編集" },
     {
       key: 4,
-      label: "削除",
+      label: (
+        // <View style={styles.optionDeleteContainerStyle}>
+        <Text style={styles.optionDeleteTextStyle}>削除</Text>
+        // </View>
+      ),
     },
   ];
 
@@ -135,7 +139,7 @@ export const ModalSelection = (props: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ModalSelector
         data={data}
         cancelText={"キャンセル"}
@@ -180,13 +184,13 @@ export const ModalSelection = (props: Props) => {
           </View>
         </View>
       </ModalSelector>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
   },
   textContainerStyle: {
@@ -225,10 +229,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     // backgroundColor: "rgba(0,0,0,0.7)", // default
     alignSelf: "center",
-    position: "absolute",
-    bottom: "10%",
+    // position: "absolute",
+    // bottom: "10%",
     width: "100%",
-    height: "100%",
+    // height: "100%",
     // justifyContent: "center", // default
     backgroundColor: "rgba(0,0,0,0.5)",
     // backgroundColor: "rgba(255,255,255,0)",
@@ -239,7 +243,7 @@ const styles = StyleSheet.create({
   },
   optionStyle: {
     justifyContent: "center",
-    height: 40,
+    height: 60,
     paddingVertical: 0,
     marginVertical: 0,
   },
@@ -247,19 +251,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
     paddingVertical: 0,
     marginVertical: 0,
+    borderRadius: 10,
   },
   optionTextStyle: {
-    fontSize: 18,
+    fontSize: 20,
     color: "#0076FF",
+  },
+  optionDeleteTextStyle: {
+    color: "#ff3b30",
+    fontSize: 20,
   },
   cancelStyle: {
     backgroundColor: "#fff",
     justifyContent: "center",
-    height: 40,
+    height: 60,
+    marginBottom: "15%",
+    borderRadius: 10,
   },
   cancelTextStyle: {
     fontWeight: "500",
-    fontSize: 18,
+    fontSize: 20,
   },
   buttonStyle: {
     height: 40,

@@ -198,7 +198,7 @@ export const HomeScreen = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#eee",
     // flexWrap: "wrap",
     // flexDirection: "row",

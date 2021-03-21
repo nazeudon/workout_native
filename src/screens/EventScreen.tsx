@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   list: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#eee",
   },
   delete: {

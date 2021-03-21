@@ -260,6 +260,7 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
 const styles = StyleSheet.create({
   list: {
+    // flex: 1,
     backgroundColor: "#eee",
     position: "relative",
   },

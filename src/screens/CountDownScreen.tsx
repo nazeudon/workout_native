@@ -9,7 +9,6 @@ import {
   Text,
   FlatList,
 } from "react-native";
-import Constants from "expo-constants";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -25,6 +24,7 @@ import { Icon } from "../component/Icon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "CountDown">;
@@ -213,7 +213,7 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
       {isPicker || (
         <View style={styles.countDownContainer}>
           <CountdownCircleTimer
-            size={(WIDTH / 10) * 9}
+            size={(HEIGHT / 10) * 4}
             isPlaying={isPlaying}
             duration={duration}
             colors="#004777"
@@ -276,16 +276,17 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   countDownContainer: {
-    height: (WIDTH / 10) * 9,
+    height: (HEIGHT / 10) * 4.2,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: Constants.statusBarHeight / 2,
+    // marginVertical: (HEIGHT / 10) * 0.5,
     // backgroundColor: "#ecf0f1",
+    // backgroundColor: "#222",
   },
   pickerContainer: {
-    height: (WIDTH / 10) * 9,
+    height: (HEIGHT / 10) * 4.2,
     justifyContent: "center",
-    paddingVertical: Constants.statusBarHeight / 2,
+    // marginVertical: (HEIGHT / 10) * 0.5,
   },
   timerButtonContainer: {
     flexDirection: "row",
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     marginLeft: "2%",
   },
   accordionListStyle: {
-    height: 40,
+    height: 45,
     borderRadius: 5,
     marginRight: "2%",
     marginLeft: "2%",

@@ -9,7 +9,7 @@ import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const WIDTH = Dimensions.get("window").width;
-const SIZE = WIDTH * 0.22;
+const SIZE = WIDTH * 0.2;
 
 type Props = {
   iconName: "controller-jump-to-start" | "controller-stop" | "restart";

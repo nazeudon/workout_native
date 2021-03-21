@@ -64,13 +64,13 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     },
   ];
 
-  // const sumWeights = (res: ItemDetailType[]) => {
-  //   let total: number = 0;
-  //   res.map((r) => {
-  //     total += r.weights * r.times;
-  //   });
-  //   setTotalWeights(total);
-  // };
+  const sumWeights = (res: ItemDetailType[]) => {
+    let total: number = 0;
+    res.map((r) => {
+      total += r.weights * r.times;
+    });
+    setTotalWeights(total);
+  };
 
   const subWeights = (weight: number) => {
     return totalWeights - weight;
@@ -97,14 +97,8 @@ export const ItemScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const fetchGetItemDetails = async () => {
     const res = await getItemDetails(item.id);
     await setItemDetails(res);
-    // await sumWeights(res);
-    await setTotalWeights(item.totalWeights);
-    // await setInitItemDetial({
-    //   id: 0,
-    //   itemsId: item.id,
-    //   weights: 0,
-    //   times: 0,
-    // });
+    await sumWeights(res);
+    // await setTotalWeights(item.totalWeights);//これだとうまく行かない
     await setItemLength(res.length);
   };
 

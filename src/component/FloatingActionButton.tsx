@@ -8,7 +8,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 
 const WIDTH = Dimensions.get("window").width;
-const SIZE = WIDTH * 0.15;
+const SIZE = WIDTH * 0.2;
 
 type Props = {
   iconName: "plus";
@@ -21,7 +21,7 @@ export const FloatingActionButton: React.FC<Props> = ({
 }: Props) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Feather name={iconName} color="#fff" size={30} />
+      <Feather name={iconName} color="#fff" size={40} />
     </TouchableOpacity>
   );
 };
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     borderRadius: SIZE / 2,
     backgroundColor: "#0076FF",
     position: "absolute",
-    right: SIZE / 2,
-    bottom: SIZE / 2,
+    right: SIZE / 3,
+    bottom: SIZE / 3,
     alignItems: "center",
     justifyContent: "center",
   },

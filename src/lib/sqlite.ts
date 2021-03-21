@@ -22,7 +22,8 @@ export const getEvents = () => {
           }
         );
       },
-      () => reject(new Error("[get events] transaction failed")),
+      // () => reject(new Error("[get events] transaction failed")),
+      () => reject(createInitDB()),
       () => resolve(results.rows._array)
     );
   });
@@ -116,7 +117,6 @@ export const getItems = (eventId: number) => {
     db.transaction(
       (tx) => {
         tx.executeSql(
-          // "select * from items (eventId) value ?;",
           "select * from items where eventId = ?;",
           [eventId],
           (_, resultSet) => {
@@ -129,7 +129,8 @@ export const getItems = (eventId: number) => {
           }
         );
       },
-      () => reject(new Error("[get items] transaction failed")),
+      // () => reject(new Error("[get items] transaction failed")),
+      () => reject(_createItemsDB()),
       () => resolve(results.rows._array)
     );
   });
@@ -395,7 +396,8 @@ export const InsertInitItemDetails = (
           }
         );
       },
-      () => reject(new Error("[insert itemsDetails] transaction failed")),
+      // () => reject(new Error("[insert itemsDetails] transaction failed")),
+      () => reject(_createItemDB()),
       () => resolve(results.insertId)
     );
   });
@@ -446,6 +448,75 @@ export const DeleteItemDetailByItemsId = (itemsId: number) => {
       () =>
         reject(new Error("[delete itemDetail by itemsId] transaction failed")),
       () => resolve(results.insertId)
+    );
+  });
+};
+
+const createInitDB = () => {
+  _createEventsDB();
+  _createItemsDB();
+  _createItemDB();
+};
+
+const _createEventsDB = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // 実行したいSQL文
+      "create table if not exists events (id integer primary key not null, event text not null, trainingType text not null, part text not null, partDetail text);",
+      null, // SQL文の引数
+      () => {
+        console.log("success create EventsDB");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+      } // 失敗時のコールバック関数
+    );
+  });
+};
+
+const _createItemsDB = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // 実行したいSQL文
+      "create table if not exists items" +
+        "(" +
+        "id integer primary key not null," +
+        "eventId integer not null," +
+        "createdAt TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')) not null," +
+        "sets integer not null," +
+        "totalWeights real not null," +
+        "recovery integer not null," +
+        "trial integer not null" +
+        ");",
+      null, // SQL文の引数
+      () => {
+        console.log("success create ItemsDB");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+      } // 失敗時のコールバック関数
+    );
+  });
+};
+
+const _createItemDB = () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // 実行したいSQL文
+      "create table if not exists item" +
+        "(" +
+        "id integer primary key not null," +
+        "itemsId integer not null," +
+        "weights real not null," +
+        "times integer not null" +
+        ");",
+      null, // SQL文の引数
+      () => {
+        console.log("success create ItemDetailDB");
+      }, // 成功時のコールバック関数
+      () => {
+        console.log("fail");
+      } // 失敗時のコールバック関数
     );
   });
 };

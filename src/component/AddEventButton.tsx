@@ -8,7 +8,7 @@ type Props = {
 
 export const AddEventButton: React.FC<Props> = ({ onPress }: Props) => {
   const { isNewEvent } = useContext(IsNewEventContext);
-  const buttonText = isNewEvent ? "追加" : "編集";
+  const buttonText = isNewEvent ? "追加" : "完了";
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -19,12 +19,14 @@ export const AddEventButton: React.FC<Props> = ({ onPress }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    height: 50,
     borderWidth: 1,
     borderColor: "darkorange",
     backgroundColor: "darkorange",
     borderRadius: 5,
     marginHorizontal: "3%",
     marginBottom: "15%",
+    justifyContent: "center",
   },
   text: {
     color: "#fff",

@@ -18,6 +18,7 @@ export const Decision: React.FC<Props> = ({ onPress }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    height: 50,
     borderWidth: 1,
     alignSelf: "center",
     minWidth: "95%",

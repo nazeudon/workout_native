@@ -181,7 +181,11 @@ export const CountDownScreen: React.FC<Props> = ({ navigation, route }) => {
     navigation.setOptions({
       title: "タイマー",
       headerLeft: () => (
-        <IconButton name="closecircleo" onPress={() => navigation.goBack()} />
+        <IconButton
+          name="closecircleo"
+          marginLeftRatio={0.025}
+          onPress={() => navigation.goBack()}
+        />
       ),
     });
   }, []);

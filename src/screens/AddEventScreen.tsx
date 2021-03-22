@@ -41,7 +41,11 @@ export const AddEventScreen: React.FC<Props> = ({
     navigation.setOptions({
       title: title,
       headerLeft: () => (
-        <IconButton name="closecircleo" onPress={() => navigation.goBack()} />
+        <IconButton
+          name="closecircleo"
+          marginLeftRatio={0.025}
+          onPress={() => navigation.goBack()}
+        />
       ),
     });
   }, []);

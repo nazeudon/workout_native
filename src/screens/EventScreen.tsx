@@ -37,6 +37,13 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions({
       title: event.event,
+      headerRight: () => (
+        <IconButton
+          name={"filter"}
+          marginRightRatio={0.025}
+          onPress={() => {}}
+        />
+      ),
     });
   }, [event]);
 

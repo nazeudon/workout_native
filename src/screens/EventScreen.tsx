@@ -22,6 +22,7 @@ import { FloatingActionButton } from "../component/FloatingActionButton";
 /* context */
 import { recoveryContext } from "../context/recoveryContext";
 import { trialContext } from "../context/trialContext";
+import { Icon } from "../component/Icon";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Event">;
@@ -31,6 +32,7 @@ type Props = {
 export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { event } = route.params;
   const [items, setItems] = useState<ItemType[]>([]);
+  const [isFilter, setIsFilter] = useState<boolean>(false);
   const { setRecovery } = useContext(recoveryContext);
   const { setTrial } = useContext(trialContext);
 
@@ -39,13 +41,13 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       title: event.event,
       headerRight: () => (
         <IconButton
-          name={"filter"}
-          marginRightRatio={0.025}
-          onPress={() => {}}
+          name={isFilter ? "filter" : "filter-outline"}
+          marginRightRatio={0}
+          onPress={() => onPressFilter()}
         />
       ),
     });
-  }, [event]);
+  }, [event, isFilter]);
 
   useEffect(() => {
     // navigation.addListenerの役割は
@@ -100,6 +102,10 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     fetchGetItems();
   };
 
+  const onPressFilter = () => {
+    setIsFilter(!isFilter);
+  };
+
   const closeRow = (rowMap: any, rowKey: any) => {
     // https://snack.expo.io/@rollindeep/react-native-swipe-list-view
     if (rowMap[rowKey]) {
@@ -134,6 +140,11 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   return (
     <>
       <SafeAreaView style={styles.list}>
+        {isFilter && (
+          <View style={styles.filterContainer}>
+            <Icon name={"filter-variant"} size={28} />
+          </View>
+        )}
         <SwipeListView
           useSectionList
           sections={sections}
@@ -207,5 +218,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     marginLeft: 50, //背景の赤色が見えないように
     backgroundColor: "#ff3b30",
+  },
+  filterContainer: {
+    height: 40,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

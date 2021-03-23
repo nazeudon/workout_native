@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, SafeAreaView, Text, View } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  View,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
+import { StatusBar } from "react-native";
+import { Header } from "@react-navigation/stack";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -284,5 +293,9 @@ const styles = StyleSheet.create({
     marginBottom: "1%",
     color: "#555",
     marginTop: "3%",
+  },
+  textInputContainer: {
+    backgroundColor: "#fff",
+    height: 100,
   },
 });

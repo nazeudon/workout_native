@@ -5,11 +5,11 @@ import {
   GestureResponderEvent,
   Dimensions,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 type Props = {
   onPress: (event: GestureResponderEvent) => void;
-  name: "closecircleo" | "delete" | "filter";
+  name: "closecircleo" | "delete" | "filter" | "filter-outline";
   color?: string;
   size?: number;
   marginLeftRatio?: number;
@@ -28,14 +28,25 @@ export const IconButton: React.FC<Props> = ({
 }: Props) => {
   const marginLeft = marginLeftRatio ? WIDTH * marginLeftRatio : 0;
   const marginRight = marginRightRatio ? WIDTH * marginRightRatio : 0;
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{ marginLeft: marginLeft, marginRight: marginRight }}
-    >
-      <AntDesign name={name} color={color} size={size} />
-    </TouchableOpacity>
-  );
+  if (name === "closecircleo" || name === "delete") {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={{ marginLeft: marginLeft, marginRight: marginRight }}
+      >
+        <AntDesign name={name} color={color} size={size} />
+      </TouchableOpacity>
+    );
+  } else {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={{ marginLeft: marginLeft, marginRight: marginRight }}
+      >
+        <MaterialCommunityIcons name={name} color={color} size={size} />
+      </TouchableOpacity>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

@@ -12,6 +12,7 @@ import {
   DeleteItem,
   DeleteItemDetailByItemsId,
 } from "../lib/sqlite";
+import { dropDownRecovery, dropDownTrial } from "../lib/dropDownItems";
 /* type */
 import { RootStackParamList } from "../types/navigation";
 import { ItemType } from "../types/item";
@@ -19,6 +20,7 @@ import { ItemType } from "../types/item";
 import { Item } from "../component/Item";
 import { IconButton } from "../component/IconButton";
 import { FloatingActionButton } from "../component/FloatingActionButton";
+import { DropDownSelection } from "../component/DropDownSelection";
 /* context */
 import { recoveryContext } from "../context/recoveryContext";
 import { trialContext } from "../context/trialContext";
@@ -142,10 +144,24 @@ export const EventScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       <SafeAreaView style={styles.list}>
         {isFilter && (
           <View style={styles.filterContainer}>
-            <Icon name={"filter-variant"} size={28} />
+            <View style={{ ...styles.filterItemContainer, zIndex: 2 }}>
+              <View style={styles.filterItem}>
+                <Icon name={"filter-variant"} size={16} color={"#555"} />
+                <Text style={styles.filterItemTextStyle}>種目目</Text>
+              </View>
+              <DropDownSelection items={dropDownTrial} />
+            </View>
+            <View style={styles.filterItemContainer}>
+              <View style={styles.filterItem}>
+                <Icon name={"filter-variant"} size={14} color={"#555"} />
+                <Text style={styles.filterItemTextStyle}>リカバリー</Text>
+              </View>
+              <DropDownSelection items={dropDownRecovery} />
+            </View>
           </View>
         )}
         <SwipeListView
+          style={styles.swipeListContainer}
           useSectionList
           sections={sections}
           renderSectionHeader={({ section: { title } }) => title}
@@ -220,9 +236,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff3b30",
   },
   filterContainer: {
-    height: 40,
-    backgroundColor: "#fff",
+    zIndex: 1,
+    height: 120,
+    marginHorizontal: "2%",
+    marginVertical: "2%",
+  },
+  filterItemContainer: {
+    marginBottom: "1%",
+  },
+  filterItem: {
     flexDirection: "row",
-    alignItems: "center",
+  },
+  filterItemTextStyle: {
+    color: "#555",
+    marginBottom: "1%",
+    marginLeft: "1%",
+  },
+  swipeListContainer: {
+    zIndex: 0,
   },
 });
